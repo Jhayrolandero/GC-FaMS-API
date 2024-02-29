@@ -13,11 +13,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
-
 foreach (glob("./Controller/*/*.php") as $filename) {
     include_once $filename;
 }
-
 include_once "./Model/database.php";
 include_once "./Controller/global.php";
 
@@ -39,17 +37,13 @@ else{
 
 switch($_SERVER['REQUEST_METHOD']){
     case 'GET':
+        $userSessionID = $globalOb->verifyToken()['payload'];
+
         switch($request[0]){
             case 'getschedules':
-                if(count($request) == 3){
-                    echo json_encode($getSchedule->getScheduleWeek($request[1], $request[2]));
-                }
-                else if(count($request) == 2){
-                    echo json_encode($getSchedule->getScheduleFaculty($request[1]));
-                }
-                else{
-                    echo json_encode($getSchedule->getScheduleAll());
-                }            
+                if($request[1] == "fetchFaculty"){
+                    echo json_encode($getSchedule->getScheduleFaculty($globalOb->verifyToken()['payload']));
+                }          
                 break;
 
             default:
@@ -70,6 +64,5 @@ switch($_SERVER['REQUEST_METHOD']){
         http_response_code(403);    
         break;
 }
-//echo json_encode($request);
 
 ?>

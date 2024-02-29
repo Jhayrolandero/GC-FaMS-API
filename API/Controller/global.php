@@ -2,6 +2,12 @@
 header('Access-Control-Allow-Origin: http://localhost:4200');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header("Access-Control-Allow-Headers: *");
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use Firebase\JWT\ExpiredException;
+use Firebase\JWT\SignatureInvalidException;
+use Firebase\JWT\BeforeValidException;
+require_once('../vendor/autoload.php');
 
 include_once "./Model/database.php";
 
@@ -49,7 +55,39 @@ class GlobalMethods extends Connection{
         return array("code"=>$code, "errmsg"=>$errmsg);
     }
 
+    public function verifyToken(){
+        if (! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
+            header('HTTP/1.0 403 Forbidden');
+            echo 'Token not found in request';
+            exit;
+        }
 
+        $jwt = $matches[1];
+        if(! $jwt){
+            header('HTTP/1.0 403 Forbidden');
+            echo 'Token is missing but header exists';
+            exit;
+        }
+        $jwtArr = explode('.', $jwt);
+
+        $headers = new stdClass();
+        $secretKey = 'jetculverin';
+        $payload = JWT::decode($jwt, new Key($secretKey, 'HS512'), $headers);
+        $parsedPayload = json_decode(json_encode($payload), true);
+
+        $toCheckSignature = JWT::encode($parsedPayload, $secretKey, 'HS512');
+        $toCheckSignature = explode('.', $toCheckSignature);
+
+        if($toCheckSignature[2] == $jwtArr[2]){
+            return array("code" => 200, 
+                         "payload" => $payload->id);
+        }
+        else{
+            header('HTTP/1.0 403 Forbidden');
+            echo 'Currently encoded payload does not matched initially signed payload';
+            exit;
+        }
+    }
 }
 
 ?>

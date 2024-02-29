@@ -2,7 +2,12 @@
     header('Access-Control-Allow-Origin: http://localhost:4200');
     header('Access-Control-Allow-Methods: POST, OPTIONS');
     header("Access-Control-Allow-Headers: *");
-
+    use Firebase\JWT\JWT;
+    use Firebase\JWT\Key;
+    use Firebase\JWT\ExpiredException;
+    use Firebase\JWT\SignatureInvalidException;
+    use Firebase\JWT\BeforeValidException;
+    require_once('../vendor/autoload.php');
     include_once "./Controller/global.php";
 
     class Login extends GlobalMethods{
@@ -11,42 +16,32 @@
         }
 
         function generateToken($faculty_ID, $isAdmin){
-            $secret = "jetculverin";
-            $header = [
-                "alg" => "HS512",
-                "typ" => "JWT"
-            ];
-            $header = $this->base64_url_encode(json_encode($header));
 
-            $payload = [
+            $token = array(
                 "id" => $faculty_ID,
-                'isAdmin' => $isAdmin
-            ];
-            $payload = $this->base64_url_encode(json_encode($payload));
-
-            $signature = $this->base64_url_encode(hash_hmac('sha512', "$header.$payload", $secret, true));
-            $jwt = "$header.$payload.$signature";
-
+                "isAdmin" => $isAdmin
+            );
             return array(
-                "token" => $jwt,
+                "token" => JWT::encode($token, 'jetculverin', 'HS512'),
+                "privilege" => $isAdmin,
                 "code" => 200
             );
         }
         public function validateLogin($form){
-            $sql = "SELECT * FROM `facultymembers` WHERE `email` = '$form->email'";
+            $isAdmin = $form->privExpected == 1 ? 0 : 1;
+            $sql = "SELECT * FROM `facultymembers` WHERE `email` = '$form->email' AND `isAdmin` = $isAdmin";
             $result = $this->executeQuery($sql);
-
             if($result['code'] == 200){
                 $passValid = password_verify($form->password, $result['data'][0]['password']);
                 if($passValid){
-                    return $this->generateToken($result['data'][0]['faculty_ID'], false);
+                    return $this->generateToken($result['data'][0]['faculty_ID'], $result['data'][0]['isAdmin']);
                 }
                 else{
                     return array("token" => "", "code" => 403);
                 }
             }
             else{
-                    return array("token" => "", "code" => 403);
+                return array("token" => "", "code" => 404);
             }
         }
     }
