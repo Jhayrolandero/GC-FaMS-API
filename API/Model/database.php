@@ -1,4 +1,7 @@
 <?php
+header('Access-Control-Allow-Origin: http://localhost:4200');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header("Access-Control-Allow-Headers: *");
 
 //SET DEFAULT TIME ZONE
 date_default_timezone_set("Asia/Manila");
