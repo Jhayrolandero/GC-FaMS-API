@@ -49,14 +49,20 @@ switch($_SERVER['REQUEST_METHOD']){
             default:
                 http_response_code(403);    
                 break;
-        }
-        break;
-
-    case 'POST':
+            }
+            break;
+            
+            case 'POST':
         $data = json_decode(file_get_contents("php://input"));
         switch($request[0]){
             case 'login':
                 echo json_encode($login->validateLogin($data));
+
+            case 'faculty':
+                echo json_encode()
+            default:
+                http_response_code(403);    
+                break;
         }    
         break;
 
