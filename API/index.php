@@ -24,7 +24,8 @@ $globalOb = new GlobalMethods();
 $pdo = $con->connect();
 
 $getSchedule = new Schedule($pdo);
-$login = new Login($pdo);
+$getFaculty = new Profile($pdo);
+$login = new Login();
 
 
 if(isset($_REQUEST['request'])){
@@ -46,8 +47,14 @@ switch($_SERVER['REQUEST_METHOD']){
                 }          
                 break;
 
+            case 'getprofile':
+                if($request[1] == "fetchProfile"){
+                    echo json_encode($getFaculty->getFacultyInfo($globalOb->verifyToken()['payload']));
+                }
+                break;
+
             default:
-                http_response_code(403);    
+                http_response_code(404);    
                 break;
         }
         break;
@@ -61,7 +68,7 @@ switch($_SERVER['REQUEST_METHOD']){
         break;
 
     default:
-        http_response_code(403);    
+        http_response_code(404);    
         break;
 }
 
