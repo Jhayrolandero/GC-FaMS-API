@@ -19,6 +19,7 @@ foreach (glob("./Controller/*/*.php") as $filename) {
 include_once "./Model/database.php";
 include_once "./Controller/global.php";
 include_once "./Controller/Faculty/Faculty.php";
+include_once "./Controller/College/CollegeController.php";
 
 $con = new Connection();
 // $globalOb = new GlobalMethods();
@@ -27,7 +28,7 @@ $pdo = $con->connect();
 // $getSchedule = new Schedule($pdo);
 // $login = new Login($pdo);
 $faculty = new FacultyController($pdo);
-
+$college = new CollegeController($pdo);
 if (isset($_REQUEST['request'])) {
     $request = explode('/', $_REQUEST['request']);
 } else {
@@ -37,13 +38,16 @@ if (isset($_REQUEST['request'])) {
 
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
-        $userSessionID = $globalOb->verifyToken()['payload'];
+        // $userSessionID = $globalOb->verifyToken()['payload'];
 
         switch ($request[0]) {
             case 'getschedules':
                 if ($request[1] == "fetchFaculty") {
                     echo json_encode($getSchedule->getScheduleFaculty($globalOb->verifyToken()['payload']));
                 }
+                break;
+            case 'college':
+                echo json_encode($college->getCollege());
                 break;
 
             default:
