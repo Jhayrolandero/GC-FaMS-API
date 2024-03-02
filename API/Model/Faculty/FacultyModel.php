@@ -1,36 +1,81 @@
 <?php
 
-include_once('../../Controller/global.php');
+
+include_once(__DIR__ . '/../../Controller/global.php');
 class Faculty
 {
     private $pdo;
     private $global;
-    public function __construct(\PDO $pdo)
+
+    function __construct($pdo)
     {
         $this->pdo = $pdo;
-        $this->global = new GlobalMethods;
+    }
+    private function getColumns($data)
+    {
+        $columns = array_keys(get_object_vars($data));
+        return $columns;
     }
 
-
-    public function addFaculties($data)
+    private function addColumns($sqlStr, $columns)
     {
-        $sql = "INSERT INTO FACULTIES (
-            programID, 
-            teaching_position, 
-            first_name, 
-            last_name,
-            middle_name,
-            ext_name,
-            email,
-            phone_number,
-            birthdate,
-            region,
-            province,
-            city,
-            barangay,
-            gender,
-            language,
-            nationality
-            )";
+        $sqlStr .= "(" . implode(', ', $columns) . ")"
+            . " VALUES ( ";
+
+        for ($i = 0; $i < count($columns); $i++) {
+            if ($i == count($columns) - 1) {
+                $sqlStr .= '? )';
+            } else {
+                $sqlStr .= '?, ';
+            }
+        }
+
+        return $sqlStr;
+    }
+
+    public function executeQuery($sql, $data)
+    {
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([
+            $data->college_id,
+            $data->teaching_position,
+            $data->first_name,
+            $data->last_name,
+            $data->birthdate,
+            $data->age,
+            $data->citizenship,
+            $data->civil_status,
+            $data->sex,
+            $data->email,
+            $data->employment_status,
+            $data->address,
+        ]);
+    }
+
+    public function addFaculty($data)
+    {
+        $columns = $this->getColumns($data);
+
+        $sql = "INSERT INTO facultymembers ";
+
+        $sql = $this->addColumns($sql, $columns);
+
+        return $this->executeQuery($sql, $data);
     }
 }
+
+/**{
+    "college_id": 2,
+    "teaching_position": "Coordinator",
+    "first_name": "Not",
+    "last_name": "Sure",
+    "birthdate": "1994-10-23",
+    "age": 20,
+    "citizenship": "Filipino",
+    "civil_status": "Married",
+    "sex": "Male",
+    "email": "123@gmail.com",
+    "employment_status": 0,
+    "address": "123 st"
+}
+ */
