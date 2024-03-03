@@ -59,8 +59,21 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     echo json_encode($program->getProgram());
                 }
                 break;
+
+            case 'getprofile':
+                if ($request[1] == "fetchProfile") {
+                    echo json_encode($getFaculty->getFacultyInfo($globalOb->verifyToken()['payload']));
+                }
+                break;
+
+            case 'getcommex':
+                if ($request[1] == "fetchCommex") {
+                    echo json_encode($getCommex->getCommexFaculty($globalOb->verifyToken()['payload']));
+                }
+                break;
+
             default:
-                http_response_code(403);
+                http_response_code(404);
                 break;
         }
         break;
@@ -79,6 +92,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     default:
-        http_response_code(403);
+        http_response_code(404);
         break;
 }
