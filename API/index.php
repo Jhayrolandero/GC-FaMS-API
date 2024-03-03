@@ -25,6 +25,7 @@ $pdo = $con->connect();
 
 $getSchedule = new Schedule($pdo);
 $getFaculty = new Profile($pdo);
+$getCommex = new Commex($pdo);
 $login = new Login();
 
 
@@ -50,6 +51,12 @@ switch($_SERVER['REQUEST_METHOD']){
             case 'getprofile':
                 if($request[1] == "fetchProfile"){
                     echo json_encode($getFaculty->getFacultyInfo($globalOb->verifyToken()['payload']));
+                }
+                break;
+            
+            case 'getcommex':
+                if($request[1] == "fetchCommex"){
+                    echo json_encode($getCommex->getCommexFaculty($globalOb->verifyToken()['payload']));
                 }
                 break;
 

@@ -5,9 +5,8 @@
 
     include_once "./Controller/global.php";
     
-    class Schedule{
+    class Commex{
         private $pdo;
-        private $faculty_ID = 1;
 
         public function __construct(\PDO $pdo){
             $this->pdo = $pdo;
@@ -18,20 +17,18 @@
         }
 
         //Faculty id GET sched
-        public function getScheduleFaculty($id){
-            $sql = "SELECT * 
-                    FROM `faculty-course` 
-                    INNER JOIN course on `faculty-course`.course_code=course.course_code
+        public function getCommexFaculty($id){
+            $sql = "SELECT * FROM `commex-faculty`
+                    INNER JOIN commex on `commex-faculty`.`commex_ID`=`commex`.`commex_ID`
                     WHERE faculty_ID = $id;";
 
             return $this->executeQuery($sql);
         }
 
         //GET all sched
-        public function getScheduleAll(){
-            $sql = "SELECT * 
-                    FROM `faculty-course` 
-                    INNER JOIN course on `faculty-course`.course_code=`course`.course_code;";
+        public function getCommexAll(){
+            $sql = "SELECT * FROM `commex-faculty`
+                    INNER JOIN commex on `commex-faculty`.`commex_ID`=`commex`.`commex_ID`;";
 
             return $this->executeQuery($sql);
         }

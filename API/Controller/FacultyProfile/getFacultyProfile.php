@@ -13,15 +13,15 @@
         }
 
         public function executeQuery($sql){
-            return $this->pdo->query($sql)->fetchAll();
+            return $this->pdo->query($sql)->fetch();
         }
 
         //Faculty id GET sched
         public function getFacultyInfo($id){
-            $sql = "SELECT `faculty_ID`,`college_ID`,`teaching_position`,`isAdmin`,`first_name`,`last_name`,`birthdate`,`age`,`citizenship`,`civil_status`,`sex`,`email`,`employment_status`,`address` 
-                    FROM `facultymembers` 
-                    WHERE faculty_ID = $id;";
-            return $this->executeQuery($sql);
+                $sql = "SELECT `faculty_ID`,`college_ID`,`teaching_position`,`isAdmin`,`first_name`,`last_name`,`birthdate`,`age`,`citizenship`,`civil_status`,`sex`,`email`,`employment_status`,`address`,`profile_image`,`cover_image`
+                FROM `facultymembers` 
+                WHERE faculty_ID = $id;";
+                return $this->executeQuery($sql);
         }
 
         public function getAllFaculty(){
