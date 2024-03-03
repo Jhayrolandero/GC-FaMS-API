@@ -20,6 +20,7 @@ include_once "./Model/database.php";
 include_once "./Controller/global.php";
 include_once "./Controller/Faculty/Faculty.php";
 include_once "./Controller/College/CollegeController.php";
+include_once "./Controller/Program/ProgramController.php";
 
 $con = new Connection();
 // $globalOb = new GlobalMethods();
@@ -29,6 +30,8 @@ $pdo = $con->connect();
 // $login = new Login($pdo);
 $faculty = new FacultyController($pdo);
 $college = new CollegeController($pdo);
+$program = new ProgramController($pdo);
+
 if (isset($_REQUEST['request'])) {
     $request = explode('/', $_REQUEST['request']);
 } else {
@@ -49,7 +52,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
             case 'college':
                 echo json_encode($college->getCollege());
                 break;
-
+            case 'program':
+                if (isset($request[1])) {
+                    echo json_encode($program->getProgram($request[1]));
+                } else {
+                    echo json_encode($program->getProgram());
+                }
+                break;
             default:
                 http_response_code(403);
                 break;
@@ -61,6 +70,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         switch ($request[0]) {
             case 'faculty':
                 echo json_encode($faculty->addFaculty($data));
+                break;
 
             default:
                 http_response_code(403);

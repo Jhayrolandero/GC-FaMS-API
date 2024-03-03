@@ -10,9 +10,9 @@ class FacultyController
     {
         $this->faculty = new Faculty($pdo);
     }
-    public function test()
+    public function test($data)
     {
-        return 'FacultyController is working';
+        return $data;
     }
 
     public function sendPaylood()

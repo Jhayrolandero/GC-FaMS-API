@@ -37,7 +37,7 @@ class Faculty
     {
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([
-            $data->college_id,
+            $data->college_ID,
             $data->teaching_position,
             $data->first_name,
             $data->last_name,
@@ -48,7 +48,14 @@ class Faculty
             $data->sex,
             $data->email,
             $data->employment_status,
-            $data->address,
+            $data->phone_number,
+            $data->middle_name,
+            $data->ext_name,
+            $data->region,
+            $data->province,
+            $data->language,
+            $data->city,
+            $data->barangay
         ]);
     }
 
@@ -61,6 +68,7 @@ class Faculty
         $sql = $this->addColumns($sql, $columns);
 
         return $this->executeQuery($sql, $data);
+        // return $sql;
     }
 }
 
