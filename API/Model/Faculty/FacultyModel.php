@@ -81,19 +81,3 @@ class Faculty extends GlobalMethods{
         return $this->executeGetQuery($sql);
     }
 }
-
-/**{
-    "college_id": 2,
-    "teaching_position": "Coordinator",
-    "first_name": "Not",
-    "last_name": "Sure",
-    "birthdate": "1994-10-23",
-    "age": 20,
-    "citizenship": "Filipino",
-    "civil_status": "Married",
-    "sex": "Male",
-    "email": "123@gmail.com",
-    "employment_status": 0,
-    "address": "123 st"
-}
- */

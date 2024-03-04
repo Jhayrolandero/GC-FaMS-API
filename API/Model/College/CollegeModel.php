@@ -1,24 +1,18 @@
 <?php
-class College
-{
-    private $pdo;
-    private $global;
+    header('Access-Control-Allow-Origin: http://localhost:4200');
+    header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+    header("Access-Control-Allow-Headers: *");
 
-    function __construct($pdo)
-    {
-        $this->pdo = $pdo;
+    include_once "./Controller/global.php";
+    
+    class College extends GlobalMethods{
+        //Faculty id GET sched
+        public function getCollege()
+        {
+            $sql = "SELECT * FROM college";
+    
+            return $this->executeGetQuery($sql)['data'];
+        }
     }
 
-    private function executeQuery($sql)
-    {
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll();
-    }
-    public function getCollege()
-    {
-        $sql = "SELECT * FROM college";
-
-        return $this->executeQuery($sql);
-    }
-}
+?>

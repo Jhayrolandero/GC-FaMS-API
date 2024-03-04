@@ -38,9 +38,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     echo json_encode($getTunnel->toGetSchedule($globalOb->verifyToken()['payload']));
                 }
                 break;
-            // case 'college':
-            //     echo json_encode($getTunnel->getCollege());
-            //     break;
+            case 'college':
+                echo json_encode($getTunnel->toGetCollege($globalOb->verifyToken()['payload']));
+                break;
             // case 'program':
             //     if (isset($request[1])) {
             //         echo json_encode($getTunnel->getProgram($request[1]));

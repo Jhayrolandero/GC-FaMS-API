@@ -13,11 +13,13 @@
         private $faculty;
         private $schedule;
         private $commex;
+        private $college;
 
         public function __construct(){
             $this->faculty = new Faculty();
             $this->schedule = new Schedule();
             $this->commex = new Commex();
+            $this->college = new College();
         }
 
         public function toGetFaculty($id){
@@ -30,6 +32,10 @@
 
         public function toGetCommex($id){
             return $this->commex->getCommexFaculty($id);
+        }
+
+        public function toGetCollege($id){
+            return $this->college->getCollege();
         }
     }
 
