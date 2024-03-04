@@ -5,18 +5,7 @@
 
     include_once "./Controller/global.php";
     
-    class Schedule{
-        private $pdo;
-        private $faculty_ID = 1;
-
-        public function __construct(\PDO $pdo){
-            $this->pdo = $pdo;
-        }
-
-        public function executeQuery($sql){
-            return $this->pdo->query($sql)->fetchAll();
-        }
-
+    class Schedule extends GlobalMethods{
         //Faculty id GET sched
         public function getScheduleFaculty($id){
             $sql = "SELECT * 
@@ -24,7 +13,7 @@
                     INNER JOIN course on `faculty-course`.course_code=course.course_code
                     WHERE faculty_ID = $id;";
 
-            return $this->executeQuery($sql);
+            return $this->executeGetQuery($sql)['data'];
         }
 
         //GET all sched
@@ -33,7 +22,7 @@
                     FROM `faculty-course` 
                     INNER JOIN course on `faculty-course`.course_code=`course`.course_code;";
 
-            return $this->executeQuery($sql);
+            return $this->executeGetQuery($sql);
         }
     }
 

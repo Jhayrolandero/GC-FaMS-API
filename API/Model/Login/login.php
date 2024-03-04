@@ -11,10 +11,6 @@
     include_once "./Controller/global.php";
 
     class Login extends GlobalMethods{
-        function base64_url_encode($text):String{
-            return str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($text));
-        }
-
         function generateToken($faculty_ID, $isAdmin){
 
             $token = array(
@@ -27,10 +23,10 @@
                 "code" => 200
             );
         }
+
         public function validateLogin($form){
-            $isAdmin = $form->privExpected == 1 ? 0 : 1;
-            $sql = "SELECT * FROM `facultymembers` WHERE `email` = '$form->email' AND `isAdmin` = $isAdmin";
-            $result = $this->executeQuery($sql);
+            $sql = "SELECT * FROM `facultymembers` WHERE `email` = '$form->email'";
+            $result = $this->executeGetQuery($sql);
             if($result['code'] == 200){
                 $passValid = password_verify($form->password, $result['data'][0]['password']);
                 if($passValid){

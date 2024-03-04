@@ -13,8 +13,7 @@ require_once('../vendor/autoload.php');
 
 include_once "./Model/database.php";
 
-class GlobalMethods extends Connection
-{
+class GlobalMethods extends Connection{
     //UNUSED FUNCTIONS (MAY BE REPURPOSED LATER)
     //UNUSED FUNCTIONS (MAY BE REPURPOSED LATER)
     //UNUSED FUNCTIONS (MAY BE REPURPOSED LATER)
@@ -41,8 +40,7 @@ class GlobalMethods extends Connection
      * @return array
      *   the result of query.
      */
-    public function executeQuery($sqlString)
-    {
+    public function executeGetQuery($sqlString){
         $data = array();
         $errmsg = "";
         $code = 0;
@@ -66,8 +64,7 @@ class GlobalMethods extends Connection
         return array("code" => $code, "errmsg" => $errmsg);
     }
 
-    public function verifyToken()
-    {
+    public function verifyToken(){
         if (!preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
             header('HTTP/1.0 403 Forbidden');
             echo 'Token not found in request';
@@ -84,7 +81,10 @@ class GlobalMethods extends Connection
 
         $headers = new stdClass();
         $secretKey = 'jetculverin';
+
         $payload = JWT::decode($jwt, new Key($secretKey, 'HS512'), $headers);
+
+        //ETO YUNG MISMONG JSON FORMATTED NA PAYLOAD
         $parsedPayload = json_decode(json_encode($payload), true);
 
         $toCheckSignature = JWT::encode($parsedPayload, $secretKey, 'HS512');

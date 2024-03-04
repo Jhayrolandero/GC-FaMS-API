@@ -13,27 +13,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
-foreach (glob("./Controller/*/*.php") as $filename) {
-    include_once $filename;
-}
 include_once "./Model/database.php";
 include_once "./Controller/global.php";
-include_once "./Controller/Faculty/Faculty.php";
-include_once "./Controller/College/CollegeController.php";
-include_once "./Controller/Program/ProgramController.php";
+include_once "./Controller/getTunnel.php";
+include_once "./Controller/postTunnel.php";
 
-$con = new Connection();
-// $globalOb = new GlobalMethods();
-$pdo = $con->connect();
-
+$getTunnel = new GetTunnel();
+$postTunnel = new PostTunnel();
 $globalOb = new GlobalMethods();
-$getSchedule = new Schedule($pdo);
-$getFaculty = new Profile($pdo);
-$getCommex = new Commex($pdo);
-$login = new Login($pdo);
-$faculty = new FacultyController($pdo);
-$college = new CollegeController($pdo);
-$program = new ProgramController($pdo);
 
 if (isset($_REQUEST['request'])) {
     $request = explode('/', $_REQUEST['request']);
@@ -44,36 +31,35 @@ if (isset($_REQUEST['request'])) {
 
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
-        // $userSessionID = $globalOb->verifyToken()['payload'];
 
         switch ($request[0]) {
             case 'getschedules':
                 if ($request[1] == "fetchFaculty") {
-                    echo json_encode($getSchedule->getScheduleFaculty($globalOb->verifyToken()['payload']));
+                    echo json_encode($getTunnel->toGetSchedule($globalOb->verifyToken()['payload']));
                 }
                 break;
-            case 'college':
-                echo json_encode($college->getCollege());
-                break;
-            case 'program':
-                if (isset($request[1])) {
-                    echo json_encode($program->getProgram($request[1]));
-                } else {
-                    echo json_encode($program->getProgram());
-                }
-                break;
+            // case 'college':
+            //     echo json_encode($getTunnel->getCollege());
+            //     break;
+            // case 'program':
+            //     if (isset($request[1])) {
+            //         echo json_encode($getTunnel->getProgram($request[1]));
+            //     } else {
+            //         echo json_encode($getTunnel->getProgram());
+            //     }
+            //     break;
 
             case 'getprofile':
                 if ($request[1] == "fetchProfile") {
-                    echo json_encode($getFaculty->getFacultyInfo($globalOb->verifyToken()['payload']));
+                    echo json_encode($getTunnel->toGetFaculty($globalOb->verifyToken()['payload']));
                 }
                 break;
 
-            case 'getcommex':
-                if ($request[1] == "fetchCommex") {
-                    echo json_encode($getCommex->getCommexFaculty($globalOb->verifyToken()['payload']));
-                }
-                break;
+            // case 'getcommex':
+            //     if ($request[1] == "fetchCommex") {
+            //         echo json_encode($getTunnel->getCommexFaculty($globalOb->verifyToken()['payload']));
+            //     }
+            //     break;
 
             default:
                 http_response_code(404);
@@ -84,12 +70,12 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case 'POST':
         $data = json_decode(file_get_contents("php://input"));
         switch ($request[0]) {
-            case 'faculty':
-                echo json_encode($faculty->addFaculty($data));
-                break;
+            // case 'faculty':
+            //     echo json_encode($faculty->addFaculty($data));
+            //     break;
 
             case 'login':
-                echo json_encode($login->validateLogin($data));
+                echo json_encode($postTunnel->toValidateLogin($data));
                 break;
 
             default:
