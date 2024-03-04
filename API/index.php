@@ -55,11 +55,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 }
                 break;
 
-            // case 'getcommex':
-            //     if ($request[1] == "fetchCommex") {
-            //         echo json_encode($getTunnel->getCommexFaculty($globalOb->verifyToken()['payload']));
-            //     }
-            //     break;
+            case 'getcommex':
+                if ($request[1] == "fetchCommex") {
+                    echo json_encode($getTunnel->toGetCommex($globalOb->verifyToken()['payload']));
+                }
+                break;
 
             default:
                 http_response_code(404);
