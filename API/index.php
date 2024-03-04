@@ -26,8 +26,11 @@ $con = new Connection();
 // $globalOb = new GlobalMethods();
 $pdo = $con->connect();
 
-// $getSchedule = new Schedule($pdo);
-// $login = new Login($pdo);
+$globalOb = new GlobalMethods();
+$getSchedule = new Schedule($pdo);
+$getFaculty = new Profile($pdo);
+$getCommex = new Commex($pdo);
+$login = new Login($pdo);
 $faculty = new FacultyController($pdo);
 $college = new CollegeController($pdo);
 $program = new ProgramController($pdo);
@@ -83,6 +86,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
         switch ($request[0]) {
             case 'faculty':
                 echo json_encode($faculty->addFaculty($data));
+                break;
+
+            case 'login':
+                echo json_encode($login->validateLogin($data));
                 break;
 
             default:
