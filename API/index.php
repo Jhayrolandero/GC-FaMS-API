@@ -61,6 +61,12 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 }
                 break;
 
+            case 'getresume':
+                if ($request[1] == "fetchResume") {
+                    echo json_encode($getTunnel->toGetResumeInfo($globalOb->verifyToken()['payload']));
+                }
+                break;
+
             default:
                 http_response_code(404);
                 break;

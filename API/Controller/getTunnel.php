@@ -14,12 +14,14 @@
         private $schedule;
         private $commex;
         private $college;
+        private $resume;
 
         public function __construct(){
             $this->faculty = new Faculty();
             $this->schedule = new Schedule();
             $this->commex = new Commex();
             $this->college = new College();
+            $this->resume = new ResumeInfo();
         }
 
         public function toGetFaculty($id){
@@ -36,6 +38,10 @@
 
         public function toGetCollege($id){
             return $this->college->getCollege();
+        }
+
+        public function toGetResumeInfo($id){
+            return $this->resume->getResumeInfo($id);
         }
     }
 
