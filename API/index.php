@@ -38,7 +38,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     echo json_encode($getTunnel->toGetSchedule($globalOb->verifyToken()['payload']));
                 }
                 break;
-            case 'college':
+            case 'fetchCollege':
                 echo json_encode($getTunnel->toGetCollege($globalOb->verifyToken()['payload']));
                 break;
             // case 'program':
