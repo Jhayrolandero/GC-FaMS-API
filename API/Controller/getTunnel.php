@@ -15,6 +15,7 @@
         private $commex;
         private $college;
         private $resume;
+        private $evaluation;
 
         public function __construct(){
             $this->faculty = new Faculty();
@@ -22,6 +23,7 @@
             $this->commex = new Commex();
             $this->college = new College();
             $this->resume = new ResumeInfo();
+            $this->evaluation = new Evaluation();
         }
 
         public function toGetFaculty($id){
@@ -42,6 +44,10 @@
 
         public function toGetResumeInfo($id){
             return $this->resume->getResumeInfo($id);
+        }
+
+        public function toGetEvaluation($id){
+            return $this->evaluation->getEvaluation($id);
         }
     }
 

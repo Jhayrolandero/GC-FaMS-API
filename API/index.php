@@ -67,6 +67,12 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 }
                 break;
 
+            case 'getevaluation':
+                if ($request[1] == "fetchEvaluation") {
+                    echo json_encode($getTunnel->toGetEvaluation($globalOb->verifyToken()['payload']));
+                }
+                break;
+
             default:
                 http_response_code(404);
                 break;
