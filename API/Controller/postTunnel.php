@@ -26,8 +26,26 @@
             return $this->login->validateLogin($form);
         }
 
-        public function toAddEduc($form, $id){
-            return $this->resume->addEduc($form, $id);
+        public function toAddResume($form, $id, $type){
+            switch ($type) {
+                case 1:
+                    return $this->resume->addEduc($form, $id);
+                
+                default:
+                    # code...
+                    break;
+            }
+        }
+
+        public function toDeleteResume($id, $type){
+            switch ($type) {
+                case 1:
+                    return $this->resume->deleteEduc($id);
+                
+                default:
+                    # code...
+                    break;
+            }
         }
     }
 

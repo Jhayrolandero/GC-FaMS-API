@@ -41,7 +41,11 @@
                             $form->year_start,
                             $form->year_end,
                             $form->educ_details);
-            return $this->prepareBind('educattainment', $params, $tempForm);
+            return $this->prepareAddBind('educattainment', $params, $tempForm);
+        }
+
+        public function deleteEduc($id){
+            return $this->prepareDeleteBind('educattainment', 'educattainment_ID', $id);
         }
     }
 ?>

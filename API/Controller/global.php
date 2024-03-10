@@ -54,7 +54,7 @@ class GlobalMethods extends Connection{
         try {
             if ($stmt->execute()) {
                 $code = 200;
-                return array("code" => $code, "msg" => 'Successfully Added.');
+                return array("code" => $code, "msg" => 'Successful Query.');
             } else {
                 $errmsg = "No data found";
                 $code = 404;
@@ -104,7 +104,7 @@ class GlobalMethods extends Connection{
         }
     }
 
-    public function prepareBind($table, $params, $form){
+    public function prepareAddBind($table, $params, $form){
         $sql = "INSERT INTO `$table`(";
         $tempParam = "(";
         $tempValue = "";
@@ -122,6 +122,15 @@ class GlobalMethods extends Connection{
         foreach($form as $key=>$value){
             $stmt->bindParam(($key+1), $form[$key]);
         }
+
+        return $this->executePostQuery($stmt);
+    }
+
+    public function prepareDeleteBind($table, $col, $id){
+        $sql = "DELETE FROM `$table` WHERE `$col` = ?";
+
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->bindParam(1, $id);
 
         return $this->executePostQuery($stmt);
     }

@@ -87,8 +87,20 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'addEduc':
-                echo json_encode($postTunnel->toAddEduc($data, $globalOb->verifyToken()['payload']));
+                echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 1));
                 break;
+            default:
+                http_response_code(403);
+                break;
+        }
+        break;
+
+    case 'DELETE':
+        switch ($request[0]) {
+            case 'deleteEduc':
+                echo json_encode($postTunnel->toDeleteResume($request[1], 1));
+                break;
+
             default:
                 http_response_code(403);
                 break;
