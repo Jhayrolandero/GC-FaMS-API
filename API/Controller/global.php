@@ -46,7 +46,7 @@ class GlobalMethods extends Connection
             $errmsg = $e->getMessage();
             $code = 403;
         }
-        return array("code" => $code, "errmsg" => $errmsg);
+        return array("code" => $code, "errmsg" => $errmsg, "data" => $data);
     }
 
     public function executePostQuery($stmt)
@@ -124,6 +124,29 @@ class GlobalMethods extends Connection
         $sql = $sql . " VALUES " . $tempParam;
         $stmt = $this->connect()->prepare($sql);
 
+        foreach ($form as $key => $value) {
+            $stmt->bindParam(($key + 1), $form[$key]);
+        }
+
+        return $this->executePostQuery($stmt);
+    }
+
+    public function prepareEditBind($table, $params, $form, $rowId)
+    {
+        // UPDATE `educattainment`
+        // SET `faculty_ID` = 3, `educ_title` = 'My nutsacks', `educ_school` = 'Nutsack School', `year_start` = '2022', `year_end` = '2023', `educ_details` = 'very nuts, much sacks'
+        // WHERE `educattainment_ID` = 26;
+
+
+        $sql = "UPDATE `$table`
+                SET ";
+
+        foreach ($params as $key => $col) {
+            //Insertion columns details
+            sizeof($params) - 1 != $key ? $sql = $sql . "`$col` = ?, " : $sql = $sql . "`$col` = ? ";
+        }
+        $sql = $sql . "WHERE `$rowId` = ?";
+        $stmt = $this->connect()->prepare($sql);
         foreach ($form as $key => $value) {
             $stmt->bindParam(($key + 1), $form[$key]);
         }

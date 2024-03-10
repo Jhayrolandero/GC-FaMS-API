@@ -1,6 +1,6 @@
 <?php
     header('Access-Control-Allow-Origin: http://localhost:4200');
-    header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+    header('Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS');
     header("Access-Control-Allow-Headers: *");
 
     // Fetches every single file in Model
@@ -30,6 +30,35 @@
             switch ($type) {
                 case 1:
                     return $this->resume->addEduc($form, $id);
+
+                case 2:
+                    return $this->resume->addExp($form, $id);
+                
+                case 3:
+                    return $this->resume->addCert($form, $id);
+
+                case 4:
+                    return $this->resume->addProj($form, $id);
+                
+                default:
+                    # code...
+                    break;
+            }
+        }
+
+        public function toEditResume($form, $id, $type){
+            switch ($type) {
+                case 1:
+                    return $this->resume->editEduc($form, $id);
+
+                case 2:
+                    return $this->resume->editExp($form, $id);
+
+                case 3:
+                    return $this->resume->editCert($form, $id);
+
+                case 4:
+                    return $this->resume->editProj($form, $id);
                 
                 default:
                     # code...
@@ -41,7 +70,16 @@
             switch ($type) {
                 case 1:
                     return $this->resume->deleteEduc($id);
+
+                case 2:
+                    return $this->resume->deleteExp($id);
+
+                case 3:
+                    return $this->resume->deleteCert($id);
                 
+                case 4:
+                    return $this->resume->deleteProj($id);
+                    
                 default:
                     # code...
                     break;
