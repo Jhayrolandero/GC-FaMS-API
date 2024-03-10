@@ -11,4 +11,8 @@ class Evaluation extends GlobalMethods{
         }
     }
 
+
+    public function getProfileEvaluation($id) {
+        
+    }
 }

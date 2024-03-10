@@ -13,7 +13,8 @@ require_once('../vendor/autoload.php');
 
 include_once "./Model/database.php";
 
-class GlobalMethods extends Connection{
+class GlobalMethods extends Connection
+{
     /**
      * Global function to execute queries
      *
@@ -23,7 +24,8 @@ class GlobalMethods extends Connection{
      * @return array
      *   the result of query.
      */
-    public function executeGetQuery($sqlString){
+    public function executeGetQuery($sqlString)
+    {
         $data = array();
         $errmsg = "";
         $code = 0;
@@ -47,7 +49,8 @@ class GlobalMethods extends Connection{
         return array("code" => $code, "errmsg" => $errmsg);
     }
 
-    public function executePostQuery($stmt){
+    public function executePostQuery($stmt)
+    {
         $errmsg = "";
         $code = 0;
 
@@ -66,7 +69,8 @@ class GlobalMethods extends Connection{
         return array("code" => $code, "errmsg" => $errmsg);
     }
 
-    public function verifyToken(){
+    public function verifyToken()
+    {
         if (!preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
             header('HTTP/1.0 403 Forbidden');
             echo 'Token not found in request';
@@ -104,12 +108,13 @@ class GlobalMethods extends Connection{
         }
     }
 
-    public function prepareAddBind($table, $params, $form){
+    public function prepareAddBind($table, $params, $form)
+    {
         $sql = "INSERT INTO `$table`(";
         $tempParam = "(";
         $tempValue = "";
 
-        foreach($params as $key=>$col){
+        foreach ($params as $key => $col) {
             //Insertion columns details
             sizeof($params) - 1 != $key ? $sql = $sql . $col . ', ' : $sql = $sql . $col . ')';
             //Question marks
@@ -119,14 +124,15 @@ class GlobalMethods extends Connection{
         $sql = $sql . " VALUES " . $tempParam;
         $stmt = $this->connect()->prepare($sql);
 
-        foreach($form as $key=>$value){
-            $stmt->bindParam(($key+1), $form[$key]);
+        foreach ($form as $key => $value) {
+            $stmt->bindParam(($key + 1), $form[$key]);
         }
 
         return $this->executePostQuery($stmt);
     }
 
-    public function prepareDeleteBind($table, $col, $id){
+    public function prepareDeleteBind($table, $col, $id)
+    {
         $sql = "DELETE FROM `$table` WHERE `$col` = ?";
 
         $stmt = $this->connect()->prepare($sql);

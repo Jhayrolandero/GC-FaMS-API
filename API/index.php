@@ -41,13 +41,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
             case 'fetchCollege':
                 echo json_encode($getTunnel->toGetCollege($globalOb->verifyToken()['payload']));
                 break;
-            // case 'program':
-            //     if (isset($request[1])) {
-            //         echo json_encode($getTunnel->getProgram($request[1]));
-            //     } else {
-            //         echo json_encode($getTunnel->getProgram());
-            //     }
-            //     break;
+                // case 'program':
+                //     if (isset($request[1])) {
+                //         echo json_encode($getTunnel->getProgram($request[1]));
+                //     } else {
+                //         echo json_encode($getTunnel->getProgram());
+                //     }
+                //     break;
 
             case 'getprofile':
                 if ($request[1] == "fetchProfile") {
