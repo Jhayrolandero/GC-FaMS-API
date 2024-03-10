@@ -102,6 +102,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 4));
                 break;
 
+            case 'addSpec':
+                echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 5));
+                break;
+
             default:
                 http_response_code(403);
                 break;
@@ -131,6 +135,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toEditResume($data, $request[1] , 4));
                 break;
 
+            case 'editSpec':
+                echo json_encode($postTunnel->toEditResume($data, $request[1] , 5));
+                break;
+
             default:
                 http_response_code(403);
                 break;
@@ -153,6 +161,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
             case 'deleteProj':
                 echo json_encode($postTunnel->toDeleteResume($request[1], 4));
+                break;
+
+            case 'deleteSpec':
+                echo json_encode($postTunnel->toDeleteResume($request[1], 5));
                 break;
 
             default:

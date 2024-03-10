@@ -34,6 +34,10 @@
                        WHERE faculty_ID = $id;";
             $experience = $this->executeGetQuery($expSQL)['data'];
 
+            $specSQL = "SELECT * FROM `expertise`
+                        WHERE faculty_ID = $id;";
+            $expertise = $this->executeGetQuery($specSQL)['data'];
+
 
             $projSQL = "SELECT * FROM `projects`
                         WHERE faculty_ID = $id;";
@@ -85,6 +89,14 @@
             return $this->prepareAddBind('projects', $params, $tempForm);
         }
 
+        public function addSpec($form, $id){
+            $params = array('faculty_ID','expertise_name','expertise_confidence');
+            $tempForm = array($id,
+                            $form->expertise_name, 
+                            $form->expertise_confidence);
+            return $this->prepareAddBind('expertise', $params, $tempForm);
+        }
+
         public function editEduc($form, $id){
             $params = array('educ_title','educ_school','year_start','year_end','educ_details');
             $tempForm = array($form->educ_title, 
@@ -127,6 +139,14 @@
             return $this->prepareEditBind('projects', $params, $tempForm, 'project_ID');
         }
 
+        public function editSpec($form, $id){
+            $params = array('expertise_name','expertise_confidence');
+            $tempForm = array($form->expertise_name, 
+                            $form->expertise_confidence,
+                            $id);
+            return $this->prepareEditBind('expertise', $params, $tempForm, 'expertise_ID');
+        }
+
         public function deleteEduc($id){
             return $this->prepareDeleteBind('educattainment', 'educattainment_ID', $id);
         }
@@ -141,6 +161,10 @@
 
         public function deleteProj($id){
             return $this->prepareDeleteBind('projects', 'project_ID', $id);
+        }
+
+        public function deleteSpec($id){
+            return $this->prepareDeleteBind('expertise', 'expertise_ID', $id);
         }
     }
 ?>
