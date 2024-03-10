@@ -82,14 +82,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case 'POST':
         $data = json_decode(file_get_contents("php://input"));
         switch ($request[0]) {
-            // case 'faculty':
-            //     echo json_encode($faculty->addFaculty($data));
-            //     break;
-
             case 'login':
                 echo json_encode($postTunnel->toValidateLogin($data));
                 break;
 
+            case 'addEduc':
+                echo json_encode($postTunnel->toAddEduc($data, $globalOb->verifyToken()['payload']));
+                break;
             default:
                 http_response_code(403);
                 break;

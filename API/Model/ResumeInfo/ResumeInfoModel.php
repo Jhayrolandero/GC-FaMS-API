@@ -15,7 +15,6 @@
 
             $educSQL = "SELECT * 
                         FROM `educattainment` 
-                        INNER JOIN school on `educattainment`.school_ID=`school`.school_ID
                         WHERE faculty_ID = $id;";
 
             $educAttain = $this->executeGetQuery($educSQL)['data'];
@@ -25,9 +24,24 @@
                         WHERE faculty_ID = $id;";
             $certs = $this->executeGetQuery($certSQL)['data'];
 
+            $expSQL = "SELECT * FROM `experience-faculty`
+                       WHERE faculty_ID = $id;";
+            $experience = $this->executeGetQuery($expSQL)['data'];
+
             return array("educAttainment" => $educAttain, "certifications" => $certs, "industryExp" => $experience, "expertise" => $expertise);
         }
 
+        public function addEduc($form, $id){
+            // $sql = "INSERT INTO `educattainment`(faculty_ID, educ_title, educ_school, year_start, year_end educ_details)
+            // VALUES (?,?,?,?,?,?)";
+            $params = array('faculty_ID','educ_title','educ_school','year_start','year_end','educ_details');
+            $tempForm = array($id,
+                            $form->educ_title, 
+                            $form->educ_school,
+                            $form->year_start,
+                            $form->year_end,
+                            $form->educ_details);
+            return $this->prepareBind('educattainment', $params, $tempForm);
+        }
     }
-
 ?>

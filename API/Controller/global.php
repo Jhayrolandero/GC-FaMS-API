@@ -14,23 +14,6 @@ require_once('../vendor/autoload.php');
 include_once "./Model/database.php";
 
 class GlobalMethods extends Connection{
-    //UNUSED FUNCTIONS (MAY BE REPURPOSED LATER)
-    //UNUSED FUNCTIONS (MAY BE REPURPOSED LATER)
-    //UNUSED FUNCTIONS (MAY BE REPURPOSED LATER)
-    // public function sendPayLoad($data, $remarks, $message, $code){
-    //     $status = array("remarks"=>$remarks, "message"=> $message);
-    //     http_response_code($code);
-    //     return array(
-    //         "status"=>$status,
-    //         "data"=>$data,
-    //         "prepared_by"=>"Chris Kirk Patrick V. Viacrusis",
-    //         "timestamp"=>date_create()
-    //     );
-    // }
-    //UNUSED FUNCTIONS (MAY BE REPURPOSED LATER)
-    //UNUSED FUNCTIONS (MAY BE REPURPOSED LATER)
-    //UNUSED FUNCTIONS (MAY BE REPURPOSED LATER)
-
     /**
      * Global function to execute queries
      *
@@ -53,6 +36,25 @@ class GlobalMethods extends Connection{
                 $code = 200;
                 $result = null;
                 return array("code" => $code, "data" => $data);
+            } else {
+                $errmsg = "No data found";
+                $code = 404;
+            }
+        } catch (\PDOException $e) {
+            $errmsg = $e->getMessage();
+            $code = 403;
+        }
+        return array("code" => $code, "errmsg" => $errmsg);
+    }
+
+    public function executePostQuery($stmt){
+        $errmsg = "";
+        $code = 0;
+
+        try {
+            if ($stmt->execute()) {
+                $code = 200;
+                return array("code" => $code, "msg" => 'Successfully Added.');
             } else {
                 $errmsg = "No data found";
                 $code = 404;
@@ -100,5 +102,27 @@ class GlobalMethods extends Connection{
             echo 'Currently encoded payload does not matched initially signed payload';
             exit;
         }
+    }
+
+    public function prepareBind($table, $params, $form){
+        $sql = "INSERT INTO `$table`(";
+        $tempParam = "(";
+        $tempValue = "";
+
+        foreach($params as $key=>$col){
+            //Insertion columns details
+            sizeof($params) - 1 != $key ? $sql = $sql . $col . ', ' : $sql = $sql . $col . ')';
+            //Question marks
+            sizeof($params) - 1 != $key ? $tempParam = $tempParam . '?' . ', ' : $tempParam = $tempParam . '?' . ')';
+        }
+
+        $sql = $sql . " VALUES " . $tempParam;
+        $stmt = $this->connect()->prepare($sql);
+
+        foreach($form as $key=>$value){
+            $stmt->bindParam(($key+1), $form[$key]);
+        }
+
+        return $this->executePostQuery($stmt);
     }
 }
