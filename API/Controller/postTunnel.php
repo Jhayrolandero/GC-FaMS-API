@@ -39,6 +39,9 @@
 
                 case 4:
                     return $this->resume->addProj($form, $id);
+
+                case 5:
+                    return $this->resume->addSpec($form, $id);
                 
                 default:
                     # code...
@@ -60,6 +63,9 @@
                 case 4:
                     return $this->resume->editProj($form, $id);
                 
+                case 5:
+                    return $this->resume->editSpec($form, $id);
+
                 default:
                     # code...
                     break;
@@ -79,6 +85,9 @@
                 
                 case 4:
                     return $this->resume->deleteProj($id);
+
+                case 5:
+                    return $this->resume->deleteSpec($id);
                     
                 default:
                     # code...
