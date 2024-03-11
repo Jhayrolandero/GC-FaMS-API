@@ -11,7 +11,7 @@ set_time_limit(1000);
 
 //DEFINE CONSTANT SERVER VARIABLES
 define("SERVER", "mysql-gc-fams123.alwaysdata.net");
-define("DATABASE", "gc-fams123_gc-fams");
+define("DATABASE", "gc-fams123_gc-fams2");
 define("USER", "351056");
 define("PASSWORD", "GC-F@M$123");
 define("DRIVER", "mysql");

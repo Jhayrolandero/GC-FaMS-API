@@ -2,6 +2,7 @@
 header('Access-Control-Allow-Origin: http://localhost:4200');
 header('Access-Control-Allow-Credentials: true');
 
+
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
@@ -106,6 +107,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 5));
                 break;
 
+            case 'faculty':
+                echo json_encode($postTunnel->addFaculty($data, $globalOb->verifyToken()['payload']));
+                break;
             default:
                 http_response_code(403);
                 break;
@@ -120,23 +124,23 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
         switch ($request[0]) {
             case 'editEduc':
-                echo json_encode($postTunnel->toEditResume($data, $request[1] , 1));
+                echo json_encode($postTunnel->toEditResume($data, $request[1], 1));
                 break;
 
             case 'editExp':
-                echo json_encode($postTunnel->toEditResume($data, $request[1] , 2));
+                echo json_encode($postTunnel->toEditResume($data, $request[1], 2));
                 break;
 
             case 'editCert':
-                echo json_encode($postTunnel->toEditResume($data, $request[1] , 3));
+                echo json_encode($postTunnel->toEditResume($data, $request[1], 3));
                 break;
 
             case 'editProj':
-                echo json_encode($postTunnel->toEditResume($data, $request[1] , 4));
+                echo json_encode($postTunnel->toEditResume($data, $request[1], 4));
                 break;
 
             case 'editSpec':
-                echo json_encode($postTunnel->toEditResume($data, $request[1] , 5));
+                echo json_encode($postTunnel->toEditResume($data, $request[1], 5));
                 break;
 
             default:
