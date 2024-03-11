@@ -67,31 +67,38 @@ class GlobalMethods extends Connection{
     }
 
     public function verifyToken(){
+        //Check existence of token
         if (!preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
             header('HTTP/1.0 403 Forbidden');
             echo 'Token not found in request';
             exit;
         }
 
+        //Check header
         $jwt = $matches[1];
         if (!$jwt) {
             header('HTTP/1.0 403 Forbidden');
             echo 'Token is missing but header exists';
             exit;
         }
+        //Separate token to 3 parts
         $jwtArr = explode('.', $jwt);
 
         $headers = new stdClass();
-        $secretKey = 'jetculverin';
+        $env = parse_ini_file('.env');
+        $secretKey = $env["GCFAMS_API_KEY"];
 
+        //Decode received token
         $payload = JWT::decode($jwt, new Key($secretKey, 'HS512'), $headers);
 
-        //ETO YUNG MISMONG JSON FORMATTED NA PAYLOAD
+        //Decode payload part
         $parsedPayload = json_decode(json_encode($payload), true);
 
+        //Re-encode decoded payload with the stored signature key to check for tampers
         $toCheckSignature = JWT::encode($parsedPayload, $secretKey, 'HS512');
         $toCheckSignature = explode('.', $toCheckSignature);
 
+        //If re-encoded token is equal to received token, validate token.
         if ($toCheckSignature[2] == $jwtArr[2]) {
             return array(
                 "code" => 200,
