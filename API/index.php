@@ -41,13 +41,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
             case 'fetchCollege':
                 echo json_encode($getTunnel->toGetCollege($globalOb->verifyToken()['payload']));
                 break;
-            // case 'program':
-            //     if (isset($request[1])) {
-            //         echo json_encode($getTunnel->getProgram($request[1]));
-            //     } else {
-            //         echo json_encode($getTunnel->getProgram());
-            //     }
-            //     break;
+                // case 'program':
+                //     if (isset($request[1])) {
+                //         echo json_encode($getTunnel->getProgram($request[1]));
+                //     } else {
+                //         echo json_encode($getTunnel->getProgram());
+                //     }
+                //     break;
 
             case 'getprofile':
                 if ($request[1] == "fetchProfile") {
@@ -82,9 +82,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case 'POST':
         $data = json_decode(file_get_contents("php://input"));
         switch ($request[0]) {
-            // case 'faculty':
-            //     echo json_encode($faculty->addFaculty($data));
-            //     break;
+                // case 'faculty':
+                //     echo json_encode($faculty->addFaculty($data));
+                //     break;
 
             case 'login':
                 echo json_encode($postTunnel->toValidateLogin($data));
