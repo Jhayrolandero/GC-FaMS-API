@@ -32,23 +32,43 @@ class PostTunnel
         return $this->login->validateLogin($form);
     }
 
-    public function addFaculty($data, $id)
+    public function addFaculty($data)
     {
-        // if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        //     $tmp_name = $_FILES['image']['tmp_name'];
-        //     $name = basename($_FILES['image']['name']);
-        //     $destination = 'uploads/' . $name;
 
-        //     // Move uploaded file to specified directory
-        //     if (move_uploaded_file($tmp_name, $destination)) {
-        //         echo 'Image uploaded successfully!';
-        //     } else {
-        //         echo 'Failed to upload image.';
-        //     }
-        // } else {
-        //     echo 'No image selected or upload error occurred.';
-        // }
-        return $data;
+
+        if (!empty($_FILES)) {
+            $tempFile = '';
+            $fileName = '';
+
+            foreach ($_FILES as $key => $file) {
+                $tempFile = $file['tmp_name'];
+                $fileName = $file['name'];
+            }
+            $lastIncrementID = $this->faculty->fetchLastID();
+            $fileFolder = __DIR__ . "/../../Image_Assets/Faculty_Profile/$lastIncrementID/";
+
+            if (!file_exists($fileFolder)) {
+                mkdir($fileFolder, 0777);
+            }
+
+            $filepath = __DIR__ . "/../../Image_Assets/Faculty_Profile/$lastIncrementID/$fileName";
+
+            if (file_exists($filepath)) {
+                unlink($filepath);
+            }
+
+            if (!move_uploaded_file($tempFile, $filepath)) {
+                return array("code" => 404, "errmsg" => "Upload unsuccessful");
+            }
+
+            $filepath = str_replace("C:\\xampp\\htdocs", "", $filepath);
+            return $this->faculty->addFaculty($filepath);
+            // return 'withimage';
+        } else {
+
+            return $this->faculty->addFaculty();
+        }
+        // return 'withoutimage';
     }
     public function toAddResume($form, $id, $type)
     {
@@ -73,12 +93,6 @@ class PostTunnel
                 break;
         }
     }
-
-    //Assuming your table is named 'your_table_name' and has an auto-incremented column named 'id'
-    //SELECT AUTO_INCREMENT
-    //FROM information_schema.TABLES
-    //WHERE TABLE_SCHEMA = 'your_database_name'  -- Replace with your database name
-    //AND TABLE_NAME = 'your_table_name';      -- Replace with your table name
 
     public function toEditResume($form, $id, $type)
     {

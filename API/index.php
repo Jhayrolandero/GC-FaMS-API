@@ -108,7 +108,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'faculty':
-                echo json_encode($postTunnel->addFaculty($data, $globalOb->verifyToken()['payload']));
+                // echo json_encode($postTunnel->addFaculty($data, $globalOb->verifyToken()['payload']));
+                echo json_encode($postTunnel->addFaculty($data));
                 break;
             default:
                 http_response_code(403);

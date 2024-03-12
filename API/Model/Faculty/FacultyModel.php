@@ -4,67 +4,6 @@
 include_once(__DIR__ . '/../../Controller/global.php');
 class Faculty extends GlobalMethods
 {
-    // private function getColumns($data)
-    // {
-    //     $columns = array_keys(get_object_vars($data));
-    //     return $columns;
-    // }
-
-    // private function addColumns($sqlStr, $columns)
-    // {
-    //     $sqlStr .= "(" . implode(', ', $columns) . ")"
-    //         . " VALUES ( ";
-
-    //     for ($i = 0; $i < count($columns); $i++) {
-    //         if ($i == count($columns) - 1) {
-    //             $sqlStr .= '? )';
-    //         } else {
-    //             $sqlStr .= '?, ';
-    //         }
-    //     }
-
-    //     return $sqlStr;
-    // }
-
-    // public function executeQuery($sql, $data)
-    // {
-    //     $stmt = $this->pdo->prepare($sql);
-    //     return $stmt->execute([
-    //         $data->college_ID,
-    //         $data->teaching_position,
-    //         $data->first_name,
-    //         $data->last_name,
-    //         $data->birthdate,
-    //         $data->age,
-    //         $data->citizenship,
-    //         $data->civil_status,
-    //         $data->sex,
-    //         $data->email,
-    //         $data->employment_status,
-    //         $data->phone_number,
-    //         $data->middle_name,
-    //         $data->ext_name,
-    //         $data->region,
-    //         $data->province,
-    //         $data->language,
-    //         $data->city,
-    //         $data->barangay
-    //     ]);
-    // }
-
-    // public function addFaculty($data)
-    // {
-    //     $columns = $this->getColumns($data);
-
-    //     $sql = "INSERT INTO facultymembers ";
-
-    //     $sql = $this->addColumns($sql, $columns);
-
-    //     return $this->executeQuery($sql, $data);
-    //     // return $sql;
-    // }
-
-
 
     public function getFacultyInfo($id)
     {
@@ -85,9 +24,60 @@ class Faculty extends GlobalMethods
         return $this->executeGetQuery($sql);
     }
 
-
-    public function addFaculty()
+    private function emailExist()
     {
-        return "Add faculty Works!";
+        $email = $_POST['email'];
+        $sql = "SELECT email from `facultymembers`
+                WHERE email = '$email';";
+
+
+        if ($this->executeGetQuery($sql)["data"]) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function addFaculty($profileIMGPath = null)
+    {
+
+
+        if ($this->emailExist()) {
+            return ["code" => 406, "errmsg" => "Email already Exist!"];
+        }
+
+        $params = [];
+        $tempForm = [];
+        foreach ($_POST as $key => $value) {
+            if ($key === 'password') {
+                $value = password_hash($value, PASSWORD_DEFAULT);
+                array_push($params, $key);
+                array_push($tempForm, $value);
+            } elseif ($key === 'profile_image' && empty($profileIMGPath)) {
+                array_push($params, 'profile_image');
+                array_push($tempForm, $profileIMGPath);
+            } else {
+                array_push($params, $key);
+                array_push($tempForm, $value);
+            }
+        }
+
+        if (isset($profileIMGPath)) {
+            array_push($params, 'profile_image');
+            array_push($tempForm, $profileIMGPath);
+        }
+
+
+        return $this->prepareAddBind('facultymembers', $params, $tempForm);
+    }
+
+
+
+    public function fetchLastID()
+    {
+        /**
+         * @param $table 
+         */
+        return $this->getLastID('facultymembers')["data"][0]['AUTO_INCREMENT'];
     }
 }

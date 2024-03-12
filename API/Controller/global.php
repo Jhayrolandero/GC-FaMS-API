@@ -3,6 +3,7 @@ header('Access-Control-Allow-Origin: http://localhost:4200');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header("Access-Control-Allow-Headers: *");
 
+
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Firebase\JWT\ExpiredException;
@@ -15,6 +16,14 @@ include_once "./Model/database.php";
 
 class GlobalMethods extends Connection
 {
+
+    private $env;
+
+
+    function __construct()
+    {
+        $this->env = parse_ini_file('.env');
+    }
     /**
      * Global function to execute queries
      *
@@ -49,7 +58,7 @@ class GlobalMethods extends Connection
         return array("code" => $code, "errmsg" => $errmsg, "data" => $data);
     }
 
-    public function executePostQuery($stmt)
+    public function executePostQuery($stmt, $params = null)
     {
         $errmsg = "";
         $code = 0;
@@ -89,8 +98,8 @@ class GlobalMethods extends Connection
         $jwtArr = explode('.', $jwt);
 
         $headers = new stdClass();
-        $env = parse_ini_file('.env');
-        $secretKey = $env["GCFAMS_API_KEY"];
+        // $env = parse_ini_file('.env');
+        $secretKey = $this->env["GCFAMS_API_KEY"];
 
         //Decode received token
         $payload = JWT::decode($jwt, new Key($secretKey, 'HS512'), $headers);
@@ -136,6 +145,7 @@ class GlobalMethods extends Connection
         }
 
         return $this->executePostQuery($stmt);
+        // return $sql;
     }
 
     public function prepareEditBind($table, $params, $form, $rowId)
@@ -169,5 +179,16 @@ class GlobalMethods extends Connection
         $stmt->bindParam(1, $id);
 
         return $this->executePostQuery($stmt);
+    }
+
+    public function getLastID($table)
+    {
+
+        $DBName = $this->env["DB_NAME"];
+        $sql = "SELECT AUTO_INCREMENT 
+                FROM information_schema.TABLES 
+                WHERE TABLE_SCHEMA = '$DBName' AND TABLE_NAME = '$table'";
+
+        return $this->executeGetQuery($sql);
     }
 }
