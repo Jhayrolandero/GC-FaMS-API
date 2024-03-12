@@ -3,6 +3,7 @@ header('Access-Control-Allow-Origin: http://localhost:4200');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header("Access-Control-Allow-Headers: *");
 
+
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Firebase\JWT\ExpiredException;
@@ -13,24 +14,16 @@ require_once('../vendor/autoload.php');
 
 include_once "./Model/database.php";
 
-class GlobalMethods extends Connection{
-    //UNUSED FUNCTIONS (MAY BE REPURPOSED LATER)
-    //UNUSED FUNCTIONS (MAY BE REPURPOSED LATER)
-    //UNUSED FUNCTIONS (MAY BE REPURPOSED LATER)
-    // public function sendPayLoad($data, $remarks, $message, $code){
-    //     $status = array("remarks"=>$remarks, "message"=> $message);
-    //     http_response_code($code);
-    //     return array(
-    //         "status"=>$status,
-    //         "data"=>$data,
-    //         "prepared_by"=>"Chris Kirk Patrick V. Viacrusis",
-    //         "timestamp"=>date_create()
-    //     );
-    // }
-    //UNUSED FUNCTIONS (MAY BE REPURPOSED LATER)
-    //UNUSED FUNCTIONS (MAY BE REPURPOSED LATER)
-    //UNUSED FUNCTIONS (MAY BE REPURPOSED LATER)
+class GlobalMethods extends Connection
+{
 
+    private $env;
+
+
+    function __construct()
+    {
+        $this->env = parse_ini_file('.env');
+    }
     /**
      * Global function to execute queries
      *
@@ -40,7 +33,8 @@ class GlobalMethods extends Connection{
      * @return array
      *   the result of query.
      */
-    public function executeGetQuery($sqlString){
+    public function executeGetQuery($sqlString)
+    {
         $data = array();
         $errmsg = "";
         $code = 0;
@@ -61,35 +55,63 @@ class GlobalMethods extends Connection{
             $errmsg = $e->getMessage();
             $code = 403;
         }
+        return array("code" => $code, "errmsg" => $errmsg, "data" => $data);
+    }
+
+    public function executePostQuery($stmt, $params = null)
+    {
+        $errmsg = "";
+        $code = 0;
+
+        try {
+            if ($stmt->execute()) {
+                $code = 200;
+                return array("code" => $code, "msg" => 'Successful Query.');
+            } else {
+                $errmsg = "No data found";
+                $code = 404;
+            }
+        } catch (\PDOException $e) {
+            $errmsg = $e->getMessage();
+            $code = 403;
+        }
         return array("code" => $code, "errmsg" => $errmsg);
     }
 
-    public function verifyToken(){
+    public function verifyToken()
+    {
+        //Check existence of token
         if (!preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
             header('HTTP/1.0 403 Forbidden');
             echo 'Token not found in request';
             exit;
         }
 
+        //Check header
         $jwt = $matches[1];
         if (!$jwt) {
             header('HTTP/1.0 403 Forbidden');
             echo 'Token is missing but header exists';
             exit;
         }
+        //Separate token to 3 parts
         $jwtArr = explode('.', $jwt);
 
         $headers = new stdClass();
-        $secretKey = 'jetculverin';
+        // $env = parse_ini_file('.env');
+        $secretKey = $this->env["GCFAMS_API_KEY"];
 
+        //Decode received token
         $payload = JWT::decode($jwt, new Key($secretKey, 'HS512'), $headers);
 
-        //ETO YUNG MISMONG JSON FORMATTED NA PAYLOAD
+        //Decode payload part
         $parsedPayload = json_decode(json_encode($payload), true);
 
+        //Re-encode decoded payload with the stored signature key to check for tampers
         $toCheckSignature = JWT::encode($parsedPayload, $secretKey, 'HS512');
         $toCheckSignature = explode('.', $toCheckSignature);
 
+        //If re-encoded token is equal to received token, validate token.
         if ($toCheckSignature[2] == $jwtArr[2]) {
             return array(
                 "code" => 200,
@@ -100,5 +122,73 @@ class GlobalMethods extends Connection{
             echo 'Currently encoded payload does not matched initially signed payload';
             exit;
         }
+    }
+
+    public function prepareAddBind($table, $params, $form)
+    {
+        $sql = "INSERT INTO `$table`(";
+        $tempParam = "(";
+        $tempValue = "";
+
+        foreach ($params as $key => $col) {
+            //Insertion columns details
+            sizeof($params) - 1 != $key ? $sql = $sql . $col . ', ' : $sql = $sql . $col . ')';
+            //Question marks
+            sizeof($params) - 1 != $key ? $tempParam = $tempParam . '?' . ', ' : $tempParam = $tempParam . '?' . ')';
+        }
+
+        $sql = $sql . " VALUES " . $tempParam;
+        $stmt = $this->connect()->prepare($sql);
+
+        foreach ($form as $key => $value) {
+            $stmt->bindParam(($key + 1), $form[$key]);
+        }
+
+        return $this->executePostQuery($stmt);
+        // return $sql;
+    }
+
+    public function prepareEditBind($table, $params, $form, $rowId)
+    {
+        // UPDATE `educattainment`
+        // SET `faculty_ID` = 3, `educ_title` = 'My nutsacks', `educ_school` = 'Nutsack School', `year_start` = '2022', `year_end` = '2023', `educ_details` = 'very nuts, much sacks'
+        // WHERE `educattainment_ID` = 26;
+
+
+        $sql = "UPDATE `$table`
+                SET ";
+
+        foreach ($params as $key => $col) {
+            //Insertion columns details
+            sizeof($params) - 1 != $key ? $sql = $sql . "`$col` = ?, " : $sql = $sql . "`$col` = ? ";
+        }
+        $sql = $sql . "WHERE `$rowId` = ?";
+        $stmt = $this->connect()->prepare($sql);
+        foreach ($form as $key => $value) {
+            $stmt->bindParam(($key + 1), $form[$key]);
+        }
+
+        return $this->executePostQuery($stmt);
+    }
+
+    public function prepareDeleteBind($table, $col, $id)
+    {
+        $sql = "DELETE FROM `$table` WHERE `$col` = ?";
+
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->bindParam(1, $id);
+
+        return $this->executePostQuery($stmt);
+    }
+
+    public function getLastID($table)
+    {
+
+        $DBName = $this->env["DB_NAME"];
+        $sql = "SELECT AUTO_INCREMENT 
+                FROM information_schema.TABLES 
+                WHERE TABLE_SCHEMA = '$DBName' AND TABLE_NAME = '$table'";
+
+        return $this->executeGetQuery($sql);
     }
 }

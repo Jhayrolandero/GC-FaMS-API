@@ -2,10 +2,11 @@
 header('Access-Control-Allow-Origin: http://localhost:4200');
 header('Access-Control-Allow-Credentials: true');
 
+
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+        header("Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS");
 
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
@@ -82,12 +83,93 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case 'POST':
         $data = json_decode(file_get_contents("php://input"));
         switch ($request[0]) {
-                // case 'faculty':
-                //     echo json_encode($faculty->addFaculty($data));
-                //     break;
-
             case 'login':
                 echo json_encode($postTunnel->toValidateLogin($data));
+                break;
+
+            case 'addEduc':
+                echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 1));
+                break;
+
+            case 'addExp':
+                echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 2));
+                break;
+
+            case 'addCert':
+                echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 3));
+                break;
+
+            case 'addProj':
+                echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 4));
+                break;
+
+            case 'addSpec':
+                echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 5));
+                break;
+
+            case 'faculty':
+                // echo json_encode($postTunnel->addFaculty($data, $globalOb->verifyToken()['payload']));
+                echo json_encode($postTunnel->addFaculty($data));
+                break;
+            default:
+                http_response_code(403);
+                break;
+        }
+        break;
+
+    case 'PATCH':
+        $data = json_decode(file_get_contents("php://input"));
+
+        //No need for user id, so verification is applied globally. (Apply this to GET next time. Too lazy for now);
+        $globalOb->verifyToken()['payload'];
+
+        switch ($request[0]) {
+            case 'editEduc':
+                echo json_encode($postTunnel->toEditResume($data, $request[1], 1));
+                break;
+
+            case 'editExp':
+                echo json_encode($postTunnel->toEditResume($data, $request[1], 2));
+                break;
+
+            case 'editCert':
+                echo json_encode($postTunnel->toEditResume($data, $request[1], 3));
+                break;
+
+            case 'editProj':
+                echo json_encode($postTunnel->toEditResume($data, $request[1], 4));
+                break;
+
+            case 'editSpec':
+                echo json_encode($postTunnel->toEditResume($data, $request[1], 5));
+                break;
+
+            default:
+                http_response_code(403);
+                break;
+        }
+        break;
+
+    case 'DELETE':
+        switch ($request[0]) {
+            case 'deleteEduc':
+                echo json_encode($postTunnel->toDeleteResume($request[1], 1));
+                break;
+
+            case 'deleteExp':
+                echo json_encode($postTunnel->toDeleteResume($request[1], 2));
+                break;
+
+            case 'deleteCert':
+                echo json_encode($postTunnel->toDeleteResume($request[1], 3));
+                break;
+
+            case 'deleteProj':
+                echo json_encode($postTunnel->toDeleteResume($request[1], 4));
+                break;
+
+            case 'deleteSpec':
+                echo json_encode($postTunnel->toDeleteResume($request[1], 5));
                 break;
 
             default:

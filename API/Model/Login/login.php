@@ -12,13 +12,14 @@
 
     class Login extends GlobalMethods{
         function generateToken($faculty_ID, $isAdmin){
-
+            $env = parse_ini_file('.env');
+            $secretKey = $env["GCFAMS_API_KEY"];
             $token = array(
                 "id" => $faculty_ID,
                 "isAdmin" => $isAdmin
             );
             return array(
-                "token" => JWT::encode($token, 'jetculverin', 'HS512'),
+                "token" => JWT::encode($token, $secretKey, 'HS512'),
                 "privilege" => $isAdmin,
                 "code" => 200
             );
