@@ -3,6 +3,7 @@ header('Access-Control-Allow-Origin: http://localhost:4200');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header("Access-Control-Allow-Headers: *");
 
+
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Firebase\JWT\ExpiredException;
@@ -13,7 +14,16 @@ require_once('../vendor/autoload.php');
 
 include_once "./Model/database.php";
 
-class GlobalMethods extends Connection{
+class GlobalMethods extends Connection
+{
+
+    private $env;
+
+
+    function __construct()
+    {
+        $this->env = parse_ini_file('.env');
+    }
     /**
      * Global function to execute queries
      *
@@ -23,7 +33,8 @@ class GlobalMethods extends Connection{
      * @return array
      *   the result of query.
      */
-    public function executeGetQuery($sqlString){
+    public function executeGetQuery($sqlString)
+    {
         $data = array();
         $errmsg = "";
         $code = 0;
@@ -47,7 +58,8 @@ class GlobalMethods extends Connection{
         return array("code" => $code, "errmsg" => $errmsg, "data" => $data);
     }
 
-    public function executePostQuery($stmt){
+    public function executePostQuery($stmt, $params = null)
+    {
         $errmsg = "";
         $code = 0;
 
@@ -66,7 +78,8 @@ class GlobalMethods extends Connection{
         return array("code" => $code, "errmsg" => $errmsg);
     }
 
-    public function verifyToken(){
+    public function verifyToken()
+    {
         //Check existence of token
         if (!preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
             header('HTTP/1.0 403 Forbidden');
@@ -85,8 +98,8 @@ class GlobalMethods extends Connection{
         $jwtArr = explode('.', $jwt);
 
         $headers = new stdClass();
-        $env = parse_ini_file('.env');
-        $secretKey = $env["GCFAMS_API_KEY"];
+        // $env = parse_ini_file('.env');
+        $secretKey = $this->env["GCFAMS_API_KEY"];
 
         //Decode received token
         $payload = JWT::decode($jwt, new Key($secretKey, 'HS512'), $headers);
@@ -111,12 +124,13 @@ class GlobalMethods extends Connection{
         }
     }
 
-    public function prepareAddBind($table, $params, $form){
+    public function prepareAddBind($table, $params, $form)
+    {
         $sql = "INSERT INTO `$table`(";
         $tempParam = "(";
         $tempValue = "";
 
-        foreach($params as $key=>$col){
+        foreach ($params as $key => $col) {
             //Insertion columns details
             sizeof($params) - 1 != $key ? $sql = $sql . $col . ', ' : $sql = $sql . $col . ')';
             //Question marks
@@ -126,14 +140,16 @@ class GlobalMethods extends Connection{
         $sql = $sql . " VALUES " . $tempParam;
         $stmt = $this->connect()->prepare($sql);
 
-        foreach($form as $key=>$value){
-            $stmt->bindParam(($key+1), $form[$key]);
+        foreach ($form as $key => $value) {
+            $stmt->bindParam(($key + 1), $form[$key]);
         }
 
         return $this->executePostQuery($stmt);
+        // return $sql;
     }
 
-    public function prepareEditBind($table, $params, $form, $rowId){
+    public function prepareEditBind($table, $params, $form, $rowId)
+    {
         // UPDATE `educattainment`
         // SET `faculty_ID` = 3, `educ_title` = 'My nutsacks', `educ_school` = 'Nutsack School', `year_start` = '2022', `year_end` = '2023', `educ_details` = 'very nuts, much sacks'
         // WHERE `educattainment_ID` = 26;
@@ -142,25 +158,37 @@ class GlobalMethods extends Connection{
         $sql = "UPDATE `$table`
                 SET ";
 
-        foreach($params as $key=>$col){
+        foreach ($params as $key => $col) {
             //Insertion columns details
             sizeof($params) - 1 != $key ? $sql = $sql . "`$col` = ?, " : $sql = $sql . "`$col` = ? ";
         }
         $sql = $sql . "WHERE `$rowId` = ?";
         $stmt = $this->connect()->prepare($sql);
-        foreach($form as $key=>$value){
-            $stmt->bindParam(($key+1), $form[$key]);
+        foreach ($form as $key => $value) {
+            $stmt->bindParam(($key + 1), $form[$key]);
         }
 
         return $this->executePostQuery($stmt);
     }
 
-    public function prepareDeleteBind($table, $col, $id){
+    public function prepareDeleteBind($table, $col, $id)
+    {
         $sql = "DELETE FROM `$table` WHERE `$col` = ?";
 
         $stmt = $this->connect()->prepare($sql);
         $stmt->bindParam(1, $id);
 
         return $this->executePostQuery($stmt);
+    }
+
+    public function getLastID($table)
+    {
+
+        $DBName = $this->env["DB_NAME"];
+        $sql = "SELECT AUTO_INCREMENT 
+                FROM information_schema.TABLES 
+                WHERE TABLE_SCHEMA = '$DBName' AND TABLE_NAME = '$table'";
+
+        return $this->executeGetQuery($sql);
     }
 }
