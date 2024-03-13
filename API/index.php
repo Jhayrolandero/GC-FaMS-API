@@ -74,6 +74,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 }
                 break;
 
+            case 'faculty':
+                echo json_encode($getTunnel->getFaculties());
             default:
                 http_response_code(404);
                 break;

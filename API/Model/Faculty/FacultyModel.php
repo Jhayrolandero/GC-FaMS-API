@@ -21,7 +21,7 @@ class Faculty extends GlobalMethods
     public function getAllFaculty()
     {
         $sql = "SELECT * FROM `facultymembers`;";
-        return $this->executeGetQuery($sql);
+        return $this->executeGetQuery($sql)['data'];
     }
 
     private function emailExist()

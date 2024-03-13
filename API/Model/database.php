@@ -3,6 +3,9 @@ header('Access-Control-Allow-Origin: http://localhost:4200');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header("Access-Control-Allow-Headers: *");
 
+$env = parse_ini_file('.env');
+
+
 //SET DEFAULT TIME ZONE
 date_default_timezone_set("Asia/Manila");
 
@@ -10,11 +13,18 @@ date_default_timezone_set("Asia/Manila");
 set_time_limit(1000);
 
 //DEFINE CONSTANT SERVER VARIABLES
-define("SERVER", "mysql-gc-fams123.alwaysdata.net");
-define("DATABASE", "gc-fams123_gc-fams2");
-define("USER", "351056");
-define("PASSWORD", "GC-F@M$123");
-define("DRIVER", "mysql");
+// define("SERVER", "mysql-gc-fams123.alwaysdata.net");
+// define("DATABASE", "gc-fams123_gc-fams2");
+// define("USER", "351056");
+// define("PASSWORD", "GC-F@M$123");
+// define("DRIVER", "mysql");
+
+
+define("SERVER", $env["SERVER"]);
+define("DATABASE", $env["DB_NAME"]);
+define("USER", $env["USER"]);
+define("PASSWORD", $env["PASSWORD"]);
+define("DRIVER", $env["DRIVER"]);
 
 //DOT IS CONCATENATION IN PHP
 class Connection
