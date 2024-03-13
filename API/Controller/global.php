@@ -58,7 +58,7 @@ class GlobalMethods extends Connection
         return array("code" => $code, "errmsg" => $errmsg, "data" => $data);
     }
 
-    public function executePostQuery($stmt, $params = null)
+    public function executePostQuery($stmt)
     {
         $errmsg = "";
         $code = 0;
