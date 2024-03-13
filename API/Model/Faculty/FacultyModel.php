@@ -38,9 +38,7 @@ class Faculty extends GlobalMethods
         return false;
     }
 
-    public function addFaculty($profileIMGPath = null)
-    {
-
+    public function addFaculty($profileIMGPath = null){
 
         if ($this->emailExist()) {
             return ["code" => 406, "errmsg" => "Email already Exist!"];
@@ -48,6 +46,7 @@ class Faculty extends GlobalMethods
 
         $params = [];
         $tempForm = [];
+
         foreach ($_POST as $key => $value) {
             if ($key === 'password') {
                 $value = password_hash($value, PASSWORD_DEFAULT);
@@ -67,11 +66,8 @@ class Faculty extends GlobalMethods
             array_push($tempForm, $profileIMGPath);
         }
 
-
         return $this->prepareAddBind('facultymembers', $params, $tempForm);
     }
-
-
 
     public function fetchLastID()
     {

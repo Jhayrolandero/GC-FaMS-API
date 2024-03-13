@@ -15,12 +15,14 @@ class PostTunnel
     private $resume;
 
     private $faculty;
+    private $commex;
 
     public function __construct()
     {
         $this->login = new Login();
         $this->resume = new ResumeInfo();
         $this->faculty = new Faculty();
+        $this->commex = new Commex();
     }
 
     // public function addFaculty($data){
@@ -35,7 +37,7 @@ class PostTunnel
     public function addFaculty($data)
     {
 
-
+        // return $_FILES;
         if (!empty($_FILES)) {
             $tempFile = '';
             $fileName = '';
@@ -70,6 +72,48 @@ class PostTunnel
         }
         // return 'withoutimage';
     }
+
+    public function toAddCommex()
+    {
+
+        // return $_FILES;
+        if (!empty($_FILES)) {
+            $tempFile = '';
+            $fileName = '';
+
+            foreach ($_FILES as $key => $file) {
+                $tempFile = $file['tmp_name'];
+                $fileName = $file['name'];
+            }
+            $lastIncrementID = $this->faculty->fetchLastID();
+            $fileFolder = __DIR__ . "/../../Image_Assets/CommunityExtensions/$lastIncrementID/";
+
+            if (!file_exists($fileFolder)) {
+                mkdir($fileFolder, 0777);
+            }
+
+            $filepath = __DIR__ . "/../../Image_Assets/CommunityExtensions/$lastIncrementID/$fileName";
+
+            if (file_exists($filepath)) {
+                unlink($filepath);
+            }
+
+            if (!move_uploaded_file($tempFile, $filepath)) {
+                return array("code" => 404, "errmsg" => "Upload unsuccessful");
+            }
+
+            $filepath = str_replace("C:\\xampp\\htdocs", "", $filepath);
+            return $this->commex->addCommex($filepath);
+            // return 'withimage';
+        } else {
+
+            return $this->commex->addCommex();
+        }
+        // return 'withoutimage';
+    }
+
+
+    
     public function toAddResume($form, $id, $type)
     {
         switch ($type) {

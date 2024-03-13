@@ -113,6 +113,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 // echo json_encode($postTunnel->addFaculty($data, $globalOb->verifyToken()['payload']));
                 echo json_encode($postTunnel->addFaculty($data));
                 break;
+
+            case 'addCommex':
+                echo json_encode($postTunnel->toAddCommex());
+                break;
+
             default:
                 http_response_code(403);
                 break;
