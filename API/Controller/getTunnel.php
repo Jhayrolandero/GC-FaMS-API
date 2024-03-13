@@ -57,4 +57,9 @@ class GetTunnel extends Connection
     {
         return $this->evaluation->getEvaluation($id);
     }
+
+    public function getFaculties()
+    {
+        return $this->faculty->getAllFaculty();
+    }
 }
