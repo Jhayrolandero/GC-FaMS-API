@@ -23,43 +23,33 @@
             return $this->executeGetQuery($sql);
         }
 
-        public function addCommex($profileIMGPath = null){
-   
+        public function addCommex($data){
+        $filepath = null;
+
+        //Calls function that saves image.
+        if (!empty($_FILES)) {
+            $filepath = $this->saveImage("/../../Image_Assets/CommunityExtensions/");
+            array_push($params, 'commex_header_img');
+            array_push($tempForm, $filepath);
+        }
+
             $params = [];
             $tempForm = [];
 
+            //Iterates through FormData, and assigns parameter and value.
             foreach ($_POST as $key => $value) {
-                if ($key === 'password') {
-                    $value = password_hash($value, PASSWORD_DEFAULT);
                     array_push($params, $key);
                     array_push($tempForm, $value);
-                } elseif ($key === 'commex_header_img' && empty($profileIMGPath)) {
-                    array_push($params, 'commex_header_img');
-                    array_push($tempForm, $profileIMGPath);
-                } else {
-                    array_push($params, $key);
-                    array_push($tempForm, $value);
-                }
             }
     
-            if (isset($profileIMGPath)) {
-                array_push($params, 'commex_header_img');
-                array_push($tempForm, $profileIMGPath);
-            }
             //Add Commex 
             $this->prepareAddBind('commex', $params, $tempForm);
 
-            //Assign commex to faculty
-            return $this->prepareAddBind('commex-faculty', array('faculty_ID', 'commex_ID'), array($this->verifyToken()['payload'], $this->fetchLastID() - 1));
-        }
-
-        public function fetchLastID()
-        {
-            /**
-             * @param $table 
-             */
-            return $this->getLastID('commex')["data"][0]['AUTO_INCREMENT'];
+            //Assign Commex to faculty
+            return $this->prepareAddBind('commex-faculty', 
+                                         array('faculty_ID', 'commex_ID'), 
+                                         array($this->verifyToken()['payload'], 
+                                         $this->getLastID('commex') -1));
         }
     }
-
 ?>

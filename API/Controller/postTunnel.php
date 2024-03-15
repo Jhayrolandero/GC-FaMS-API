@@ -36,79 +36,46 @@ class PostTunnel
 
     public function addFaculty($data)
     {
+        return $this->faculty->addFaculty();
+        // // return $_FILES;
+        // if (!empty($_FILES)) {
+        //     $tempFile = '';
+        //     $fileName = '';
 
-        // return $_FILES;
-        if (!empty($_FILES)) {
-            $tempFile = '';
-            $fileName = '';
+        //     foreach ($_FILES as $key => $file) {
+        //         $tempFile = $file['tmp_name'];
+        //         $fileName = $file['name'];
+        //     }
+        //     $lastIncrementID = $this->faculty->fetchLastID();
+        //     $fileFolder = __DIR__ . "/../../Image_Assets/Faculty_Profile/$lastIncrementID/";
 
-            foreach ($_FILES as $key => $file) {
-                $tempFile = $file['tmp_name'];
-                $fileName = $file['name'];
-            }
-            $lastIncrementID = $this->faculty->fetchLastID();
-            $fileFolder = __DIR__ . "/../../Image_Assets/Faculty_Profile/$lastIncrementID/";
+        //     if (!file_exists($fileFolder)) {
+        //         mkdir($fileFolder, 0777);
+        //     }
 
-            if (!file_exists($fileFolder)) {
-                mkdir($fileFolder, 0777);
-            }
+        //     $filepath = __DIR__ . "/../../Image_Assets/Faculty_Profile/$lastIncrementID/$fileName";
 
-            $filepath = __DIR__ . "/../../Image_Assets/Faculty_Profile/$lastIncrementID/$fileName";
+        //     if (file_exists($filepath)) {
+        //         unlink($filepath);
+        //     }
 
-            if (file_exists($filepath)) {
-                unlink($filepath);
-            }
+        //     if (!move_uploaded_file($tempFile, $filepath)) {
+        //         return array("code" => 404, "errmsg" => "Upload unsuccessful");
+        //     }
 
-            if (!move_uploaded_file($tempFile, $filepath)) {
-                return array("code" => 404, "errmsg" => "Upload unsuccessful");
-            }
+        //     $filepath = str_replace("C:\\xampp\\htdocs", "", $filepath);
+        //     return $this->faculty->addFaculty($filepath);
+        //     // return 'withimage';
+        // } else {
 
-            $filepath = str_replace("C:\\xampp\\htdocs", "", $filepath);
-            return $this->faculty->addFaculty($filepath);
-            // return 'withimage';
-        } else {
-
-            return $this->faculty->addFaculty();
-        }
-        // return 'withoutimage';
+        //     return $this->faculty->addFaculty();
+        // }
+        // // return 'withoutimage';
     }
 
-    public function toAddCommex()
+    public function toAddCommex($data)
     {
-        // return $_FILES;
-        if (!empty($_FILES)) {
-            $tempFile = '';
-            $fileName = '';
-
-            foreach ($_FILES as $key => $file) {
-                $tempFile = $file['tmp_name'];
-                $fileName = $file['name'];
-            }
-            $lastIncrementID = $this->faculty->fetchLastID();
-            $fileFolder = __DIR__ . "/../../Image_Assets/CommunityExtensions/$lastIncrementID/";
-
-            if (!file_exists($fileFolder)) {
-                mkdir($fileFolder, 0777);
-            }
-
-            $filepath = __DIR__ . "/../../Image_Assets/CommunityExtensions/$lastIncrementID/$fileName";
-
-            if (file_exists($filepath)) {
-                unlink($filepath);
-            }
-
-            if (!move_uploaded_file($tempFile, $filepath)) {
-                return array("code" => 404, "errmsg" => "Upload unsuccessful");
-            }
-
-            $filepath = str_replace("C:\\xampp\\htdocs", "", $filepath);
-            return $this->commex->addCommex($filepath);
-            // return 'withimage';
-        } else {
-
-            return $this->commex->addCommex();
-        }
-        // return 'withoutimage';
+        return $this->commex->addCommex($data);
     }
 
 

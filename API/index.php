@@ -115,7 +115,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'addCommex':
-                echo json_encode($postTunnel->toAddCommex());
+                // echo json_encode($_POST);
+                echo json_encode($postTunnel->toAddCommex($data));
                 break;
 
             default:
