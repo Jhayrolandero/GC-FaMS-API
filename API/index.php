@@ -68,6 +68,22 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 }
                 break;
 
+            case 'certificate':
+                echo json_encode($getTunnel->getCert(3));
+                break;
+
+            case 'experience':
+                echo json_encode($getTunnel->getExp($globalOb->verifyToken()['payload']));
+                break;
+
+            case 'education':
+                echo json_encode($getTunnel->getEduc($globalOb->verifyToken()['payload']));
+                break;
+
+            case 'expertise':
+                echo json_encode($getTunnel->getSpec($globalOb->verifyToken()['payload']));
+                break;
+
             case 'getevaluation':
                 if ($request[1] == "fetchEvaluation") {
                     echo json_encode($getTunnel->toGetEvaluation($globalOb->verifyToken()['payload']));
