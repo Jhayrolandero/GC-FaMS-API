@@ -1,3 +1,3 @@
 <?php
-    echo password_hash("John Eric", PASSWORD_DEFAULT);
+    echo password_hash("Christian Jay", PASSWORD_DEFAULT);
 ?>
