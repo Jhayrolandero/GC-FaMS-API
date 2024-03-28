@@ -84,9 +84,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     case 'POST':
-        $globalOb->verifyToken()['payload'];
-
+        $payloadID = $globalOb->verifyToken()['payload'];
         $data = json_decode(file_get_contents("php://input"));
+
         switch ($request[0]) {
             case 'addEduc':
                 echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 1));
