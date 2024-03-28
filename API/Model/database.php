@@ -19,6 +19,9 @@ set_time_limit(1000);
 // define("PASSWORD", "GC-F@M$123");
 // define("DRIVER", "mysql");
 
+//Temp ko
+
+
 
 define("SERVER", $env["SERVER"]);
 define("DATABASE", $env["DB_NAME"]);

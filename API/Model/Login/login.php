@@ -28,6 +28,7 @@
         public function validateLogin($form){
             $sql = "SELECT * FROM `facultymembers` WHERE `email` = '$form->email'";
             $result = $this->executeGetQuery($sql);
+            
             if($result['code'] == 200){
                 $passValid = password_verify($form->password, $result['data'][0]['password']);
                 if($passValid){

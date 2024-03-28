@@ -62,46 +62,41 @@ class Faculty extends GlobalMethods
         return false;
     }
 
-    public function addFaculty($profileIMGPath = null)
-    {
-
+    public function addFaculty(){
+        $filepath = null;
+        $params = [];
+        $tempForm = [];
+        
+        //Calls function that saves image.
+        if (!empty($_FILES)) {
+            $filepath = $this->saveImage("/../../Image_Assets/CommunityExtensions/");
+            array_push($params, 'profile_image');
+            array_push($tempForm, $filepath);
+        }
 
         if ($this->emailExist()) {
             return ["code" => 406, "errmsg" => "Email already Exist!"];
         }
 
-        $params = [];
-        $tempForm = [];
         foreach ($_POST as $key => $value) {
             if ($key === 'password') {
                 $value = password_hash($value, PASSWORD_DEFAULT);
                 array_push($params, $key);
                 array_push($tempForm, $value);
-            } elseif ($key === 'profile_image' && empty($profileIMGPath)) {
-                array_push($params, 'profile_image');
-                array_push($tempForm, $profileIMGPath);
             } else {
                 array_push($params, $key);
                 array_push($tempForm, $value);
             }
         }
 
-        if (isset($profileIMGPath)) {
-            array_push($params, 'profile_image');
-            array_push($tempForm, $profileIMGPath);
-        }
-
-
         return $this->prepareAddBind('facultymembers', $params, $tempForm);
     }
-
-
 
     public function fetchLastID()
     {
         /**
          * @param $table 
          */
-        return $this->getLastID('facultymembers')["data"][0]['AUTO_INCREMENT'];
+        return $this->getLastID('facultymembers');
     }
 }

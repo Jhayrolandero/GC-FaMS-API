@@ -15,12 +15,14 @@ class PostTunnel
     private $resume;
 
     private $faculty;
+    private $commex;
 
     public function __construct()
     {
         $this->login = new Login();
         $this->resume = new ResumeInfo();
         $this->faculty = new Faculty();
+        $this->commex = new Commex();
     }
 
     // public function addFaculty($data){
@@ -34,42 +36,50 @@ class PostTunnel
 
     public function addFaculty($data)
     {
+        return $this->faculty->addFaculty();
+        // // return $_FILES;
+        // if (!empty($_FILES)) {
+        //     $tempFile = '';
+        //     $fileName = '';
 
+        //     foreach ($_FILES as $key => $file) {
+        //         $tempFile = $file['tmp_name'];
+        //         $fileName = $file['name'];
+        //     }
+        //     $lastIncrementID = $this->faculty->fetchLastID();
+        //     $fileFolder = __DIR__ . "/../../Image_Assets/Faculty_Profile/$lastIncrementID/";
 
-        if (!empty($_FILES)) {
-            $tempFile = '';
-            $fileName = '';
+        //     if (!file_exists($fileFolder)) {
+        //         mkdir($fileFolder, 0777);
+        //     }
 
-            foreach ($_FILES as $key => $file) {
-                $tempFile = $file['tmp_name'];
-                $fileName = $file['name'];
-            }
-            $lastIncrementID = $this->faculty->fetchLastID();
-            $fileFolder = __DIR__ . "/../../Image_Assets/Faculty_Profile/$lastIncrementID/";
+        //     $filepath = __DIR__ . "/../../Image_Assets/Faculty_Profile/$lastIncrementID/$fileName";
 
-            if (!file_exists($fileFolder)) {
-                mkdir($fileFolder, 0777);
-            }
+        //     if (file_exists($filepath)) {
+        //         unlink($filepath);
+        //     }
 
-            $filepath = __DIR__ . "/../../Image_Assets/Faculty_Profile/$lastIncrementID/$fileName";
+        //     if (!move_uploaded_file($tempFile, $filepath)) {
+        //         return array("code" => 404, "errmsg" => "Upload unsuccessful");
+        //     }
 
-            if (file_exists($filepath)) {
-                unlink($filepath);
-            }
+        //     $filepath = str_replace("C:\\xampp\\htdocs", "", $filepath);
+        //     return $this->faculty->addFaculty($filepath);
+        //     // return 'withimage';
+        // } else {
 
-            if (!move_uploaded_file($tempFile, $filepath)) {
-                return array("code" => 404, "errmsg" => "Upload unsuccessful");
-            }
-
-            $filepath = str_replace("C:\\xampp\\htdocs", "", $filepath);
-            return $this->faculty->addFaculty($filepath);
-            // return 'withimage';
-        } else {
-
-            return $this->faculty->addFaculty();
-        }
-        // return 'withoutimage';
+        //     return $this->faculty->addFaculty();
+        // }
+        // // return 'withoutimage';
     }
+
+    public function toAddCommex($data)
+    {
+        return $this->commex->addCommex($data);
+    }
+
+
+    
     public function toAddResume($form, $id, $type)
     {
         switch ($type) {

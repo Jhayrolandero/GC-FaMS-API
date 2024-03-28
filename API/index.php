@@ -23,48 +23,49 @@ $getTunnel = new GetTunnel();
 $postTunnel = new PostTunnel();
 $globalOb = new GlobalMethods();
 
+//Converts request link to array
 if (isset($_REQUEST['request'])) {
     $request = explode('/', $_REQUEST['request']);
 } else {
     http_response_code(404);
 }
 
+//Login filter
+if($request[0] === 'login'){
+    echo json_encode($postTunnel->toValidateLogin(json_decode(file_get_contents("php://input"))));
+    exit;
+} 
 
+
+//Main request switch endpoints
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
-
+        $id = $globalOb->verifyToken()['payload'];
         switch ($request[0]) {
             case 'getschedules':
                 if ($request[1] == "fetchFaculty") {
-                    echo json_encode($getTunnel->toGetSchedule($globalOb->verifyToken()['payload']));
+                    echo json_encode($getTunnel->toGetSchedule($id));
                 }
                 break;
             case 'fetchCollege':
-                echo json_encode($getTunnel->toGetCollege($globalOb->verifyToken()['payload']));
+                echo json_encode($getTunnel->toGetCollege($id));
                 break;
-                // case 'program':
-                //     if (isset($request[1])) {
-                //         echo json_encode($getTunnel->getProgram($request[1]));
-                //     } else {
-                //         echo json_encode($getTunnel->getProgram());
-                //     }
-                //     break;
 
             case 'getprofile':
                 if ($request[1] == "fetchProfile") {
-                    echo json_encode($getTunnel->toGetFaculty($globalOb->verifyToken()['payload']));
+                    echo json_encode($getTunnel->toGetFaculty($id));
                 }
                 break;
 
             case 'getcommex':
                 if ($request[1] == "fetchCommex") {
-                    echo json_encode($getTunnel->toGetCommex($globalOb->verifyToken()['payload']));
+                    echo json_encode($getTunnel->toGetCommex($id));
                 }
                 break;
 
             case 'getresume':
                 if ($request[1] == "fetchResume") {
-                    echo json_encode($getTunnel->toGetResumeInfo($globalOb->verifyToken()['payload']));
+                    echo json_encode($getTunnel->toGetResumeInfo($id));
                 }
                 break;
 
@@ -86,7 +87,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
             case 'getevaluation':
                 if ($request[1] == "fetchEvaluation") {
-                    echo json_encode($getTunnel->toGetEvaluation($globalOb->verifyToken()['payload']));
+                    echo json_encode($getTunnel->toGetEvaluation($id));
                 }
                 break;
 
@@ -99,12 +100,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     case 'POST':
+        $payloadID = $globalOb->verifyToken()['payload'];
         $data = json_decode(file_get_contents("php://input"));
-        switch ($request[0]) {
-            case 'login':
-                echo json_encode($postTunnel->toValidateLogin($data));
-                break;
 
+        switch ($request[0]) {
             case 'addEduc':
                 echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 1));
                 break;
@@ -126,9 +125,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'faculty':
-                // echo json_encode($postTunnel->addFaculty($data, $globalOb->verifyToken()['payload']));
                 echo json_encode($postTunnel->addFaculty($data));
                 break;
+
+            case 'addCommex':
+                echo json_encode($postTunnel->toAddCommex($data));
+                break;
+
             default:
                 http_response_code(403);
                 break;
@@ -136,6 +139,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     case 'PATCH':
+        $globalOb->verifyToken()['payload'];
         $data = json_decode(file_get_contents("php://input"));
 
         //No need for user id, so verification is applied globally. (Apply this to GET next time. Too lazy for now);
@@ -169,6 +173,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     case 'DELETE':
+        $globalOb->verifyToken()['payload'];
         switch ($request[0]) {
             case 'deleteEduc':
                 echo json_encode($postTunnel->toDeleteResume($request[1], 1));

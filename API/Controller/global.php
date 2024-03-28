@@ -78,6 +78,44 @@ class GlobalMethods extends Connection
         return array("code" => $code, "errmsg" => $errmsg);
     }
 
+    public function saveImage($dir) //A reusable function for saving images based on provided directory location
+    {
+        //Declare temporary holders for parameter and value for sql
+        $tempFile = '';
+        $fileName = '';
+
+        //Iterates through the file uploaded (image)
+        foreach ($_FILES as $key => $file) {
+            //Assigngs the parameter and value (filename)
+            $tempFile = $file['tmp_name'];
+            $fileName = $file['name'];
+        }
+        //Fetch last autoincrement id on commex
+        $lastIncrementID = $this->getLastID('commex');
+        //Declares folder location
+        $fileFolder = __DIR__ . $dir . "$lastIncrementID/";
+
+        //Creates directory if it doesn't exist yet
+        if (!file_exists($fileFolder)) {
+            mkdir($fileFolder, 0777);
+        }
+
+        //Declares location for image file itself.
+        $filepath = __DIR__ . $dir . "$lastIncrementID/$fileName";
+
+        //If file exists in path, delete it.
+        if (file_exists($filepath)) {
+            unlink($filepath);
+        }
+
+        //Add file to give nfilepath
+        if (!move_uploaded_file($tempFile, $filepath)) {
+            return array("code" => 404, "errmsg" => "Upload unsuccessful");
+        }
+
+        return $filepath = str_replace("C:\\xampp\\htdocs", "", $filepath);
+    }
+
     public function verifyToken()
     {
         //Check existence of token
@@ -189,6 +227,6 @@ class GlobalMethods extends Connection
                 FROM information_schema.TABLES 
                 WHERE TABLE_SCHEMA = '$DBName' AND TABLE_NAME = '$table'";
 
-        return $this->executeGetQuery($sql);
+        return $this->executeGetQuery($sql)['data'][0]['AUTO_INCREMENT'];
     }
 }
