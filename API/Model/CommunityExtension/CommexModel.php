@@ -32,7 +32,7 @@
         
         //Calls function that saves image.
         if (!empty($_FILES)) {
-            $filepath = $this->saveImage("/../../Image_Assets/CommunityExtensions/");
+            $filepath = $this->saveImage("/../../Image_Assets/CommunityExtensions/", "commex", "commex_header_img");
             array_push($params, 'commex_header_img');
             array_push($tempForm, $filepath);
         }

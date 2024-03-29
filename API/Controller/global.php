@@ -78,20 +78,19 @@ class GlobalMethods extends Connection
         return array("code" => $code, "errmsg" => $errmsg);
     }
 
-    public function saveImage($dir) //A reusable function for saving images based on provided directory location
+    public function saveImage($dir, $tableName, $name) //A reusable function for saving images based on provided directory location
     {
         //Declare temporary holders for parameter and value for sql
         $tempFile = '';
         $fileName = '';
 
         //Iterates through the file uploaded (image)
-        foreach ($_FILES as $key => $file) {
-            //Assigngs the parameter and value (filename)
-            $tempFile = $file['tmp_name'];
-            $fileName = $file['name'];
-        }
+        //Assigngs the parameter and value (filename)
+        $tempFile = $_FILES[$name]['tmp_name'];
+        $fileName = $_FILES[$name]['name'];
+
         //Fetch last autoincrement id on commex
-        $lastIncrementID = $this->getLastID('commex');
+        $lastIncrementID = $this->getLastID($tableName);
         //Declares folder location
         $fileFolder = __DIR__ . $dir . "$lastIncrementID/";
 

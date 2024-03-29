@@ -40,14 +40,21 @@ class Faculty extends GlobalMethods
 
     public function addFaculty(){
         $filepath = null;
+        $filepathCover = null;
         $params = [];
         $tempForm = [];
         
         //Calls function that saves image.
-        if (!empty($_FILES)) {
-            $filepath = $this->saveImage("/../../Image_Assets/CommunityExtensions/");
+        if (!empty($_FILES['profile_image'])) {
+            $filepath = $this->saveImage("/../../Image_Assets/Faculty_Profile/", "facultymembers", "profile_image");
             array_push($params, 'profile_image');
             array_push($tempForm, $filepath);
+        }
+
+        if (!empty($_FILES['cover_image'])) {
+            $filepathCover = $this->saveImage("/../../Image_Assets/Faculty_Cover/", 'facultymembers', "cover_image");
+            array_push($params, 'cover_image');
+            array_push($tempForm, $filepathCover);
         }
 
         if ($this->emailExist()) {
