@@ -31,16 +31,17 @@ if (isset($_REQUEST['request'])) {
 }
 
 //Login filter
-if($request[0] === 'login'){
+if ($request[0] === 'login') {
     echo json_encode($postTunnel->toValidateLogin(json_decode(file_get_contents("php://input"))));
     exit;
-} 
+}
 
 
 //Main request switch endpoints
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
-        $id = $globalOb->verifyToken()['payload'];
+        // $id = $globalOb->verifyToken()['payload'];
+        $id = 3;
         switch ($request[0]) {
             case 'getschedules':
                 if ($request[1] == "fetchFaculty") {
@@ -60,6 +61,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             case 'getcommex':
                 if ($request[1] == "fetchCommex") {
                     echo json_encode($getTunnel->toGetCommex($id));
+                    // echo json_encode($getTunnel->toGetCommex($id));
                 }
                 break;
 
@@ -67,6 +69,22 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 if ($request[1] == "fetchResume") {
                     echo json_encode($getTunnel->toGetResumeInfo($id));
                 }
+                break;
+
+            case 'certificate':
+                echo json_encode($getTunnel->getCert($globalOb->verifyToken()['payload']));
+                break;
+
+            case 'experience':
+                echo json_encode($getTunnel->getExp($globalOb->verifyToken()['payload']));
+                break;
+
+            case 'education':
+                echo json_encode($getTunnel->getEduc($globalOb->verifyToken()['payload']));
+                break;
+
+            case 'expertise':
+                echo json_encode($getTunnel->getSpec($globalOb->verifyToken()['payload']));
                 break;
 
             case 'getevaluation':

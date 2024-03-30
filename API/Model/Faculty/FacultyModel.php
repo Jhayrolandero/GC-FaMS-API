@@ -5,9 +5,33 @@ include_once(__DIR__ . '/../../Controller/global.php');
 class Faculty extends GlobalMethods
 {
 
-    public function getFacultyInfo($id)
+    public function getFacultyInfo($id = null)
     {
-        $sql = "SELECT `faculty_ID`,`college_name`,`college_abbrev`,`teaching_position`,`isAdmin`,`first_name`,`middle_name`,`ext_name`,`last_name`,`birthdate`,`age`,`citizenship`,`civil_status`,`sex`,`email`,`employment_status`,`phone_number`,`region`,`province`,`language`,`city`,`barangay`,`profile_image`,`cover_image` 
+        $sql = "SELECT 
+                `faculty_ID`,
+                `college_name`,
+                `college_abbrev`,
+                `teaching_position`,
+                `isAdmin`,
+                `first_name`,
+                `middle_name`,
+                `ext_name`,
+                `last_name`,
+                `birthdate`,
+                `age`,
+                `citizenship`,
+                `civil_status`,
+                `sex`,
+                `email`,
+                `employment_status`,
+                `phone_number`,
+                `region`,
+                `province`,
+                `language`,
+                `city`,
+                `barangay`,
+                `profile_image`,
+                `cover_image` 
                 FROM `facultymembers` 
                 INNER JOIN `college` on `facultymembers`.`college_ID`=`college`.`college_ID` 
                 WHERE faculty_ID = $id;";

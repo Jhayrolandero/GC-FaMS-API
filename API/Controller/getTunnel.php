@@ -53,6 +53,23 @@ class GetTunnel extends Connection
         return $this->resume->getResumeInfo($id);
     }
 
+    public function getCert($id)
+    {
+        return $this->resume->getCert($id);
+    }
+    public function getExp($id)
+    {
+        return $this->resume->getExp($id);
+    }
+    public function getEduc($id)
+    {
+        return $this->resume->getEduc($id);
+    }
+    public function getSpec($id)
+    {
+        return $this->resume->getSpec($id);
+    }
+
     public function toGetEvaluation($id)
     {
         return $this->evaluation->getEvaluation($id);
