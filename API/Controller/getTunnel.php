@@ -65,6 +65,11 @@ class GetTunnel extends Connection
     {
         return $this->resume->getEduc($id);
     }
+
+    public function getProj($id){
+        return $this->resume->getProj($id);
+    }
+
     public function getSpec($id)
     {
         return $this->resume->getSpec($id);

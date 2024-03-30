@@ -40,8 +40,8 @@ if ($request[0] === 'login') {
 //Main request switch endpoints
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
-        // $id = $globalOb->verifyToken()['payload'];
-        $id = 3;
+        $id = $globalOb->verifyToken()['payload'];
+        // $id = 3;
         switch ($request[0]) {
             case 'getschedules':
                 if ($request[1] == "fetchFaculty") {
@@ -81,6 +81,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
             case 'education':
                 echo json_encode($getTunnel->getEduc($globalOb->verifyToken()['payload']));
+                break;
+
+            case 'project':
+                echo json_encode($getTunnel->getProj($globalOb->verifyToken()['payload']));
                 break;
 
             case 'expertise':

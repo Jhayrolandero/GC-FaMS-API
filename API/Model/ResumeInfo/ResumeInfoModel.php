@@ -31,12 +31,21 @@ class ResumeInfo extends GlobalMethods
         return $this->executeGetQuery($educSQL)["data"];
     }
 
+    public function getProj($id){
+        $projSQL = "SELECT * 
+        FROM `projects` 
+        WHERE faculty_ID = $id;";
+        return $this->executeGetQuery($projSQL)["data"];
+    }
+
     public function getSpec($id)
     {
         $specSQL = "SELECT * FROM `expertise`
         WHERE faculty_ID = $id;";
         return $this->executeGetQuery($specSQL)["data"];
     }
+
+
 
     // Reason why this is slow ay isahan ang result however hinahati niya sa 3 yung request sa DB each results have res time at nag bubuild up yun
     // bago mareturn ng function hihintayin niya muna lahat matapos kaya ang tagal, my solution is i-separate or I-lazy load nalang yung mga parts resume info
