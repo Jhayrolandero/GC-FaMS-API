@@ -79,7 +79,7 @@ class PostTunnel
     }
 
 
-    
+
     public function toAddResume($form, $id, $type)
     {
         switch ($type) {
@@ -150,5 +150,10 @@ class PostTunnel
                 # code...
                 break;
         }
+    }
+
+    public function toDeleteFaculty($id)
+    {
+        return $this->faculty->deleteFaculty($id);
     }
 }

@@ -202,6 +202,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toDeleteResume($request[1], 5));
                 break;
 
+            case 'faculty':
+                echo json_encode($postTunnel->toDeleteFaculty($request[1]));
+                break;
             default:
                 http_response_code(403);
                 break;

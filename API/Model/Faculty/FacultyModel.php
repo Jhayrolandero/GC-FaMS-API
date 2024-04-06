@@ -5,6 +5,10 @@ include_once(__DIR__ . '/../../Controller/global.php');
 class Faculty extends GlobalMethods
 {
 
+    public function deleteFaculty($id)
+    {
+        return $this->prepareDeleteBind('facultymembers', 'faculty_ID', $id);
+    }
     public function getFacultyInfo($id = null)
     {
         $sql = "SELECT 
@@ -62,12 +66,13 @@ class Faculty extends GlobalMethods
         return false;
     }
 
-    public function addFaculty(){
+    public function addFaculty()
+    {
         $filepath = null;
         $filepathCover = null;
         $params = [];
         $tempForm = [];
-        
+
         //Calls function that saves image.
         if (!empty($_FILES['profile_image'])) {
             $filepath = $this->saveImage("/../../Image_Assets/Faculty_Profile/", "facultymembers", "profile_image");
