@@ -107,9 +107,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     case 'POST':
-        $payloadID = $globalOb->verifyToken()['payload'];
+        // $payloadID = $globalOb->verifyToken()['payload'];
         $data = json_decode(file_get_contents("php://input"));
-
         switch ($request[0]) {
             case 'addEduc':
                 echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 1));
@@ -139,6 +138,21 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toAddCommex($data));
                 break;
 
+            case 'test':
+                echo json_encode($postTunnel->test());
+                break;
+
+                // Use this for updating profile pic
+
+            case 'profile':
+
+                $params = $_GET["t"];
+                echo json_encode($postTunnel->toEditProfile($params, $request[1]));
+                break;
+
+                // Use this for updating cover pic
+            case 'cover':
+                break;
             default:
                 http_response_code(403);
                 break;
@@ -146,11 +160,14 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     case 'PATCH':
-        $globalOb->verifyToken()['payload'];
+        // $globalOb->verifyToken()['payload'];
         $data = json_decode(file_get_contents("php://input"));
 
+        // For req of Formdata
+        // parse_str(file_get_contents("php://input"), $_PATCH);
+
         //No need for user id, so verification is applied globally. (Apply this to GET next time. Too lazy for now);
-        $globalOb->verifyToken()['payload'];
+        // $globalOb->verifyToken()['payload'];
 
         switch ($request[0]) {
             case 'editEduc':
@@ -171,6 +188,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
             case 'editSpec':
                 echo json_encode($postTunnel->toEditResume($data, $request[1], 5));
+                break;
+
+            case 'faculty':
+                echo json_encode($postTunnel->toEditFaculty($data, $request[1]));
                 break;
 
             default:

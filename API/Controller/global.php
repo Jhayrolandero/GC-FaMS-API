@@ -78,7 +78,7 @@ class GlobalMethods extends Connection
         return array("code" => $code, "errmsg" => $errmsg);
     }
 
-    public function saveImage($dir, $tableName, $name) //A reusable function for saving images based on provided directory location
+    public function saveImage($dir, $tableName, $name, $id = null) //A reusable function for saving images based on provided directory location
     {
         //Declare temporary holders for parameter and value for sql
         $tempFile = '';
@@ -91,8 +91,11 @@ class GlobalMethods extends Connection
 
         //Fetch last autoincrement id on commex
         $lastIncrementID = $this->getLastID($tableName);
+
+        $picID = isset($id) ? $id : $lastIncrementID;
+
         //Declares folder location
-        $fileFolder = __DIR__ . $dir . "$lastIncrementID/";
+        $fileFolder = __DIR__ . $dir . "$picID/";
 
         //Creates directory if it doesn't exist yet
         if (!file_exists($fileFolder)) {
@@ -100,7 +103,7 @@ class GlobalMethods extends Connection
         }
 
         //Declares location for image file itself.
-        $filepath = __DIR__ . $dir . "$lastIncrementID/$fileName";
+        $filepath = __DIR__ . $dir . "$picID/$fileName";
 
         //If file exists in path, delete it.
         if (file_exists($filepath)) {
@@ -227,5 +230,26 @@ class GlobalMethods extends Connection
                 WHERE TABLE_SCHEMA = '$DBName' AND TABLE_NAME = '$table'";
 
         return $this->executeGetQuery($sql)['data'][0]['AUTO_INCREMENT'];
+    }
+
+    public function getParams($data)
+    {
+        $params = [];
+
+        foreach ($data as $key => $value) {
+            array_push($params, $key);
+        }
+
+        return $params;
+    }
+    public function getValues($data)
+    {
+        $values = [];
+
+        foreach ($data as $key => $value) {
+            array_push($values, $value);
+        }
+
+        return $values;
     }
 }
