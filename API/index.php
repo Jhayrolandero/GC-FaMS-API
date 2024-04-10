@@ -145,13 +145,14 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 // Use this for updating profile pic
 
             case 'profile':
-
                 $params = $_GET["t"];
                 echo json_encode($postTunnel->toEditProfile($params, $request[1]));
                 break;
 
                 // Use this for updating cover pic
             case 'cover':
+                $params = $_GET["t"];
+                echo json_encode($postTunnel->toEditCover($params, $request[1]));
                 break;
             default:
                 http_response_code(403);
@@ -160,7 +161,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     case 'PATCH':
-        // $globalOb->verifyToken()['payload'];
         $data = json_decode(file_get_contents("php://input"));
 
         // For req of Formdata
@@ -232,6 +232,22 @@ switch ($_SERVER['REQUEST_METHOD']) {
         }
         break;
 
+    case 'PUT':
+        // $globalOb->verifyToken()['payload'];
+        $data = json_decode(file_get_contents("php://input"));
+        switch ($request[0]) {
+            case 'profile':
+                $params = $_GET["t"];
+                echo json_encode($postTunnel->toEditProfile($params, $request[1]));
+                break;
+            case 'test':
+                echo json_encode($postTunnel->test());
+                break;
+            default:
+                http_response_code(404);
+                break;
+        }
+        break;
     default:
         http_response_code(404);
         break;

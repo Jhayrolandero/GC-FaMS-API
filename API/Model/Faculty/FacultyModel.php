@@ -117,35 +117,34 @@ class Faculty extends GlobalMethods
     public function editFaculty($data = null, $id)
     {
 
-        if (isset($data)) {
-            $params = $this->getParams($data);
-            $tempForm = $this->getValues($data);
-            array_push($tempForm, $id);
-            return $this->prepareEditBind($this->tableName, $params, $tempForm, 'faculty_ID');
-        }
+        $params = $this->getParams($data);
+        $tempForm = $this->getValues($data);
+        array_push($tempForm, $id);
+        return $this->prepareEditBind($this->tableName, $params, $tempForm, 'faculty_ID');
 
-        $filepath = null;
-        $filepathCover = null;
-        $params = [];
-        $tempForm = [];
-        // var_dump($_FILES);
-        //Calls function that saves image.
-        // return $_FILES['profile_image'];
-        return $_FILES['cover_image'];
+        // Ignore this
+        // $filepath = null;
+        // $filepathCover = null;
+        // $params = [];
+        // $tempForm = [];
+
+        // //Calls function that saves image.
         // if (!empty($_FILES['profile_image'])) {
+
+        //     // return 'Profile Exist';
         //     $filepath = $this->saveImage("/../../Image_Assets/Faculty_Profile/", $this->tableName, "profile_image", $id);
         //     array_push($params, 'profile_image');
         //     array_push($tempForm, $filepath);
         // }
 
         // if (!empty($_FILES['cover_image'])) {
+        //     // return 'Cover Exist';
         //     $filepathCover = $this->saveImage("/../../Image_Assets/Faculty_Cover/", $this->tableName, "cover_image", $id);
         //     array_push($params, 'cover_image');
         //     array_push($tempForm, $filepathCover);
         // }
 
         // array_push($tempForm, $id);
-
         // return $this->prepareEditBind($this->tableName, $params, $tempForm, 'faculty_ID');
     }
 }

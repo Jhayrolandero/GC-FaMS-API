@@ -163,28 +163,30 @@ class PostTunnel
     public function toEditFaculty($data, $id)
     {
         return $this->faculty->editFaculty($data, $id);
-        // return $_FILES['profile_image'];
     }
 
     public function toEditProfile($params, $id)
     {
-
         switch ($params) {
             case 'faculty':
                 return $this->faculty->editFaculty(null, $id);
         }
-
-
-        // return $id;
     }
 
-    public function toEditCover()
+    public function toEditCover($params, $id)
     {
+        switch ($params) {
+            case 'faculty':
+                return $this->faculty->editFaculty(null, $id);
+        }
     }
 
     function test()
     {
-        return $_FILES['profile'];
+        $put = array();
+        parse_str(file_get_contents('php://input'), $put);
+
+        return $put;
     }
 }
 
