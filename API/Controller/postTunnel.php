@@ -1,4 +1,7 @@
 <?php
+
+use function PHPSTORM_META\type;
+
 header('Access-Control-Allow-Origin: http://localhost:4200');
 header('Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS');
 header("Access-Control-Allow-Headers: *");
@@ -79,7 +82,7 @@ class PostTunnel
     }
 
 
-    
+
     public function toAddResume($form, $id, $type)
     {
         switch ($type) {
@@ -151,4 +154,179 @@ class PostTunnel
                 break;
         }
     }
+
+    public function toDeleteFaculty($id)
+    {
+        return $this->faculty->deleteFaculty($id);
+    }
+
+    public function toEditFaculty($data, $id)
+    {
+        return $this->faculty->editFaculty($data, $id);
+    }
+
+    public function toEditProfile($params, $id)
+    {
+        switch ($params) {
+            case 'faculty':
+                return $this->faculty->editFaculty(null, $id);
+        }
+    }
+
+    public function toEditCover($params, $id)
+    {
+        switch ($params) {
+            case 'faculty':
+                return $this->faculty->editFaculty(null, $id);
+        }
+    }
+
+    function test()
+    {
+        $put = array();
+        parse_str(file_get_contents('php://input'), $put);
+
+        return $put;
+    }
 }
+
+/**
+ *  I want to show you how i wasted 3 hours of productive work
+ *  seems that PHP can't handle multiform PATCH request through formdata efficiently
+ *  i don't wanna touch regex
+ *  none of these works BTW
+ */
+
+//  public function toEditFaculty($data, $id)
+//     {
+
+//         return $data;
+//         // parse_str(file_get_contents('php://input'), $_PROFILE);
+//         // parse_str(file_get_contents('php://input'), $_PATCH);
+//         // return $_PATCH;
+//         // return $_FILES('profile');
+//         // return $_POST;
+//         // return $_PATCH;
+//         // preg_match('/boundary=(.*)$/', $_SERVER['CONTENT_TYPE'], $matches);
+
+//         // // return $_POST['first_name'];
+//         // $result = [];
+//         // $rawPost = file_get_contents('php://input');
+//         // mb_parse_str($rawPost, $result);
+//         // array_push($matches, $result);
+//         // return $matches;
+//         // $_PATCH = [];
+//         // parse_str(file_get_contents('php://input'), $_PATCH);
+//         // $this->parse_raw_http_request($_PATCH);
+//         // return $_PATCH;
+//         // // return $data;
+//         // // $formData = $this->parseFormData($data);
+//         // // return $formData;
+//     }
+       
+        // function parse_multipart_content(?string $content, ?string $boundary): ?array
+        // {
+        //     if (empty($content) || empty($boundary)) return null;
+        //     $sections = array_map("trim", explode("--$boundary", $content));
+        //     $parts = [];
+        //     foreach ($sections as $section) {
+        //         if ($section === "" || $section === "--") continue;
+        //         $fields = explode("\r\n\r\n", $section);
+        //         if (preg_match_all("/([a-z0-9-_]+)\s*:\s*([^\r\n]+)/iu", $fields[0] ?? "", $matches, PREG_SET_ORDER) === 2) {
+        //             $headers = [];
+        //             foreach ($matches as $match) $headers[$match[1]] = $match[2];
+        //         } else $headers = null;
+        //         $parts[] = ["headers" => $headers, "value"   => $fields[1] ?? null];
+        //     }
+        //     return empty($parts) ? null : $parts;
+        // }
+    
+        // function parse_raw_http_request(array &$a_data)
+        // {
+        //     // read incoming data
+        //     $input = file_get_contents('php://input');
+    
+        //     // grab multipart boundary from content type header
+        //     preg_match('/boundary=(.*)$/', $_SERVER['CONTENT_TYPE'], $matches);
+        //     $boundary = $matches[1];
+    
+        //     // split content by boundary and get rid of last -- element
+        //     $a_blocks = preg_split("/-+$boundary/", $input);
+        //     array_pop($a_blocks);
+    
+        //     // loop data blocks
+        //     foreach ($a_blocks as $id => $block) {
+        //         if (empty($block))
+        //             continue;
+    
+        //         // you'll have to var_dump $block to understand this and maybe replace \n or \r with a visibile char
+    
+        //         // parse uploaded files
+        //         if (strpos($block, 'application/octet-stream') !== FALSE) {
+        //             // match "name", then everything after "stream" (optional) except for prepending newlines 
+        //             preg_match('/name=\"([^\"]*)\".*stream[\n|\r]+([^\n\r].*)?$/s', $block, $matches);
+        //         }
+        //         // parse all other fields
+        //         else {
+        //             // match "name" and optional value in between newline sequences
+        //             preg_match('/name=\"([^\"]*)\"[\n|\r]+([^\n\r].*)?\r$/s', $block, $matches);
+        //         }
+        //         $a_data[$matches[1]] = $matches[2];
+        //     }
+        // }
+    
+    
+        // function parseFormData(string $rawRequestBody): array
+        // {
+        //     $formData = [];
+        //     $boundaries = mb_split('(\r\n\r\n)', $rawRequestBody);
+    
+        //     foreach ($boundaries as $boundary) {
+        //         if (strpos($boundary, 'Content-Disposition: form-data;') !== false) {
+        //             $headerParts = mb_split('(\r\n\r\n)', $boundary, 2);
+        //             $header = $headerParts[0];
+        //             $fieldName = mb_substr(
+        //                 $header,
+        //                 strpos($header, 'name="') + 6,
+        //                 strpos($header, '"', strpos($header, 'name="') + 6) - (strpos($header, 'name="') + 6)
+        //             );
+        //             $fieldValue = trim($headerParts[1]);
+        //             $formData[$fieldName] = $fieldValue;
+        //         }
+        //     }
+    
+        //     return $formData;
+        // }
+        // // function parseFormData(string $rawRequestBody)
+        // // {
+        // //     $formData = [];
+        // //     $boundaries = str_getcsv($rawRequestBody, "\r\n\r\n");
+    
+        // //     return $boundaries;
+        // //     // foreach ($boundaries as $boundary) {
+        // //     //     if (strpos($boundary, 'Content-Disposition: form-data;') !== false) {
+        // //     //         // $fieldName = $this->extractFieldName($boundary);
+        // //     //         // $fieldValue = $this->extractFieldValue($boundary);
+        // //     //         // $formData[$fieldName] = $fieldValue;
+        // //     //     }
+        // //     // }
+    
+        // //     // return $formData;
+        // // }
+    
+       
+        // function extractFieldName(string $boundary): string
+        // {
+        //     $pattern = '/name="([^"]+)"/';
+        //     preg_match($pattern, $boundary, $matches);
+        //     return $matches[1] ?? '';
+        // }
+    
+    
+       
+        // function extractFieldValue(string $boundary): string
+        // {
+        //     $parts = explode("\r\n\r\n", $boundary, 2);
+        //     $fieldValue = trim($parts[1] ?? '');
+        //     return str_replace("\r\n", '', $fieldValue);
+        // }

@@ -91,6 +91,9 @@ class GlobalMethods extends Connection
 
         //Fetch last autoincrement id on commex
         $lastIncrementID = $this->getLastID($tableName);
+
+        // $picID = isset($id) ? $id : $lastIncrementID;
+
         //Declares folder location
         $fileFolder = __DIR__ . $dir . "$lastIncrementID/";
 
@@ -227,5 +230,26 @@ class GlobalMethods extends Connection
                 WHERE TABLE_SCHEMA = '$DBName' AND TABLE_NAME = '$table'";
 
         return $this->executeGetQuery($sql)['data'][0]['AUTO_INCREMENT'];
+    }
+
+    public function getParams($data)
+    {
+        $params = [];
+
+        foreach ($data as $key => $value) {
+            array_push($params, $key);
+        }
+
+        return $params;
+    }
+    public function getValues($data)
+    {
+        $values = [];
+
+        foreach ($data as $key => $value) {
+            array_push($values, $value);
+        }
+
+        return $values;
     }
 }

@@ -109,7 +109,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case 'POST':
         $payloadID = $globalOb->verifyToken()['payload'];
         $data = json_decode(file_get_contents("php://input"));
-
         switch ($request[0]) {
             case 'addEduc':
                 echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 1));
@@ -139,6 +138,22 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toAddCommex($data));
                 break;
 
+            case 'test':
+                echo json_encode($postTunnel->test());
+                break;
+
+                // Use this for updating profile pic
+
+            case 'profile':
+                $params = $_GET["t"];
+                echo json_encode($postTunnel->toEditProfile($params, $request[1]));
+                break;
+
+                // Use this for updating cover pic
+            case 'cover':
+                $params = $_GET["t"];
+                echo json_encode($postTunnel->toEditCover($params, $request[1]));
+                break;
             default:
                 http_response_code(403);
                 break;
@@ -146,8 +161,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     case 'PATCH':
-        $globalOb->verifyToken()['payload'];
         $data = json_decode(file_get_contents("php://input"));
+
+        // For req of Formdata
+        // parse_str(file_get_contents("php://input"), $_PATCH);
 
         //No need for user id, so verification is applied globally. (Apply this to GET next time. Too lazy for now);
         $globalOb->verifyToken()['payload'];
@@ -171,6 +188,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
             case 'editSpec':
                 echo json_encode($postTunnel->toEditResume($data, $request[1], 5));
+                break;
+
+            case 'faculty':
+                echo json_encode($postTunnel->toEditFaculty($data, $request[1]));
                 break;
 
             default:
@@ -202,12 +223,31 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toDeleteResume($request[1], 5));
                 break;
 
+            case 'faculty':
+                echo json_encode($postTunnel->toDeleteFaculty($request[1]));
+                break;
             default:
                 http_response_code(403);
                 break;
         }
         break;
 
+    case 'PUT':
+        $globalOb->verifyToken()['payload'];
+        $data = json_decode(file_get_contents("php://input"));
+        switch ($request[0]) {
+            case 'profile':
+                $params = $_GET["t"];
+                echo json_encode($postTunnel->toEditProfile($params, $request[1]));
+                break;
+            case 'test':
+                echo json_encode($postTunnel->test());
+                break;
+            default:
+                http_response_code(404);
+                break;
+        }
+        break;
     default:
         http_response_code(404);
         break;
