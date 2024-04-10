@@ -107,7 +107,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     case 'POST':
-        // $payloadID = $globalOb->verifyToken()['payload'];
+        $payloadID = $globalOb->verifyToken()['payload'];
         $data = json_decode(file_get_contents("php://input"));
         switch ($request[0]) {
             case 'addEduc':
@@ -167,7 +167,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         // parse_str(file_get_contents("php://input"), $_PATCH);
 
         //No need for user id, so verification is applied globally. (Apply this to GET next time. Too lazy for now);
-        // $globalOb->verifyToken()['payload'];
+        $globalOb->verifyToken()['payload'];
 
         switch ($request[0]) {
             case 'editEduc':
@@ -233,7 +233,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     case 'PUT':
-        // $globalOb->verifyToken()['payload'];
+        $globalOb->verifyToken()['payload'];
         $data = json_decode(file_get_contents("php://input"));
         switch ($request[0]) {
             case 'profile':
