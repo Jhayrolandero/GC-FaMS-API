@@ -30,7 +30,6 @@ class Commex extends GlobalMethods
     {
         $filepath = null;
 
-
         $params = [];
         $tempForm = [];
 
