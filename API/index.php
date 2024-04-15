@@ -59,9 +59,23 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'getcommex':
-                if ($request[1] == "fetchCommex") {
-                    echo json_encode($getTunnel->toGetCommex($id));
-                    // echo json_encode($getTunnel->toGetCommex($id));
+                $query = $_GET['t'];
+
+                if (empty($query)) {
+                    http_response_code(404);
+                    return;
+                }
+                // echo json_encode($query);
+                switch ($query) {
+                    case 'college':
+                        echo json_encode($getTunnel->toGetCommex($request[1], $query));
+                        break;
+                    case 'faculty':
+                        echo json_encode($getTunnel->toGetCommex($id, $query));
+                        break;
+                    default:
+                        http_response_code(404);
+                        break;
                 }
                 break;
 
@@ -99,6 +113,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
             case 'faculty':
                 echo json_encode($getTunnel->getFaculties());
+                break;
+
+            case 'attendee':
+                echo json_encode($getTunnel->getAttendee($request[1]));
                 break;
             default:
                 http_response_code(404);
