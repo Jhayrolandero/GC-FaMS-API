@@ -91,8 +91,8 @@ class GetTunnel extends Connection
         return $this->faculty->getAllFaculty();
     }
 
-    public function getAttendee($id)
+    public function getAttendee($id, $query = null)
     {
-        return $this->commex->getAttendee($id);
+        return $this->commex->getAttendee($id, $query);
     }
 }
