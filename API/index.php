@@ -40,7 +40,7 @@ if ($request[0] === 'login') {
 //Main request switch endpoints
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
-        // $id = $globalOb->verifyToken()['payload'];
+        $id = $globalOb->verifyToken()['payload'];
         // $id = 3;
         switch ($request[0]) {
             case 'getschedules':
@@ -116,7 +116,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'attendee':
-
                 if (isset($_GET['q']) && $_GET['q'] === 'number') {
                     $query = $_GET['q'];
                     echo json_encode($getTunnel->getAttendee($request[1], $query));

@@ -75,18 +75,22 @@ class Commex extends GlobalMethods
 
     public function getAttendee($id, $query = null)
     {
-        if (isset($query) && $query === 'number') {
-            $sql =  "SELECT COUNT(*) as `count`
-                FROM facultymembers INNER JOIN `commex-faculty` on facultymembers.faculty_ID=`commex-faculty`.faculty_ID 
-                WHERE `commex-faculty`.commex_ID = $id";
-            return $this->executeGetQuery($sql);
+
+        $selectRes = '';
+
+        switch ($query) {
+            case 'number':
+                $selectRes = "SELECT COUNT(*) as `count`";
+                break;
+            default:
+                $selectRes = "SELECT facultymembers.first_name, facultymembers.middle_name, facultymembers.last_name, facultymembers.ext_name, facultymembers.faculty_ID, facultymembers.profile_image";
+                break;
         }
 
 
-        $sql = "SELECT facultymembers.first_name, facultymembers.middle_name, facultymembers.last_name, facultymembers.ext_name, facultymembers.faculty_ID, facultymembers.profile_image
+        $sql = "$selectRes
                 FROM facultymembers INNER JOIN `commex-faculty` on facultymembers.faculty_ID=`commex-faculty`.faculty_ID 
-                WHERE `commex-faculty`.commex_ID = $id;";
-
-        return $this->executeGetQuery($sql);
+                WHERE `commex-faculty`.commex_ID = $id";
+        return $this->executeGetQuery($sql)['data'][0]['count'];
     }
 }
