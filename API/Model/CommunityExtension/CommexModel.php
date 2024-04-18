@@ -91,6 +91,6 @@ class Commex extends GlobalMethods
         $sql = "$selectRes
                 FROM facultymembers INNER JOIN `commex-faculty` on facultymembers.faculty_ID=`commex-faculty`.faculty_ID 
                 WHERE `commex-faculty`.commex_ID = $id";
-        return $this->executeGetQuery($sql)['data'][0]['count'];
+        return $this->executeGetQuery($sql);
     }
 }
