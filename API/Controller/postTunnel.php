@@ -26,6 +26,7 @@ class PostTunnel
         $this->resume = new ResumeInfo();
         $this->faculty = new Faculty();
         $this->commex = new Commex();
+        $this->eval = new Evaluation();
     }
 
     // public function addFaculty($data){
@@ -74,6 +75,10 @@ class PostTunnel
         //     return $this->faculty->addFaculty();
         // }
         // // return 'withoutimage';
+    }
+    
+    public function toAddEval($data, $id){
+        return $this->eval->addEval($data, $id);
     }
 
     public function toAddCommex($data)

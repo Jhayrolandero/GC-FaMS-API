@@ -153,6 +153,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 5));
                 break;
 
+            case 'addEval':
+                echo json_encode($postTunnel->toAddEval($data, $globalOb->verifyToken()['payload']));
+                break;
+
             case 'faculty':
                 echo json_encode($postTunnel->addFaculty($data));
                 break;
