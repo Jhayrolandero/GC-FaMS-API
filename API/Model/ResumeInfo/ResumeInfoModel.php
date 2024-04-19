@@ -96,9 +96,10 @@ class ResumeInfo extends GlobalMethods
     {
         // $sql = "INSERT INTO `educattainment`(faculty_ID, educ_title, educ_school, year_start, year_end educ_details)
         // VALUES (?,?,?,?,?,?)";
-        $params = array('faculty_ID', 'educ_title', 'educ_school', 'year_start', 'year_end', 'educ_details');
+        $params = array('faculty_ID', 'educ_level', 'educ_title', 'educ_school', 'year_start', 'year_end', 'educ_details');
         $tempForm = array(
             $id,
+            $form->educ_level,
             $form->educ_title,
             $form->educ_school,
             $form->year_start,
@@ -175,8 +176,9 @@ class ResumeInfo extends GlobalMethods
 
     public function editEduc($form, $id)
     {
-        $params = array('educ_title', 'educ_school', 'year_start', 'year_end', 'educ_details');
+        $params = array('educ_level', 'educ_title', 'educ_school', 'year_start', 'year_end', 'educ_details');
         $tempForm = array(
+            $form->educ_level,
             $form->educ_title,
             $form->educ_school,
             $form->year_start,
