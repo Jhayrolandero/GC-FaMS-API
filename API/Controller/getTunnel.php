@@ -38,9 +38,14 @@ class GetTunnel extends Connection
         return $this->schedule->getScheduleFaculty($id);
     }
 
-    public function toGetCommex($id)
+    public function toGetCommex($id, $query)
     {
-        return $this->commex->getCommexFaculty($id);
+        switch ($query) {
+            case 'college':
+                return $this->commex->getCommex($id, $query);
+            case 'faculty':
+                return $this->commex->getCommex($id, $query);
+        }
     }
 
     public function toGetCollege($id)
@@ -66,7 +71,8 @@ class GetTunnel extends Connection
         return $this->resume->getEduc($id);
     }
 
-    public function getProj($id){
+    public function getProj($id)
+    {
         return $this->resume->getProj($id);
     }
 
@@ -83,5 +89,10 @@ class GetTunnel extends Connection
     public function getFaculties()
     {
         return $this->faculty->getAllFaculty();
+    }
+
+    public function getAttendee($id, $query = null)
+    {
+        return $this->commex->getAttendee($id, $query);
     }
 }
