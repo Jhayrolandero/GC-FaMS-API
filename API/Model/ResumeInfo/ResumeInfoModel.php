@@ -96,9 +96,10 @@ class ResumeInfo extends GlobalMethods
     {
         // $sql = "INSERT INTO `educattainment`(faculty_ID, educ_title, educ_school, year_start, year_end educ_details)
         // VALUES (?,?,?,?,?,?)";
-        $params = array('faculty_ID', 'educ_title', 'educ_school', 'year_start', 'year_end', 'educ_details');
+        $params = array('faculty_ID', 'educ_level', 'educ_title', 'educ_school', 'year_start', 'year_end', 'educ_details');
         $tempForm = array(
             $id,
+            $form->educ_level,
             $form->educ_title,
             $form->educ_school,
             $form->year_start,
@@ -123,14 +124,29 @@ class ResumeInfo extends GlobalMethods
     }
     public function addCert($form, $id)
     {
-        $params = array('faculty_ID', 'accomplished_date', 'cert_name', 'cert_details', 'cert_corporation');
-        $tempForm = array(
-            $id,
-            $form->accomplished_date,
-            $form->cert_name,
-            $form->cert_details,
-            $form->cert_corporation
-        );
+        $filepath = null;
+
+        $params = [];
+        $tempForm = [];
+
+        array_push($params, 'faculty_ID');
+        array_push($tempForm, $id);
+
+        //Calls function that saves image.
+        if (!empty($_FILES)) {
+            $filepath = $this->saveImage("/../../Image_Assets/Certifications/", "certifications-faculty", "cert_image");
+            array_push($params, 'cert_image');
+            array_push($tempForm, $filepath);
+        }
+
+        //Iterates through FormData, and assigns parameter and value.
+        foreach ($_POST as $key => $value) {
+            array_push($params, $key);
+            array_push($tempForm, $value);
+        }
+
+        // return $params;
+
         return $this->prepareAddBind('certifications-faculty', $params, $tempForm);
     }
 
@@ -160,8 +176,9 @@ class ResumeInfo extends GlobalMethods
 
     public function editEduc($form, $id)
     {
-        $params = array('educ_title', 'educ_school', 'year_start', 'year_end', 'educ_details');
+        $params = array('educ_level', 'educ_title', 'educ_school', 'year_start', 'year_end', 'educ_details');
         $tempForm = array(
+            $form->educ_level,
             $form->educ_title,
             $form->educ_school,
             $form->year_start,
