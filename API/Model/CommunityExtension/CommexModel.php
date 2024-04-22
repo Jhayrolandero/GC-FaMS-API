@@ -35,11 +35,19 @@ class Commex extends GlobalMethods
     //GET all sched
     public function getCommexAll()
     {
-        $sql = "SELECT * FROM `commex-faculty`
-                    INNER JOIN commex on `commex-faculty`.`commex_ID`=`commex`.`commex_ID`;";
+        $sql = "SELECT * FROM `commex`;";
 
-        return $this->executeGetQuery($sql);
+        return $this->executeGetQuery($sql)['data'];
     }
+    /*
+    
+    
+    SELECT c.*, COUNT(cf.faculty_ID) AS attendee_count
+FROM commex c
+LEFT JOIN `commex-faculty` cf ON c.commex_ID = cf.commex_ID
+GROUP BY c.commex_ID, c.commex_title, c.commex_date;
+
+    */
 
     public function addCommex($data)
     {
@@ -70,6 +78,40 @@ class Commex extends GlobalMethods
             array('faculty_ID', 'commex_ID'),
             array($this->verifyToken()['payload'], $this->getLastID('commex') - 1)
         );
+    }
+    public function addAttendee($data)
+    {
+
+        $cols = [];
+        $values = [];
+
+        foreach (array_keys($data[0]) as $key) {
+            array_push($cols, $key);
+        }
+
+
+        $colLength = count($cols);
+        foreach ($data as $item) {
+            $value = [];
+
+            for ($i = 0; $i < $colLength; $i++) {
+                array_push($value, $item[$cols[$i]]);
+            }
+
+            array_push($values, $value);
+        }
+
+        return $this->prepateMultipleAddBind('commex-faculty', $cols, $values);
+
+        // var_dump($params);
+
+        // $this->prepareAddBind(());
+        // $sql = "
+        // INSERT INTO `commex-faculty`
+        // (commex_id, faculty_id) 
+        // VALUES
+        // ()
+        // ";
     }
 
     public function getAttendee($id, $query = null)

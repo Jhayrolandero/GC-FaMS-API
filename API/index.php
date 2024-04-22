@@ -73,6 +73,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     case 'faculty':
                         echo json_encode($getTunnel->toGetCommex($id, $query));
                         break;
+                    case 'all':
+                        echo json_encode($getTunnel->toGetCommex(null, $query));
+                        break;
                     default:
                         http_response_code(404);
                         break;
@@ -130,7 +133,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     case 'POST':
-        $payloadID = $globalOb->verifyToken()['payload'];
+        // $payloadID = $globalOb->verifyToken()['payload'];
         $data = json_decode(file_get_contents("php://input"));
         switch ($request[0]) {
             case 'addEduc':
@@ -180,6 +183,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
             case 'cover':
                 $params = $_GET["t"];
                 echo json_encode($postTunnel->toEditCover($params, $request[1]));
+                break;
+
+            case 'attendee':
+                echo json_encode($postTunnel->toAddAttendee($data));
                 break;
             default:
                 http_response_code(403);

@@ -76,8 +76,9 @@ class PostTunnel
         // }
         // // return 'withoutimage';
     }
-    
-    public function toAddEval($data, $id){
+
+    public function toAddEval($data, $id)
+    {
         return $this->eval->addEval($data, $id);
     }
 
@@ -192,6 +193,20 @@ class PostTunnel
         parse_str(file_get_contents('php://input'), $put);
 
         return $put;
+    }
+
+    // [ { "commex_id": 1, "faculty_id": 1} ]
+    public function toAddAttendee($data)
+    {
+
+        $data = $_POST["id"];
+
+        // foreach ($data as $item) {
+        //     // Access commex_id and faculty_id directly from $item array
+        //     echo "Commex ID: " . $item["commex_id"] . ", Faculty ID: " . $item["faculty_id"] . "<br>";
+        // }
+        // // return $this->commex->addAttendee();
+        return $this->commex->addAttendee($data);
     }
 }
 
