@@ -37,7 +37,8 @@ class Faculty extends GlobalMethods
                 `city`,
                 `barangay`,
                 `profile_image`,
-                `cover_image` 
+                `cover_image`,
+                facultymembers.`college_ID` 
                 FROM `facultymembers` 
                 INNER JOIN `college` on `facultymembers`.`college_ID`=`college`.`college_ID` 
                 WHERE faculty_ID = $id;";

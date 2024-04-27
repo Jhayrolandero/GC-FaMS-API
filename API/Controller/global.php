@@ -188,7 +188,7 @@ class GlobalMethods extends Connection
         // return $sql;
     }
 
-    public function prepateMultipleAddBind($table, $cols, $values)
+    public function prepareMultipleAddBind($table, $cols, $values)
     {
 
         $sql = "INSERT INTO `$table` (";
@@ -211,6 +211,7 @@ class GlobalMethods extends Connection
         $stmt = $this->connect()->prepare($sql);
 
         return $this->executePostQuery($stmt);
+        // return $sql;
     }
     public function prepareEditBind($table, $params, $form, $rowId)
     {
@@ -285,5 +286,28 @@ class GlobalMethods extends Connection
             $str    = substr_replace($str, $replace, $pos, $search_length);
         }
         return $str;
+    }
+
+    function arrayIncludes($mainArray, $targetArray)
+    {
+
+        foreach ($mainArray as $array) {
+            // Check if the current array matches the target array
+            if ($this->checkContents($array, $targetArray)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    function checkContents($array1, $array2)
+    {
+        // Encode arrays to JSON strings for comparison
+        $json1 = json_encode($array1, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $json2 = json_encode($array2, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+        // Compare JSON strings
+        return $json1 === $json2;
     }
 }

@@ -24,9 +24,11 @@ class Commex extends GlobalMethods
                 break;
         }
 
-        $sql = "SELECT * FROM `$table`
+        $sql = "SELECT commex.commex_ID, commex_title, commex_details, commex_header_img, commex_date
+                FROM `$table`
                 INNER JOIN commex on `$table`.`commex_ID`=`commex`.`commex_ID`
                 WHERE $condID = $id;";
+
 
         return $this->executeGetQuery($sql)['data'];
         // return $sql;
@@ -39,15 +41,6 @@ class Commex extends GlobalMethods
 
         return $this->executeGetQuery($sql)['data'];
     }
-    /*
-    
-    
-    SELECT c.*, COUNT(cf.faculty_ID) AS attendee_count
-FROM commex c
-LEFT JOIN `commex-faculty` cf ON c.commex_ID = cf.commex_ID
-GROUP BY c.commex_ID, c.commex_title, c.commex_date;
-
-    */
 
     public function addCommex($data)
     {
@@ -65,19 +58,51 @@ GROUP BY c.commex_ID, c.commex_title, c.commex_date;
 
         //Iterates through FormData, and assigns parameter and value.
         foreach ($_POST as $key => $value) {
+
+            if ($key === "attendees") {
+                continue;
+            }
+
             array_push($params, $key);
             array_push($tempForm, $value);
         }
 
-        //Add Commex 
+        // Add Commex 
         $this->prepareAddBind('commex', $params, $tempForm);
 
         //Assign Commex to faculty
-        return $this->prepareAddBind(
+        // return $this->prepareAddBind(
+        //     'commex-faculty',
+        //     array('faculty_ID', 'commex_ID'),
+        //     array($this->verifyToken()['payload'], $this->getLastID('commex') - 1)
+        // );
+
+        $lastCommexID = $this->getLastID('commex') - 1;
+
+        $this->prepareAddBind(
             'commex-faculty',
             array('faculty_ID', 'commex_ID'),
-            array($this->verifyToken()['payload'], $this->getLastID('commex') - 1)
+            array($this->verifyToken()['payload'], $lastCommexID)
         );
+
+
+
+        $faculty_ID = [];
+        $college_ID = [];
+
+        foreach ($_POST["attendees"] as $attendee) {
+
+            $attendee = json_decode($attendee);
+
+            if (!$this->arrayIncludes($college_ID, [$lastCommexID, $attendee->college_ID])) {
+                array_push($college_ID, [$lastCommexID, $attendee->college_ID]);
+            };
+            array_push($faculty_ID, [$lastCommexID, $attendee->faculty_ID]);
+            // var_dump($attendee);
+        }
+
+        $this->prepareMultipleAddBind('commex-college', ["commex_id", "college_ID"], $college_ID);
+        return $this->prepareMultipleAddBind('commex-faculty', ["commex_id", "faculty_ID"], $faculty_ID);
     }
     public function addAttendee($data)
     {
@@ -85,23 +110,42 @@ GROUP BY c.commex_ID, c.commex_title, c.commex_date;
         $cols = [];
         $values = [];
 
-        foreach (array_keys($data[0]) as $key) {
-            array_push($cols, $key);
+        if (is_string($data[0])) {
+            $data = json_decode($data[0]);
+            $keys = array_keys((array)$data);
+
+            foreach ($keys as $key) {
+                array_push($cols, $key);
+            }
+        } else {
+            foreach (array_keys($data[0]) as $key) {
+                array_push($cols, $key);
+            }
         }
 
 
         $colLength = count($cols);
-        foreach ($data as $item) {
-            $value = [];
 
-            for ($i = 0; $i < $colLength; $i++) {
-                array_push($value, $item[$cols[$i]]);
+
+        if (is_string($data[0])) {
+
+            foreach ($data as $item => $item_value) {
+                // print_r($item);
+                print_r($item_value);
             }
+        } else {
+            foreach ($data as $item) {
+                $value = [];
 
-            array_push($values, $value);
+                for ($i = 0; $i < $colLength; $i++) {
+                    array_push($value, $item[$cols[$i]]);
+                }
+
+                array_push($values, $value);
+            }
         }
 
-        return $this->prepateMultipleAddBind('commex-faculty', $cols, $values);
+        return $this->prepareMultipleAddBind('commex-faculty', $cols, $values);
 
         // var_dump($params);
 

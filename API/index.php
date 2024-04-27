@@ -186,7 +186,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'attendee':
-                echo json_encode($postTunnel->toAddAttendee($data));
+                echo json_encode($postTunnel->toAddAttendee());
                 break;
             default:
                 http_response_code(403);
