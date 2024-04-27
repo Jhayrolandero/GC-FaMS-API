@@ -8,13 +8,17 @@ include_once "./Controller/global.php";
 class ResumeInfo extends GlobalMethods
 {
     //Faculty id GET sched
-
-    public function getCert($id)
-    {
-        $certSQL = "SELECT * FROM `certifications-faculty`
-        WHERE faculty_ID = $id;";
-        return $this->executeGetQuery($certSQL)["data"];
+    // INNER JOIN commex on `commex-faculty`.`commex_ID`=`commex`.`commex_ID`;";
+    public function getCert($id){
+        //Fetches certs attained by faculty, and all certs template within the faculty. Pinag-isa ko na since they're mostly both needed.
+        $existCertSQL = "SELECT * FROM `certifications-faculty` 
+                         INNER JOIN certifications on `certifications-faculty`.`cert_ID`=`certifications`.`cert_ID`
+                         WHERE faculty_ID = $id;";
+        $certSQL = "SELECT * FROM `certifications`";
+        
+        return [$this->executeGetQuery($existCertSQL)["data"], $this->executeGetQuery($certSQL)["data"]];
     }
+
 
     public function getExp($id)
     {
@@ -122,8 +126,9 @@ class ResumeInfo extends GlobalMethods
         );
         return $this->prepareAddBind('experience-faculty', $params, $tempForm);
     }
-    public function addCert($form, $id)
+    public function addFacultyCert($form, $id)
     {
+        //Create record only on bridge table, and link it to an existing certificate
         $filepath = null;
 
         $params = [];
@@ -145,9 +150,50 @@ class ResumeInfo extends GlobalMethods
             array_push($tempForm, $value);
         }
 
-        // return $params;
+        return $this->prepareAddBind('certifications-faculty', $params, $tempForm);
+    }
+
+    public function addNewCert($form, $id)
+    {
+        //Create new certificate record, and call addFacultyCert data.
+        $filepath = null;
+        $params = [];
+        $tempForm = [];
+
+        //For adding new certificate
+        foreach ($_POST as $key => $value) {
+            if($key != 'accomplished_date'){
+                array_push($params, $key);
+                array_push($tempForm, $value);
+            }
+        }
+        $this->prepareAddBind('certifications', $params, $tempForm);
+
+
+
+        //Recording instance of certifications-faculty to said record
+        $params = [];
+        $tempForm = [];
+        array_push($params, 'faculty_ID');
+        array_push($tempForm, $id);
+        array_push($params, 'cert_ID');
+        array_push($tempForm, $this->getLastID('certifications')-1);
+
+        if (!empty($_FILES)) {
+            $filepath = $this->saveImage("/../../Image_Assets/Certifications/", "certifications-faculty", "cert_image");
+            array_push($params, 'cert_image');
+            array_push($tempForm, $filepath);
+        }
+
+        foreach ($_POST as $key => $value) {
+            if($key == 'accomplished_date'){
+                array_push($params, $key);
+                array_push($tempForm, $value);
+            }
+        }
 
         return $this->prepareAddBind('certifications-faculty', $params, $tempForm);
+
     }
 
     public function addProj($form, $id)

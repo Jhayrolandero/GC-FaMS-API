@@ -141,8 +141,12 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 2));
                 break;
 
-            case 'addCert':
+            case 'addFacultyCert':
                 echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 3));
+                break;
+
+            case 'addNewCert':
+                echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 6));
                 break;
 
             case 'addProj':

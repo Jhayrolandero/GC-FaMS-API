@@ -98,13 +98,16 @@ class PostTunnel
                 return $this->resume->addExp($form, $id);
 
             case 3:
-                return $this->resume->addCert($form, $id);
+                return $this->resume->addFacultyCert($form, $id);
 
             case 4:
                 return $this->resume->addProj($form, $id);
 
             case 5:
                 return $this->resume->addSpec($form, $id);
+
+            case 6:
+                return $this->resume->addNewCert($form, $id);
 
             default:
                 # code...
