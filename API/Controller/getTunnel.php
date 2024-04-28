@@ -38,13 +38,15 @@ class GetTunnel extends Connection
         return $this->schedule->getScheduleFaculty($id);
     }
 
-    public function toGetCommex($id, $query)
+    public function toGetCommex($id = null, $query)
     {
         switch ($query) {
             case 'college':
                 return $this->commex->getCommex($id, $query);
             case 'faculty':
                 return $this->commex->getCommex($id, $query);
+            case 'all':
+                return $this->commex->getCommexAll();
         }
     }
 
