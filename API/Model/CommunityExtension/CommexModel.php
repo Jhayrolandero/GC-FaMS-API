@@ -70,14 +70,15 @@ class Commex extends GlobalMethods
         // Add Commex 
         $this->prepareAddBind('commex', $params, $tempForm);
 
-        //Assign Commex to faculty
-        // return $this->prepareAddBind(
-        //     'commex-faculty',
-        //     array('faculty_ID', 'commex_ID'),
-        //     array($this->verifyToken()['payload'], $this->getLastID('commex') - 1)
-        // );
-
         $lastCommexID = $this->getLastID('commex') - 1;
+        if (empty($_POST["attendees"])) {
+            return
+                $this->prepareAddBind(
+                    'commex-faculty',
+                    array('faculty_ID', 'commex_ID'),
+                    array($this->verifyToken()['payload'], $lastCommexID)
+                );
+        }
 
         $this->prepareAddBind(
             'commex-faculty',

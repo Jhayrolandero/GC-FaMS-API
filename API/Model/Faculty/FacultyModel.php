@@ -51,7 +51,26 @@ class Faculty extends GlobalMethods
 
     public function getAllFaculty()
     {
-        $sql = "SELECT * FROM `facultymembers`;";
+        $sql = "SELECT  
+               *
+                FROM `facultymembers`
+                LEFT JOIN `college` ON `facultymembers`.`college_ID` = `college`.`college_ID`;";
+        // $sql = "SELECT  
+        //         `first_name`,
+        //         `middle_name`,
+        //         `ext_name`,
+        //         `last_name`,
+        //         `faculty_ID`,
+        //         facultymembers.`college_ID`,
+        //         `college_name`,
+        //         `college_abbrev`,
+        //         `profile_image`,
+        //         `cover_image`,
+        //         `teaching_position`,
+        //         `email`,
+        //         `employment_status` 
+        //         FROM `facultymembers`
+        //         LEFT JOIN `college` ON `facultymembers`.`college_ID` = `college`.`college_ID`;";
         return $this->executeGetQuery($sql)['data'];
     }
 
