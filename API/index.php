@@ -136,7 +136,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 1));
                 break;
 
-            case 'addExp':
+            case 'addExp': 
                 echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 2));
                 break;
 
@@ -154,6 +154,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
             case 'addSpec':
                 echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 5));
+                break;
+
+            case 'addCourse':
+                echo json_encode($postTunnel->toAddCourse($data, $globalOb->verifyToken()['payload']));
                 break;
 
             case 'addEval':

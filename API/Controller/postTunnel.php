@@ -27,6 +27,7 @@ class PostTunnel
         $this->faculty = new Faculty();
         $this->commex = new Commex();
         $this->eval = new Evaluation();
+        $this->course = new Schedule();
     }
 
     // public function addFaculty($data){
@@ -79,6 +80,10 @@ class PostTunnel
     
     public function toAddEval($data, $id){
         return $this->eval->addEval($data, $id);
+    }
+
+    public function toAddCourse($data, $id){
+        return $this->course->addCourse($data, $id);
     }
 
     public function toAddCommex($data)

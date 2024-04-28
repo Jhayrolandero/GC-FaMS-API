@@ -26,6 +26,16 @@
 
             return $this->executeGetQuery($sql);
         }
+
+        public function addCourse($form, $id){
+            $params = array('course_code', 'faculty_ID', 'class_count');
+            $tempForm = array(
+                $form->course_code,
+                $id,
+                $form->class_count,
+            );
+            return $this->prepareAddBind('course-faculty', $params, $tempForm);
+        }
     }
 
 ?>
