@@ -188,6 +188,31 @@ class GlobalMethods extends Connection
         // return $sql;
     }
 
+    public function prepareMultipleAddBind($table, $cols, $values)
+    {
+
+        $sql = "INSERT INTO `$table` (";
+
+        foreach ($cols as $key => $col) {
+            sizeof($cols) - 1 != $key ? $sql = $sql . $col . ', ' : $sql = $sql . $col . ')';
+        }
+
+        $sql .= " VALUES (";
+
+        foreach ($values as $valuesLen => $value) {
+            foreach ($value as $key => $val) {
+
+                sizeof($values) - 1 != $valuesLen ? (sizeof($value) - 1 != $key ? $sql = $sql . $val . ', ' : $sql = $sql . $val . '), (') : $sql = $sql . $val . ',';
+            }
+        }
+
+        $sql = $this->str_replace_last(',', ')', $sql);
+
+        $stmt = $this->connect()->prepare($sql);
+
+        return $this->executePostQuery($stmt);
+        // return $sql;
+    }
     public function prepareEditBind($table, $params, $form, $rowId)
     {
         // UPDATE `educattainment`
@@ -221,6 +246,7 @@ class GlobalMethods extends Connection
         return $this->executePostQuery($stmt);
     }
 
+
     public function getLastID($table)
     {
 
@@ -251,5 +277,37 @@ class GlobalMethods extends Connection
         }
 
         return $values;
+    }
+
+    function str_replace_last($search, $replace, $str)
+    {
+        if (($pos = strrpos($str, $search)) !== false) {
+            $search_length  = strlen($search);
+            $str    = substr_replace($str, $replace, $pos, $search_length);
+        }
+        return $str;
+    }
+
+    function arrayIncludes($mainArray, $targetArray)
+    {
+
+        foreach ($mainArray as $array) {
+            // Check if the current array matches the target array
+            if ($this->checkContents($array, $targetArray)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    function checkContents($array1, $array2)
+    {
+        // Encode arrays to JSON strings for comparison
+        $json1 = json_encode($array1, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $json2 = json_encode($array2, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+        // Compare JSON strings
+        return $json1 === $json2;
     }
 }

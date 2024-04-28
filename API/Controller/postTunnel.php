@@ -77,8 +77,9 @@ class PostTunnel
         // }
         // // return 'withoutimage';
     }
-    
-    public function toAddEval($data, $id){
+
+    public function toAddEval($data, $id)
+    {
         return $this->eval->addEval($data, $id);
     }
 
@@ -88,6 +89,7 @@ class PostTunnel
 
     public function toAddCommex($data)
     {
+
         return $this->commex->addCommex($data);
     }
 
@@ -200,6 +202,57 @@ class PostTunnel
         parse_str(file_get_contents('php://input'), $put);
 
         return $put;
+    }
+
+    // [ { "commex_id": 1, "faculty_id": 1} ]
+    public function toAddAttendee()
+    {
+        $datas = $_POST["id"];
+
+        $faculty_ID = [];
+        $college_ID = [];
+
+
+
+        foreach ($datas as $data) {
+            $data = json_decode($data);
+            array_push($faculty_ID, $data->faculty_ID);
+            array_push($college_ID, $data->college_ID);
+            // print_r($data);
+        }
+
+        foreach ($college_ID as $id) {
+            array_push($college_ID, 1);
+        }
+
+        // $faculty_status = $this->commex->addAttendee($faculty_ID);
+        // $college_status = $this->commex->addAttendee($faculty_ID);
+        // return gettype($data);
+        // $data = explode(",", $data);
+        // return $data;
+        // return $this->commex->addAttendee($data);
+        // $data = json_decode($data[0]);
+        // $keys = array_keys((array)$data);
+
+        return $college_ID;
+
+        // return gettype($data[0]);
+        // if (is_object($data[0])) {
+        //     return "Object";
+        // } else {
+        //     return "Not";
+        // }
+        // }
+        // COnvert to PHP Object
+        // $item = json_decode($data[0]);
+        // foreach ($data as $item) {
+        //     // Access commex_id and faculty_id directly from $item array
+        //     echo "Commex ID: " . $item["commex_ID"] . ", Faculty ID: " . $item["faculty_ID"] . "<br>";
+        // }
+        // // return $this->commex->addAttendee();
+        // return $this->commex->addAttendee($data);
+        // return $item->college_ID;
+        // return array_keys((array)$item);
     }
 }
 
