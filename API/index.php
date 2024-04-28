@@ -43,11 +43,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $id = $globalOb->verifyToken()['payload'];
         // $id = 3;
         switch ($request[0]) {
-            case 'getschedules':
-                if ($request[1] == "fetchFaculty") {
-                    echo json_encode($getTunnel->toGetSchedule($id));
-                }
+            case 'getSchedules':
+                echo json_encode($getTunnel->toGetSchedule($id));
                 break;
+
             case 'fetchCollege':
                 echo json_encode($getTunnel->toGetCollege($id));
                 break;

@@ -6,17 +6,19 @@
     include_once "./Controller/global.php";
     
     class Schedule extends GlobalMethods{
-        //Faculty id GET sched
         public function getScheduleFaculty($id){
-            $sql = "SELECT * 
-                    FROM `faculty-course` 
-                    INNER JOIN course on `faculty-course`.course_code=course.course_code
+            $factCourseSql = "SELECT * 
+                    FROM `course-faculty` 
+                    INNER JOIN course on `course-faculty`.course_code=`course`.`course_code`
                     WHERE faculty_ID = $id;";
 
-            return $this->executeGetQuery($sql)['data'];
+            $courseSql = "SELECT *
+                          FROM  `course`";
+
+
+            return [$this->executeGetQuery($factCourseSql)['data'], $this->executeGetQuery($courseSql)['data']];
         }
 
-        //GET all sched
         public function getScheduleAll(){
             $sql = "SELECT * 
                     FROM `faculty-course` 
