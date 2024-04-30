@@ -19,11 +19,27 @@ class ResumeInfo extends GlobalMethods
         return [$this->executeGetQuery($existCertSQL)["data"], $this->executeGetQuery($certSQL)["data"]];
     }
 
+    public function getCollegeCert($id){
+        $existCertSQL = "SELECT * FROM `certifications-faculty` 
+                         INNER JOIN certifications on `certifications-faculty`.`cert_ID`=`certifications`.`cert_ID`
+                         INNER JOIN facultymembers on `certifications-faculty`.`faculty_ID`=`facultymembers`.`faculty_ID`
+                         WHERE college_ID = $id;";
+        
+        return $this->executeGetQuery($existCertSQL)["data"];
+    }
 
     public function getExp($id)
     {
         $expSQL = "SELECT * FROM `experience-faculty`
         WHERE faculty_ID = $id;";
+        return $this->executeGetQuery($expSQL)["data"];
+    }
+
+    public function getCollegeExp($id)
+    {
+        $expSQL = "SELECT * FROM `experience-faculty` 
+        INNER JOIN `facultymembers` on `experience-faculty`.`faculty_ID`=`facultymembers`.`faculty_ID`
+        WHERE college_ID = $id";
         return $this->executeGetQuery($expSQL)["data"];
     }
 
@@ -35,10 +51,25 @@ class ResumeInfo extends GlobalMethods
         return $this->executeGetQuery($educSQL)["data"];
     }
 
+    public function getCollegeEduc($id)
+    {
+        $educSQL = "SELECT * FROM `educattainment` 
+        INNER JOIN `facultymembers` on `educattainment`.`faculty_ID`=`facultymembers`.`faculty_ID`
+        WHERE college_ID = $id";
+        return $this->executeGetQuery($educSQL)["data"];
+    }
+
     public function getProj($id){
         $projSQL = "SELECT * 
         FROM `projects` 
         WHERE faculty_ID = $id;";
+        return $this->executeGetQuery($projSQL)["data"];
+    }
+
+    public function getCollegeProj($id){
+        $projSQL = "SELECT * FROM `projects` 
+        INNER JOIN `facultymembers` on `projects`.`faculty_ID`=`facultymembers`.`faculty_ID`
+        WHERE college_ID = $id;";
         return $this->executeGetQuery($projSQL)["data"];
     }
 
@@ -49,49 +80,12 @@ class ResumeInfo extends GlobalMethods
         return $this->executeGetQuery($specSQL)["data"];
     }
 
-
-
-    // Reason why this is slow ay isahan ang result however hinahati niya sa 3 yung request sa DB each results have res time at nag bubuild up yun
-    // bago mareturn ng function hihintayin niya muna lahat matapos kaya ang tagal, my solution is i-separate or I-lazy load nalang yung mga parts resume info
-    public function getResumeInfo($id)
+    public function getCollegeSpec($id)
     {
-        $educAttain = [];
-        $certs = [];
-        $experience = [];
-        $expertise = [];
-        $projects = [];
-
-        $educSQL = "SELECT * 
-                    FROM `educattainment` 
-                    WHERE faculty_ID = $id;";
-
-        $educAttain = $this->executeGetQuery($educSQL)['data'];
-
-
-        $certSQL = "SELECT * FROM `certifications-faculty`
-                    WHERE faculty_ID = $id;";
-        $certs = $this->executeGetQuery($certSQL)['data'];
-
-        $expSQL = "SELECT * FROM `experience-faculty`
-                   WHERE faculty_ID = $id;";
-        $experience = $this->executeGetQuery($expSQL)['data'];
-
         $specSQL = "SELECT * FROM `expertise`
-                    WHERE faculty_ID = $id;";
-        $expertise = $this->executeGetQuery($specSQL)['data'];
-
-
-        $projSQL = "SELECT * FROM `projects`
-                    WHERE faculty_ID = $id;";
-        $projects = $this->executeGetQuery($projSQL)['data'];
-
-        return array(
-            "educAttainment" => $educAttain,
-            "certifications" => $certs,
-            "industryExp" => $experience,
-            "expertise" => $expertise,
-            "projects" => $projects
-        );
+        INNER JOIN `facultymembers` on `expertise`.`faculty_ID`=`facultymembers`.`faculty_ID`
+        WHERE college_ID = $id;";
+        return $this->executeGetQuery($specSQL)["data"];
     }
 
 

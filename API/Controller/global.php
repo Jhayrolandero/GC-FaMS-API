@@ -155,7 +155,11 @@ class GlobalMethods extends Connection
         if ($toCheckSignature[2] == $jwtArr[2]) {
             return array(
                 "code" => 200,
-                "payload" => $payload->id
+                "payload" => 
+                array(
+                    "id" => $payload->id,
+                    "college" => $payload->college
+                )
             );
         } else {
             header('HTTP/1.0 403 Forbidden');

@@ -11,6 +11,17 @@ class Evaluation extends GlobalMethods{
         }
     }
 
+    public function getCollegeEvaluation($id){
+        $sql = "SELECT * FROM `evaluation` 
+                INNER JOIN `facultymembers` on `evaluation`.`faculty_ID`=`facultymembers`.`faculty_ID`
+                WHERE college_ID = $id";
+
+        $result = $this->executeGetQuery($sql);
+        if($result['code'] == 200){
+            return $result['data'];
+        }
+    }
+
     public function addEval($form, $id){
         $params = array('faculty_ID', 'semester', 'evaluation_year', 'param1_score', 'param2_score', 'param3_score', 'param4_score', 'param5_score', 'param6_score');
         $tempForm = array(

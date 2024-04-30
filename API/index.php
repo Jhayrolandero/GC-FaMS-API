@@ -40,22 +40,22 @@ if ($request[0] === 'login') {
 //Main request switch endpoints
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
-        $id = $globalOb->verifyToken()['payload'];
-        // $id = 3;
+        $id = $globalOb->verifyToken()['payload']['id'];
+        $college = $globalOb->verifyToken()['payload']['college'];
+        
         switch ($request[0]) {
-            case 'getSchedules':
-                echo json_encode($getTunnel->toGetSchedule($id));
+            case 'schedules':
+                echo json_encode($getTunnel->getSchedule($id));
                 break;
 
             case 'fetchCollege':
-                echo json_encode($getTunnel->toGetCollege($id));
+                echo json_encode($getTunnel->getCollege($id));
                 break;
 
-            case 'getprofile':
-                if ($request[1] == "fetchProfile") {
-                    echo json_encode($getTunnel->toGetFaculty($id));
-                }
+            case 'profile':
+                echo json_encode($getTunnel->getFaculty($id));
                 break;
+
 
             case 'getcommex':
                 $query = $_GET['t'];
@@ -83,34 +83,61 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
             case 'getresume':
                 if ($request[1] == "fetchResume") {
-                    echo json_encode($getTunnel->toGetResumeInfo($id));
+                    echo json_encode($getTunnel->getResumeInfo($id));
                 }
                 break;
 
             case 'certificate':
-                echo json_encode($getTunnel->getCert($globalOb->verifyToken()['payload']));
+                echo json_encode($getTunnel->getCert($id, 0));
                 break;
+
+            case 'certificate-college':
+                echo json_encode($getTunnel->getCert($college, 1));
+                    break;
+
 
             case 'experience':
-                echo json_encode($getTunnel->getExp($globalOb->verifyToken()['payload']));
+                echo json_encode($getTunnel->getExp($id, 0));
                 break;
+
+            case 'experience-college':
+                echo json_encode($getTunnel->getExp($college, 1));
+                break;
+
 
             case 'education':
-                echo json_encode($getTunnel->getEduc($globalOb->verifyToken()['payload']));
+                echo json_encode($getTunnel->getEduc($id, 0));
                 break;
+ 
+            case 'education-college':
+                echo json_encode($getTunnel->getEduc($college, 1));
+                break;
+
 
             case 'project':
-                echo json_encode($getTunnel->getProj($globalOb->verifyToken()['payload']));
+                echo json_encode($getTunnel->getProj($id, 0));
                 break;
+
+            case 'project-college':
+                echo json_encode($getTunnel->getProj($college, 1));
+                break;
+    
 
             case 'expertise':
-                echo json_encode($getTunnel->getSpec($globalOb->verifyToken()['payload']));
+                echo json_encode($getTunnel->getSpec($id, 0));
                 break;
 
-            case 'getevaluation':
-                if ($request[1] == "fetchEvaluation") {
-                    echo json_encode($getTunnel->toGetEvaluation($id));
-                }
+            case 'expertise-college':
+                echo json_encode($getTunnel->getSpec($college, 1));
+                break;
+
+
+            case 'evaluation':
+                echo json_encode($getTunnel->getEvaluation($id, 0));
+                break;
+
+            case 'evaluation-college':
+                echo json_encode($getTunnel->getEvaluation($college, 1));
                 break;
 
             case 'faculty':
