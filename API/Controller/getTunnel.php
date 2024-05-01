@@ -62,7 +62,7 @@ class GetTunnel extends Connection
 
     public function getCert($id)
     {
-            return $this->resume->getCert($id);
+        return $this->resume->getCert($id);
     }
     public function getExp($id)
     {
@@ -93,8 +93,8 @@ class GetTunnel extends Connection
         return $this->faculty->getAllFaculty();
     }
 
-    public function getAttendee($id, $query = null)
+    public function getAttendee($id, $query = null, $faculty_ID = null)
     {
-        return $this->commex->getAttendee($id, $query);
+        return $this->commex->getAttendee($id, $query, $faculty_ID);
     }
 }

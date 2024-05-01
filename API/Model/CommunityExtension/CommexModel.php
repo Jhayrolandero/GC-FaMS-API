@@ -159,24 +159,48 @@ class Commex extends GlobalMethods
         // ";
     }
 
-    public function getAttendee($id, $query = null)
+    public function getAttendee($commex_ID, $query = null, $faculty_ID = null)
     {
 
         $selectRes = '';
+        $from = '
+                FROM facultymembers 
+                INNER JOIN `commex-faculty` on facultymembers.faculty_ID=`commex-faculty`.faculty_ID 
+                ';
 
         switch ($query) {
             case 'number':
                 $selectRes = "SELECT COUNT(*) as `count`";
+                $condition = "WHERE `commex-faculty`.commex_ID = $commex_ID";
+                break;
+            case 'check':
+                $selectRes = "SELECT COUNT(*) as `attended`";
+                $from = 'FROM `commex-faculty`';
+                $condition = "WHERE commex_ID = $commex_ID AND faculty_ID = $faculty_ID;";
                 break;
             default:
                 $selectRes = "SELECT facultymembers.first_name, facultymembers.middle_name, facultymembers.last_name, facultymembers.ext_name, facultymembers.faculty_ID, facultymembers.profile_image";
+                $condition = "WHERE `commex-faculty`.commex_ID = $commex_ID";
                 break;
         }
 
 
         $sql = "$selectRes
-                FROM facultymembers INNER JOIN `commex-faculty` on facultymembers.faculty_ID=`commex-faculty`.faculty_ID 
-                WHERE `commex-faculty`.commex_ID = $id";
+                $from
+                $condition";
+        return $this->executeGetQuery($sql);
+    }
+
+
+    public function checkAttendee($commex_ID, $faculty_ID)
+    {
+
+        $sql = "
+        SELECT COUNT(*) as attended
+        FROM `commex-faculty`
+        WHERE commex_ID = `$commex_ID` AND faculty_ID = `$faculty_ID`;
+        ";
+
         return $this->executeGetQuery($sql);
     }
 }
