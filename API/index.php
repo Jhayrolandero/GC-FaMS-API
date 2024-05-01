@@ -67,13 +67,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 // echo json_encode($query);
                 switch ($query) {
                     case 'college':
-                        echo json_encode($getTunnel->toGetCommex($request[1], $query));
+                        echo json_encode($getTunnel->getCommex($request[1], $query));
                         break;
                     case 'faculty':
-                        echo json_encode($getTunnel->toGetCommex($id, $query));
+                        echo json_encode($getTunnel->getCommex($id, $query));
                         break;
                     case 'all':
-                        echo json_encode($getTunnel->toGetCommex(null, $query));
+                        echo json_encode($getTunnel->getCommex(null, $query));
                         break;
                     default:
                         http_response_code(404);
@@ -159,39 +159,40 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     case 'POST':
-        // $payloadID = $globalOb->verifyToken()['payload'];
+        $id = $globalOb->verifyToken()['payload']['id'];
+        $college = $globalOb->verifyToken()['payload']['college'];
         $data = json_decode(file_get_contents("php://input"));
         switch ($request[0]) {
             case 'addEduc':
-                echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 1));
+                echo json_encode($postTunnel->toAddResume($data, $id, 1));
                 break;
 
             case 'addExp': 
-                echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 2));
+                echo json_encode($postTunnel->toAddResume($data, $id, 2));
                 break;
 
             case 'addFacultyCert':
-                echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 3));
+                echo json_encode($postTunnel->toAddResume($data, $id, 3));
                 break;
 
             case 'addNewCert':
-                echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 6));
+                echo json_encode($postTunnel->toAddResume($data, $id, 6));
                 break;
 
             case 'addProj':
-                echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 4));
+                echo json_encode($postTunnel->toAddResume($data, $id, 4));
                 break;
 
             case 'addSpec':
-                echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 5));
+                echo json_encode($postTunnel->toAddResume($data, $id, 5));
                 break;
 
             case 'addCourse':
-                echo json_encode($postTunnel->toAddCourse($data, $globalOb->verifyToken()['payload']));
+                echo json_encode($postTunnel->toAddCourse($data, $id));
                 break;
 
             case 'addEval':
-                echo json_encode($postTunnel->toAddEval($data, $globalOb->verifyToken()['payload']));
+                echo json_encode($postTunnel->toAddEval($data, $id));
                 break;
 
             case 'faculty':

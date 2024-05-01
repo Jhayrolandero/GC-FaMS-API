@@ -144,6 +144,7 @@ class ResumeInfo extends GlobalMethods
             array_push($tempForm, $value);
         }
 
+        // return $tempForm;
         return $this->prepareAddBind('certifications-faculty', $params, $tempForm);
     }
 

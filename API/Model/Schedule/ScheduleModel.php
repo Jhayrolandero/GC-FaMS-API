@@ -34,6 +34,7 @@
                 $id,
                 $form->class_count,
             );
+            // return $tempForm;
             return $this->prepareAddBind('course-faculty', $params, $tempForm);
         }
     }
