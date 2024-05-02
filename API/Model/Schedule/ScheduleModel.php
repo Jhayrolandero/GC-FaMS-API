@@ -6,25 +6,32 @@
     include_once "./Controller/global.php";
     
     class Schedule extends GlobalMethods{
-        public function getScheduleFaculty($id){
-            $factCourseSql = "SELECT * 
+        public function getSchedule($id, $query){
+            $schedule = "SELECT * 
                     FROM `course-faculty` 
-                    INNER JOIN course on `course-faculty`.course_code=`course`.`course_code`
-                    WHERE faculty_ID = $id;";
+                    INNER JOIN course on `course-faculty`.`course_code`=`course`.`course_code`
+                    INNER JOIN facultymembers on `course-faculty`.`faculty_ID`=`facultymembers`.`faculty_ID` ";
 
             $courseSql = "SELECT *
                           FROM  `course`";
 
+            switch ($query) {
+                case 'faculty':
+                    return [$this->executeGetQuery($schedule . "WHERE faculty_ID = $id;")['data'], $this->executeGetQuery($courseSql)['data']];
+                    break;
 
-            return [$this->executeGetQuery($factCourseSql)['data'], $this->executeGetQuery($courseSql)['data']];
-        }
+                case 'college':
+                    return [$this->executeGetQuery($schedule . "WHERE college_ID = $id;")['data'], $this->executeGetQuery($courseSql)['data']];
+                    break;
 
-        public function getScheduleAll(){
-            $sql = "SELECT * 
-                    FROM `faculty-course` 
-                    INNER JOIN course on `faculty-course`.course_code=`course`.course_code;";
-
-            return $this->executeGetQuery($sql);
+                case 'all':
+                    return [$this->executeGetQuery($schedule)['data'], $this->executeGetQuery($courseSql)['data']];
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
         }
 
         public function addCourse($form, $id){

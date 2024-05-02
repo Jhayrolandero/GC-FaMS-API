@@ -33,9 +33,16 @@ class GetTunnel extends Connection
         return $this->faculty->getFacultyInfo($id);
     }
 
-    public function getSchedule($id)
+    public function getSchedule($id, $query)
     {
-        return $this->schedule->getScheduleFaculty($id);
+        switch ($query) {
+            case 'college':
+                return $this->schedule->getSchedule($id, $query);
+            case 'faculty':
+                return $this->schedule->getSchedule($id, $query);
+            case 'all':
+
+        }
     }
 
     public function getCommex($id = null, $query)

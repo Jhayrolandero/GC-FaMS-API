@@ -45,7 +45,26 @@ switch ($_SERVER['REQUEST_METHOD']) {
         
         switch ($request[0]) {
             case 'schedules':
-                echo json_encode($getTunnel->getSchedule($id));
+                $query = $_GET['t'];
+
+                if (empty($query)) {
+                    http_response_code(404);
+                    return;
+                }
+                switch ($query) {
+                    case 'college':
+                        echo json_encode($getTunnel->getSchedule($college, $query));
+                        break;
+                    case 'faculty':
+                        echo json_encode($getTunnel->getSchedule($id, $query));
+                        break;
+                    case 'all':
+
+                        break;
+                    default:
+                        http_response_code(404);
+                        break;
+                }
                 break;
 
             case 'fetchCollege':
