@@ -199,10 +199,7 @@ class PostTunnel
 
     function test()
     {
-        $put = array();
-        parse_str(file_get_contents('php://input'), $put);
-
-        return $put;
+        return $this->commex->addAttendee();
     }
     public function toAddAttendee()
     {
