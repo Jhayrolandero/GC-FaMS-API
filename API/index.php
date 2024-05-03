@@ -263,7 +263,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     case 'DELETE':
-        $globalOb->verifyToken()['payload'];
+        // $globalOb->verifyToken()['payload'];
         switch ($request[0]) {
             case 'deleteEduc':
                 echo json_encode($postTunnel->toDeleteResume($request[1], 1));
@@ -288,12 +288,52 @@ switch ($_SERVER['REQUEST_METHOD']) {
             case 'faculty':
                 echo json_encode($postTunnel->toDeleteFaculty($request[1]));
                 break;
+
+            case 'attendee':
+                $faculty_ID = $request[1];
+                $commex_ID = $request[3];
+                echo json_encode($postTunnel->toDeleteAttendee($commex_ID, $faculty_ID));
+                break;
             default:
                 http_response_code(403);
                 break;
         }
         break;
+        /*
 
+
+
+  case 'attendee':
+
+                if (isset($_GET['q'])) {
+                    $query = $_GET['q'];
+                    $commex_ID = $request[1];
+
+                    switch ($query) {
+                        case 'number':
+                            echo json_encode($getTunnel->getAttendee($commex_ID, $query));
+                            break;
+                        case 'check':
+                            if (empty($request[2]) || empty($request[3]) || $request[2] !== 'commex') {
+                                http_response_code(404);
+                                break;
+                            }
+
+                            $faculty_ID = $request[1];
+                            $commex_ID = $request[3];
+                            // echo json_encode("check");
+                            echo json_encode($getTunnel->getAttendee($commex_ID, $query, $faculty_ID));
+                            break;
+                        default:
+                            http_response_code(404);
+                            break;
+                    }
+                    die();
+                }
+                echo json_encode($getTunnel->getAttendee($request[1]));
+                break;
+            default:
+*/
     case 'PUT':
         $globalOb->verifyToken()['payload'];
         $data = json_decode(file_get_contents("php://input"));
