@@ -7,7 +7,7 @@
     
     class Schedule extends GlobalMethods{
         public function getSchedule($id, $query){
-            $schedule = "SELECT * 
+            $schedule = "SELECT *
                     FROM `course-faculty` 
                     INNER JOIN course on `course-faculty`.`course_code`=`course`.`course_code`
                     INNER JOIN facultymembers on `course-faculty`.`faculty_ID`=`facultymembers`.`faculty_ID` ";
@@ -17,11 +17,11 @@
 
             switch ($query) {
                 case 'faculty':
-                    return [$this->executeGetQuery($schedule . "WHERE faculty_ID = $id;")['data'], $this->executeGetQuery($courseSql)['data']];
+                    return [$this->executeGetQuery($schedule . "WHERE facultymembers.faculty_ID = $id;")['data'], $this->executeGetQuery($courseSql)['data']];
                     break;
 
                 case 'college':
-                    return [$this->executeGetQuery($schedule . "WHERE college_ID = $id;")['data'], $this->executeGetQuery($courseSql)['data']];
+                    return [$this->executeGetQuery($schedule . "WHERE facultymembers.college_ID = $id;")['data'], $this->executeGetQuery($courseSql)['data']];
                     break;
 
                 case 'all':
