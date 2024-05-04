@@ -229,6 +229,11 @@ class PostTunnel
         return $this->commex->deleteAttendee($commex_ID, $faculty_ID);
         // return $commex_ID;
     }
+
+    public function toDeleteCommex($commex_ID)
+    {
+        return $this->commex->deleteCommex($commex_ID);
+    }
 }
 
 /**

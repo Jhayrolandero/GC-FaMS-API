@@ -212,4 +212,9 @@ class Commex extends GlobalMethods
 
         return $this->prepareDeleteBind2('commex-faculty', ["faculty_ID", "commex_ID"], [$faculty_ID, $commex_ID]);
     }
+
+    public function deleteCommex($commex_ID)
+    {
+        return $this->prepareDeleteBind('commex-faculty', 'commex_ID', $commex_ID);
+    }
 }

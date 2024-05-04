@@ -293,6 +293,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $commex_ID = $request[3];
                 echo json_encode($postTunnel->toDeleteAttendee($commex_ID, $faculty_ID));
                 break;
+
+            case 'commex':
+                $commex_ID = $request[1];
+                echo json_encode($postTunnel->toDeleteCommex($commex_ID));
             default:
                 http_response_code(403);
                 break;
