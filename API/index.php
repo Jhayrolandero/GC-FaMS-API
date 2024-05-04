@@ -297,6 +297,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             case 'commex':
                 $commex_ID = $request[1];
                 echo json_encode($postTunnel->toDeleteCommex($commex_ID));
+                break;
             default:
                 http_response_code(403);
                 break;
