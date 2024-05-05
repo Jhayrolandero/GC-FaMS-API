@@ -42,7 +42,7 @@ class Commex extends GlobalMethods
         return $this->executeGetQuery($sql)['data'];
     }
 
-    public function addCommex($data)
+    public function addCommex()
     {
         $filepath = null;
 
@@ -71,21 +71,20 @@ class Commex extends GlobalMethods
         $this->prepareAddBind('commex', $params, $tempForm);
 
         $lastCommexID = $this->getLastID('commex') - 1;
-        if (empty($_POST["attendees"])) {
-            return
-                $this->prepareAddBind(
-                    'commex-faculty',
-                    array('faculty_ID', 'commex_ID'),
-                    array($this->verifyToken()['payload'], $lastCommexID)
-                );
-        }
 
         $this->prepareAddBind(
-            'commex-faculty',
-            array('faculty_ID', 'commex_ID'),
-            array($this->verifyToken()['payload'], $lastCommexID)
+            'commex-college',
+            array('college_ID', 'commex_ID'),
+            array($this->verifyToken()['payload']['college'], $lastCommexID)
         );
 
+        $status = $this->prepareAddBind(
+            'commex-faculty',
+            array('faculty_ID', 'commex_ID'),
+            array($this->verifyToken()['payload']['id'], $lastCommexID)
+        );
+
+        if (empty($_POST["attendees"])) return $status;
 
 
         $faculty_ID = [];

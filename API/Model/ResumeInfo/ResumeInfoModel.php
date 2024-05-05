@@ -118,6 +118,7 @@ class ResumeInfo extends GlobalMethods
             $form->experience_from,
             $form->experience_to
         );
+
         return $this->prepareAddBind('experience-faculty', $params, $tempForm);
     }
     public function addFacultyCert($form, $id)

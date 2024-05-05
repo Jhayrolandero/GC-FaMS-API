@@ -45,7 +45,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
         // $id = $globalOb->verifyToken()->payload->id;
         // $college = $globalOb->verifyToken()->payload->college;
 
-        // echo json_encode($globalOb->verifyToken());
         switch ($request[0]) {
             case 'schedules':
                 $query = $_GET['t'];
@@ -178,16 +177,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             echo json_encode($getTunnel->getAttendee($commex_ID, $query));
                             break;
                         case 'check':
-                            if (empty($request[2]) || empty($request[3]) || $request[2] !== 'commex') {
-                                http_response_code(404);
-                                break;
-                            }
-
-                            $faculty_ID = $request[1];
-                            $commex_ID = $request[3];
-                            // echo json_encode("check");
-                            echo json_encode($getTunnel->getAttendee($commex_ID, $query, $faculty_ID));
+                            $commex_ID = $request[1];
+                            echo json_encode($getTunnel->getAttendee($commex_ID, $query, $id));
                             break;
+
                         default:
                             http_response_code(404);
                             break;
@@ -212,8 +205,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toAddResume($data, $id, 1));
                 break;
 
-            case 'addExp':
-                echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 2));
             case 'addExp':
                 echo json_encode($postTunnel->toAddResume($data, $id, 2));
                 break;
@@ -247,7 +238,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'addCommex':
-                echo json_encode($postTunnel->toAddCommex($data));
+                echo json_encode($postTunnel->toAddCommex());
                 break;
 
             case 'test':

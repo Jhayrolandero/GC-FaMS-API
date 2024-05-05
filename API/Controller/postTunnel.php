@@ -42,40 +42,6 @@ class PostTunnel
     public function addFaculty($data)
     {
         return $this->faculty->addFaculty();
-        // // return $_FILES;
-        // if (!empty($_FILES)) {
-        //     $tempFile = '';
-        //     $fileName = '';
-
-        //     foreach ($_FILES as $key => $file) {
-        //         $tempFile = $file['tmp_name'];
-        //         $fileName = $file['name'];
-        //     }
-        //     $lastIncrementID = $this->faculty->fetchLastID();
-        //     $fileFolder = __DIR__ . "/../../Image_Assets/Faculty_Profile/$lastIncrementID/";
-
-        //     if (!file_exists($fileFolder)) {
-        //         mkdir($fileFolder, 0777);
-        //     }
-
-        //     $filepath = __DIR__ . "/../../Image_Assets/Faculty_Profile/$lastIncrementID/$fileName";
-
-        //     if (file_exists($filepath)) {
-        //         unlink($filepath);
-        //     }
-
-        //     if (!move_uploaded_file($tempFile, $filepath)) {
-        //         return array("code" => 404, "errmsg" => "Upload unsuccessful");
-        //     }
-
-        //     $filepath = str_replace("C:\\xampp\\htdocs", "", $filepath);
-        //     return $this->faculty->addFaculty($filepath);
-        //     // return 'withimage';
-        // } else {
-
-        //     return $this->faculty->addFaculty();
-        // }
-        // // return 'withoutimage';
     }
 
     public function toAddEval($data, $id)
@@ -88,10 +54,11 @@ class PostTunnel
         return $this->course->addCourse($data, $id);
     }
 
-    public function toAddCommex($data)
+    public function toAddCommex()
     {
 
-        return $this->commex->addCommex($data);
+        return $this->commex->addCommex();
+        // return $_POST;
     }
 
 
