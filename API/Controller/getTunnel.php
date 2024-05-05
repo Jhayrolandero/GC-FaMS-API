@@ -28,17 +28,23 @@ class GetTunnel extends Connection
         $this->evaluation = new Evaluation();
     }
 
-    public function toGetFaculty($id)
+    public function getFaculty($id)
     {
         return $this->faculty->getFacultyInfo($id);
     }
 
-    public function toGetSchedule($id)
+    public function getSchedule($id, $query)
     {
-        return $this->schedule->getScheduleFaculty($id);
+        switch ($query) {
+            case 'college':
+                return $this->schedule->getSchedule($id, $query);
+            case 'faculty':
+                return $this->schedule->getSchedule($id, $query);
+            case 'all':
+        }
     }
 
-    public function toGetCommex($id = null, $query)
+    public function getCommex($id = null, $query)
     {
         switch ($query) {
             case 'college':
@@ -50,42 +56,54 @@ class GetTunnel extends Connection
         }
     }
 
-    public function toGetCollege($id)
+    public function getCollege($id)
     {
         return $this->college->getCollege();
     }
 
-    public function toGetResumeInfo($id)
+    // public function getResumeInfo($id)
+    // {
+    //     return $this->resume->getResumeInfo($id);
+    // }
+
+    public function getCert($id, $type)
     {
-        return $this->resume->getResumeInfo($id);
+        return $type == 0 ?
+            $this->resume->getCert($id) :
+            $this->resume->getCollegeCert($id);
+    }
+    public function getExp($id, $type)
+    {
+        return $type == 0 ?
+            $this->resume->getExp($id) :
+            $this->resume->getCollegeExp($id);
+    }
+    public function getEduc($id, $type)
+    {
+        return $type == 0 ?
+            $this->resume->getEduc($id) :
+            $this->resume->getCollegeEduc($id);
     }
 
-    public function getCert($id)
+    public function getProj($id, $type)
     {
-        return $this->resume->getCert($id);
-    }
-    public function getExp($id)
-    {
-        return $this->resume->getExp($id);
-    }
-    public function getEduc($id)
-    {
-        return $this->resume->getEduc($id);
+        return $type == 0 ?
+            $this->resume->getProj($id) :
+            $this->resume->getCollegeProj($id);
     }
 
-    public function getProj($id)
+    public function getSpec($id, $type)
     {
-        return $this->resume->getProj($id);
+        return $type == 0 ?
+            $this->resume->getSpec($id) :
+            $this->resume->getCollegeSpec($id);
     }
 
-    public function getSpec($id)
+    public function getEvaluation($id, $type)
     {
-        return $this->resume->getSpec($id);
-    }
-
-    public function toGetEvaluation($id)
-    {
-        return $this->evaluation->getEvaluation($id);
+        return $type == 0 ?
+            $this->evaluation->getEvaluation($id) :
+            $this->evaluation->getCollegeEvaluation($id);
     }
 
     public function getFaculties()

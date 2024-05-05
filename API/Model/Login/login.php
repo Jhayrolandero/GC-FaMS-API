@@ -11,11 +11,12 @@
     include_once "./Controller/global.php";
 
     class Login extends GlobalMethods{
-        function generateToken($faculty_ID, $isAdmin){
+        function generateToken($faculty_ID, $isAdmin, $college_ID){
             $env = parse_ini_file('.env');
             $secretKey = $env["GCFAMS_API_KEY"];
             $token = array(
                 "id" => $faculty_ID,
+                "college" => $college_ID,
                 "isAdmin" => $isAdmin
             );
             return array(
@@ -32,7 +33,10 @@
             if($result['code'] == 200){
                 $passValid = password_verify($form->password, $result['data'][0]['password']);
                 if($passValid){
-                    return $this->generateToken($result['data'][0]['faculty_ID'], $result['data'][0]['isAdmin']);
+                    return $this->generateToken(
+                        $result['data'][0]['faculty_ID'], 
+                        $result['data'][0]['isAdmin'], 
+                        $result['data'][0]['college_ID']);
                 }
                 else{
                     return array("token" => "", "code" => 403);
