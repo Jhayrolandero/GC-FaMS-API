@@ -42,7 +42,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
         $id = $globalOb->verifyToken()['payload']['id'];
         $college = $globalOb->verifyToken()['payload']['college'];
-        
+
+        var_dump($college);
         switch ($request[0]) {
             case 'schedules':
                 $query = $_GET['t'];
@@ -72,6 +73,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'profile':
+                // echo json_encode($college);
                 echo json_encode($getTunnel->getFaculty($id));
                 break;
 
@@ -100,11 +102,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 }
                 break;
 
-            case 'getresume':
-                if ($request[1] == "fetchResume") {
-                    echo json_encode($getTunnel->getResumeInfo($id));
-                }
-                break;
+                // case 'getresume':
+                //     if ($request[1] == "fetchResume") {
+                //         echo json_encode($getTunnel->getResumeInfo($id));
+                //     }
+                //     break;
 
             case 'certificate':
                 echo json_encode($getTunnel->getCert($id, 0));
@@ -112,7 +114,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
             case 'certificate-college':
                 echo json_encode($getTunnel->getCert($college, 1));
-                    break;
+                break;
 
 
             case 'experience':
@@ -127,7 +129,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             case 'education':
                 echo json_encode($getTunnel->getEduc($id, 0));
                 break;
- 
+
             case 'education-college':
                 echo json_encode($getTunnel->getEduc($college, 1));
                 break;
@@ -140,7 +142,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             case 'project-college':
                 echo json_encode($getTunnel->getProj($college, 1));
                 break;
-    
+
 
             case 'expertise':
                 echo json_encode($getTunnel->getSpec($id, 0));
@@ -164,10 +166,31 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'attendee':
-                if (isset($_GET['q']) && $_GET['q'] === 'number') {
+
+                if (isset($_GET['q'])) {
                     $query = $_GET['q'];
-                    echo json_encode($getTunnel->getAttendee($request[1], $query));
-                    break;
+                    $commex_ID = $request[1];
+
+                    switch ($query) {
+                        case 'number':
+                            echo json_encode($getTunnel->getAttendee($commex_ID, $query));
+                            break;
+                        case 'check':
+                            if (empty($request[2]) || empty($request[3]) || $request[2] !== 'commex') {
+                                http_response_code(404);
+                                break;
+                            }
+
+                            $faculty_ID = $request[1];
+                            $commex_ID = $request[3];
+                            // echo json_encode("check");
+                            echo json_encode($getTunnel->getAttendee($commex_ID, $query, $faculty_ID));
+                            break;
+                        default:
+                            http_response_code(404);
+                            break;
+                    }
+                    die();
                 }
                 echo json_encode($getTunnel->getAttendee($request[1]));
                 break;
@@ -178,6 +201,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     case 'POST':
+        $payloadID = $globalOb->verifyToken()['payload'];
         $id = $globalOb->verifyToken()['payload']['id'];
         $college = $globalOb->verifyToken()['payload']['college'];
         $data = json_decode(file_get_contents("php://input"));
@@ -186,7 +210,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toAddResume($data, $id, 1));
                 break;
 
-            case 'addExp': 
+            case 'addExp':
+                echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 2));
+            case 'addExp':
                 echo json_encode($postTunnel->toAddResume($data, $id, 2));
                 break;
 
@@ -238,7 +264,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $params = $_GET["t"];
                 echo json_encode($postTunnel->toEditCover($params, $request[1]));
                 break;
-
             case 'attendee':
                 echo json_encode($postTunnel->toAddAttendee());
                 break;
@@ -314,12 +339,22 @@ switch ($_SERVER['REQUEST_METHOD']) {
             case 'faculty':
                 echo json_encode($postTunnel->toDeleteFaculty($request[1]));
                 break;
+
+            case 'attendee':
+                $faculty_ID = $request[1];
+                $commex_ID = $request[3];
+                echo json_encode($postTunnel->toDeleteAttendee($commex_ID, $faculty_ID));
+                break;
+
+            case 'commex':
+                $commex_ID = $request[1];
+                echo json_encode($postTunnel->toDeleteCommex($commex_ID));
+                break;
             default:
                 http_response_code(403);
                 break;
         }
         break;
-
     case 'PUT':
         $globalOb->verifyToken()['payload'];
         $data = json_decode(file_get_contents("php://input"));

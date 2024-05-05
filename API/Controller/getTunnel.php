@@ -41,7 +41,6 @@ class GetTunnel extends Connection
             case 'faculty':
                 return $this->schedule->getSchedule($id, $query);
             case 'all':
-
         }
     }
 
@@ -62,49 +61,49 @@ class GetTunnel extends Connection
         return $this->college->getCollege();
     }
 
-    public function getResumeInfo($id)
-    {
-        return $this->resume->getResumeInfo($id);
-    }
+    // public function getResumeInfo($id)
+    // {
+    //     return $this->resume->getResumeInfo($id);
+    // }
 
     public function getCert($id, $type)
     {
         return $type == 0 ?
-        $this->resume->getCert($id) :
-        $this->resume->getCollegeCert($id);
+            $this->resume->getCert($id) :
+            $this->resume->getCollegeCert($id);
     }
     public function getExp($id, $type)
     {
         return $type == 0 ?
-        $this->resume->getExp($id) :
-        $this->resume->getCollegeExp($id);
+            $this->resume->getExp($id) :
+            $this->resume->getCollegeExp($id);
     }
     public function getEduc($id, $type)
     {
-        return $type == 0 ? 
-        $this->resume->getEduc($id) :
-        $this->resume->getCollegeEduc($id);
+        return $type == 0 ?
+            $this->resume->getEduc($id) :
+            $this->resume->getCollegeEduc($id);
     }
 
     public function getProj($id, $type)
     {
-        return $type == 0 ? 
-        $this->resume->getProj($id) :
-        $this->resume->getCollegeProj($id);
+        return $type == 0 ?
+            $this->resume->getProj($id) :
+            $this->resume->getCollegeProj($id);
     }
 
     public function getSpec($id, $type)
     {
-        return $type == 0 ? 
-        $this->resume->getSpec($id) :
-        $this->resume->getCollegeSpec($id);
+        return $type == 0 ?
+            $this->resume->getSpec($id) :
+            $this->resume->getCollegeSpec($id);
     }
 
     public function getEvaluation($id, $type)
     {
-        return $type == 0 ? 
-        $this->evaluation->getEvaluation($id) :
-        $this->evaluation->getCollegeEvaluation($id);
+        return $type == 0 ?
+            $this->evaluation->getEvaluation($id) :
+            $this->evaluation->getCollegeEvaluation($id);
     }
 
     public function getFaculties()
@@ -112,8 +111,8 @@ class GetTunnel extends Connection
         return $this->faculty->getAllFaculty();
     }
 
-    public function getAttendee($id, $query = null)
+    public function getAttendee($id, $query = null, $faculty_ID = null)
     {
-        return $this->commex->getAttendee($id, $query);
+        return $this->commex->getAttendee($id, $query, $faculty_ID);
     }
 }

@@ -250,6 +250,24 @@ class GlobalMethods extends Connection
         return $this->executePostQuery($stmt);
     }
 
+    // Tinatamad akong irefactor gawa nalang ako bago :D
+    public function prepareDeleteBind2($table, $cols, $ids)
+    {
+        $sql = "DELETE FROM `$table` WHERE ";
+
+        foreach ($cols as $key => $col) {
+            sizeof($cols) - 1 != $key ? $sql = $sql . "`$col` = ? AND " : $sql = $sql . "`$col` = ? ";
+        }
+
+        $stmt = $this->connect()->prepare($sql);
+
+        foreach ($ids as $key => $value) {
+            $stmt->bindParam(($key + 1), $ids[$key]);
+        }
+
+        return $this->executePostQuery($stmt);
+        // return $sql;
+    }
 
     public function getLastID($table)
     {
