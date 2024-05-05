@@ -43,6 +43,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $id = $globalOb->verifyToken()['payload']['id'];
         $college = $globalOb->verifyToken()['payload']['college'];
 
+        var_dump($college);
         switch ($request[0]) {
             case 'schedules':
                 $query = $_GET['t'];
@@ -72,6 +73,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'profile':
+                // echo json_encode($college);
                 echo json_encode($getTunnel->getFaculty($id));
                 break;
 
