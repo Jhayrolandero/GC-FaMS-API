@@ -210,8 +210,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'addExp':
-                echo json_encode($postTunnel->toAddResume($data, $globalOb->verifyToken()['payload'], 2));
-            case 'addExp':
                 echo json_encode($postTunnel->toAddResume($data, $id, 2));
                 break;
 
