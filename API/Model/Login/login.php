@@ -12,9 +12,14 @@
 
     class Login extends GlobalMethods{
         function generateToken($faculty_ID, $isAdmin, $college_ID){
+            $issuedAt = time();
+            $expirationTime = $issuedAt + (10 * 60);
+
             $env = parse_ini_file('.env');
             $secretKey = $env["GCFAMS_API_KEY"];
             $token = array(
+                "iat" => $issuedAt,
+                "exp" => $expirationTime,
                 "id" => $faculty_ID,
                 "college" => $college_ID,
                 "isAdmin" => $isAdmin
