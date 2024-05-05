@@ -43,7 +43,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $id = $globalOb->verifyToken()['payload']['id'];
         $college = $globalOb->verifyToken()['payload']['college'];
 
-        var_dump($college);
         switch ($request[0]) {
             case 'schedules':
                 $query = $_GET['t'];
