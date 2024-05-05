@@ -134,17 +134,21 @@ class GlobalMethods extends Connection
             echo 'Token is missing but header exists';
             exit;
         }
+
+        // return $matches;
         //Separate token to 3 parts
         $jwtArr = explode('.', $jwt);
 
+        // return $jwtArr;
         $headers = new stdClass();
-        // $env = parse_ini_file('.env');
+        $env = parse_ini_file('.env');
         $secretKey = $this->env["GCFAMS_API_KEY"];
 
         //Decode received token
         $payload = JWT::decode($jwt, new Key($secretKey, 'HS512'), $headers);
 
-        //Decode payload part
+        // return $payload;
+        // Decode payload part
         $parsedPayload = json_decode(json_encode($payload), true);
 
         //Re-encode decoded payload with the stored signature key to check for tampers
@@ -153,20 +157,72 @@ class GlobalMethods extends Connection
 
         //If re-encoded token is equal to received token, validate token.
         if ($toCheckSignature[2] == $jwtArr[2]) {
-            return array(
+            return [
                 "code" => 200,
-                "payload" => 
+                "payload" =>
                 array(
                     "id" => $payload->id,
                     "college" => $payload->college
                 )
-            );
+            ];
         } else {
             header('HTTP/1.0 403 Forbidden');
             echo 'Currently encoded payload does not matched initially signed payload';
             exit;
         }
     }
+    // public function verifyToken()
+    // {
+
+    //     return $_SERVER['HTTP_AUTHORIZATION'];
+    //     // //Check existence of token
+    //     // if (!preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
+    //     //     header('HTTP/1.0 403 Forbidden');
+    //     //     echo 'Token not found in request';
+    //     //     exit;
+    //     // }
+
+    //     // //Check header
+    //     // $jwt = $matches[1];
+    //     // if (!$jwt) {
+    //     //     header('HTTP/1.0 403 Forbidden');
+    //     //     echo 'Token is missing but header exists';
+    //     //     exit;
+    //     // }
+    //     // //Separate token to 3 parts
+    //     // $jwtArr = explode('.', $jwt);
+
+    //     // return $jwtArr;
+    //     // $headers = new stdClass();
+    //     // // $env = parse_ini_file('.env');
+    //     // $secretKey = $this->env["GCFAMS_API_KEY"];
+
+    //     // //Decode received token
+    //     // $payload = JWT::decode($jwt, new Key($secretKey, 'HS512'), $headers);
+
+    //     // //Decode payload part
+    //     // $parsedPayload = json_decode(json_encode($payload), true);
+
+    //     // //Re-encode decoded payload with the stored signature key to check for tampers
+    //     // $toCheckSignature = JWT::encode($parsedPayload, $secretKey, 'HS512');
+    //     // $toCheckSignature = explode('.', $toCheckSignature);
+
+    //     // //If re-encoded token is equal to received token, validate token.
+    //     // if ($toCheckSignature[2] == $jwtArr[2]) {
+    //     //     return array(
+    //     //         "code" => 200,
+    //     //         "payload" => 
+    //     //         array(
+    //     //             "id" => $payload->id,
+    //     //             "college" => $payload->college
+    //     //         )
+    //     //     );
+    //     // } else {
+    //     //     header('HTTP/1.0 403 Forbidden');
+    //     //     echo 'Currently encoded payload does not matched initially signed payload';
+    //     //     exit;
+    //     // }
+    // }
 
     public function prepareAddBind($table, $params, $form)
     {
