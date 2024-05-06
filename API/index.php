@@ -105,12 +105,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 }
                 break;
 
-                // case 'getresume':
-                //     if ($request[1] == "fetchResume") {
-                //         echo json_encode($getTunnel->getResumeInfo($id));
-                //     }
-                //     break;
-
             case 'certificate':
                 echo json_encode($getTunnel->getCert($id, 0));
                 break;
@@ -179,7 +173,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             echo json_encode($getTunnel->getAttendee($commex_ID, $query));
                             break;
                         case 'check':
-                            $commex_ID = $request[1];
                             echo json_encode($getTunnel->getAttendee($commex_ID, $query, $id));
                             break;
 

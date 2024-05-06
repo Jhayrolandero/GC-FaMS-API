@@ -148,7 +148,9 @@ class Commex extends GlobalMethods
         $sql = "$selectRes
                 $from
                 $condition";
-        return $this->executeGetQuery($sql);
+
+        $data = $this->executeGetQuery($sql);
+        return $this->secured_encrypt($data);
     }
 
 
