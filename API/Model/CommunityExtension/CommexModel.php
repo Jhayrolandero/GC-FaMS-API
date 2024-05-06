@@ -117,49 +117,6 @@ class Commex extends GlobalMethods
 
         return $this->prepareAddBind('commex-faculty', $cols, $values);
     }
-    // public function addAttendee($data)
-    // {
-
-    //     $cols = [];
-    //     $values = [];
-
-    //     // if (is_string($data[0])) {
-    //     //     $data = json_decode($data[0]);
-    //     //     $keys = array_keys((array)$data);
-
-    //     //     foreach ($keys as $key) {
-    //     //         array_push($cols, $key);
-    //     //     }
-    //     // } else {
-    //     //     foreach (array_keys($data[0]) as $key) {
-    //     //         array_push($cols, $key);
-    //     //     }
-    //     // }
-
-
-    //     $colLength = count($cols);
-
-
-    //     if (is_string($data[0])) {
-
-    //         foreach ($data as $item => $item_value) {
-    //             // print_r($item);
-    //             print_r($item_value);
-    //         }
-    //     } else {
-    //         foreach ($data as $item) {
-    //             $value = [];
-
-    //             for ($i = 0; $i < $colLength; $i++) {
-    //                 array_push($value, $item[$cols[$i]]);
-    //             }
-
-    //             array_push($values, $value);
-    //         }
-    //     }
-
-    //     return $this->prepareMultipleAddBind('commex-faculty', $cols, $values);
-    // }
 
     public function getAttendee($commex_ID, $query = null, $faculty_ID = null)
     {
