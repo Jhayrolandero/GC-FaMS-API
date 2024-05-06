@@ -45,7 +45,8 @@ class Faculty extends GlobalMethods
 
         $result = $this->executeGetQuery($sql);
         if ($result['code'] == 200) {
-            return $this->secured_encrypt($result['data'][0]);
+            $data = $this->secured_encrypt($result['data'][0]);
+            return $data;
         }
     }
 
@@ -55,7 +56,8 @@ class Faculty extends GlobalMethods
                *
                 FROM `facultymembers`
                 LEFT JOIN `college` ON `facultymembers`.`college_ID` = `college`.`college_ID`;";
-        return $this->executeGetQuery($sql)['data'];
+        $data = $this->secured_encrypt($this->executeGetQuery($sql)['data']);
+        return $data;
     }
 
     private function emailExist()
