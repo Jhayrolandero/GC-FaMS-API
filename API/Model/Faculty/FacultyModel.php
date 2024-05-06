@@ -45,7 +45,7 @@ class Faculty extends GlobalMethods
 
         $result = $this->executeGetQuery($sql);
         if ($result['code'] == 200) {
-            return $this->secured_encrypt($result['data']);
+            return $this->secured_encrypt($result['data'][0]);
         }
     }
 

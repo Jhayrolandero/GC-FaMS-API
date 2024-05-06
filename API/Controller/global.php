@@ -55,7 +55,7 @@ class GlobalMethods extends Connection
             $errmsg = $e->getMessage();
             $code = 403;
         }
-        return array("code" => $code, "errmsg" => $errmsg, "data" => $this->secured_encrypt($data));
+        return array("code" => $code, "errmsg" => $errmsg, "data" => $data);
     }
 
     public function executePostQuery($stmt)
@@ -339,7 +339,9 @@ class GlobalMethods extends Connection
     {
 
         $first_key = $this->env["FIRSTKEY"];
-        $stringData =  json_encode($data[0]);
+
+        // $stringData =  implode()
+        $stringData =  json_encode($data);
 
         // For password Hashing
         $salt = openssl_random_pseudo_bytes(256);

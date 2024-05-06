@@ -30,8 +30,9 @@ class Commex extends GlobalMethods
                 WHERE $condID = $id;";
 
 
-        return $this->executeGetQuery($sql)['data'];
-        // return $sql;
+        $data =  $this->executeGetQuery($sql)['data'];
+
+        return $this->secured_encrypt($data);
     }
 
     //GET all sched

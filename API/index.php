@@ -40,15 +40,14 @@ if ($request[0] === 'login') {
 //Main request switch endpoints
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
-        // $id = $globalOb->verifyToken()['payload']['id'];
-        // $college = $globalOb->verifyToken()['payload']['college'];
+        $id = $globalOb->verifyToken()['payload']['id'];
+        $college = $globalOb->verifyToken()['payload']['college'];
 
-
-        $id = 53;
+        // $id = 40;
+        // $college = 1;
         switch ($request[0]) {
             case 'schedules':
                 $query = $_GET['t'];
-
                 if (empty($query)) {
                     http_response_code(404);
                     return;
@@ -92,7 +91,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 // echo json_encode($query);
                 switch ($query) {
                     case 'college':
-                        echo json_encode($getTunnel->getCommex($request[1], $query));
+                        echo json_encode($getTunnel->getCommex($college, $query));
                         break;
                     case 'faculty':
                         echo json_encode($getTunnel->getCommex($id, $query));
