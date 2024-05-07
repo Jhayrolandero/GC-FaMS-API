@@ -35,7 +35,7 @@ class GlobalMethods extends Connection
      */
     public function executeGetQuery($sqlString)
     {
-        $data = array();
+        $data = [];
         $errmsg = "";
         $code = 0;
 
@@ -134,9 +134,12 @@ class GlobalMethods extends Connection
             echo 'Token is missing but header exists';
             exit;
         }
+
+        // return $matches;
         //Separate token to 3 parts
         $jwtArr = explode('.', $jwt);
 
+        // return $jwtArr;
         $headers = new stdClass();
         // $env = parse_ini_file('.env');
         $secretKey = $this->env["GCFAMS_API_KEY"];
@@ -148,7 +151,7 @@ class GlobalMethods extends Connection
 
             return array(
                 "code" => 200,
-                "payload" => 
+                "payload" =>
                 array(
                     "id" => $payload->id,
                     "college" => $payload->college
@@ -306,7 +309,6 @@ class GlobalMethods extends Connection
 
     function arrayIncludes($mainArray, $targetArray)
     {
-
         foreach ($mainArray as $array) {
             // Check if the current array matches the target array
             if ($this->checkContents($array, $targetArray)) {
@@ -325,5 +327,28 @@ class GlobalMethods extends Connection
 
         // Compare JSON strings
         return $json1 === $json2;
+    }
+    function secured_encrypt($data)
+    {
+
+        $first_key = $this->env["FIRSTKEY"];
+
+        // $stringData =  implode()
+        $stringData =  json_encode($data);
+
+        // For password Hashing
+        $salt = openssl_random_pseudo_bytes(256);
+
+        // Generate a random  Initialization  Vector to produce different ciphertext even if same data is requested
+        $iv = openssl_random_pseudo_bytes(16);
+
+        $iterations = 999;
+        // Use the pass key and the salt to derive more strong key
+        $key = hash_pbkdf2("sha512", $first_key, $salt, $iterations, 64);
+
+        $encrypted_data = openssl_encrypt($stringData, 'aes-256-cbc', hex2bin($key), OPENSSL_RAW_DATA, $iv);
+
+        $output = ["ciphertext" => base64_encode($encrypted_data), "iv" => bin2hex($iv), "salt" => bin2hex($salt)];
+        return $output;
     }
 }

@@ -12,6 +12,7 @@ class College extends GlobalMethods
     {
         $sql = "SELECT * FROM college";
 
-        return $this->executeGetQuery($sql)['data'];
+        $data = $this->executeGetQuery($sql)['data'];
+        return $this->secured_encrypt($data);
     }
 }

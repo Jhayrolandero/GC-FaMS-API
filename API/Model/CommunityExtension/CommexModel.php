@@ -30,8 +30,9 @@ class Commex extends GlobalMethods
                 WHERE $condID = $id;";
 
 
-        return $this->executeGetQuery($sql)['data'];
-        // return $sql;
+        $data =  $this->executeGetQuery($sql)['data'];
+
+        return $this->secured_encrypt($data);
     }
 
     //GET all sched
@@ -42,7 +43,7 @@ class Commex extends GlobalMethods
         return $this->executeGetQuery($sql)['data'];
     }
 
-    public function addCommex($data)
+    public function addCommex()
     {
         $filepath = null;
 
@@ -71,21 +72,20 @@ class Commex extends GlobalMethods
         $this->prepareAddBind('commex', $params, $tempForm);
 
         $lastCommexID = $this->getLastID('commex') - 1;
-        if (empty($_POST["attendees"])) {
-            return
-                $this->prepareAddBind(
-                    'commex-faculty',
-                    array('faculty_ID', 'commex_ID'),
-                    array($this->verifyToken()['payload'], $lastCommexID)
-                );
-        }
 
         $this->prepareAddBind(
-            'commex-faculty',
-            array('faculty_ID', 'commex_ID'),
-            array($this->verifyToken()['payload'], $lastCommexID)
+            'commex-college',
+            array('college_ID', 'commex_ID'),
+            array($this->verifyToken()['payload']['college'], $lastCommexID)
         );
 
+        $status = $this->prepareAddBind(
+            'commex-faculty',
+            array('faculty_ID', 'commex_ID'),
+            array($this->verifyToken()['payload']['id'], $lastCommexID)
+        );
+
+        if (empty($_POST["attendees"])) return $status;
 
 
         $faculty_ID = [];
@@ -118,49 +118,6 @@ class Commex extends GlobalMethods
 
         return $this->prepareAddBind('commex-faculty', $cols, $values);
     }
-    // public function addAttendee($data)
-    // {
-
-    //     $cols = [];
-    //     $values = [];
-
-    //     // if (is_string($data[0])) {
-    //     //     $data = json_decode($data[0]);
-    //     //     $keys = array_keys((array)$data);
-
-    //     //     foreach ($keys as $key) {
-    //     //         array_push($cols, $key);
-    //     //     }
-    //     // } else {
-    //     //     foreach (array_keys($data[0]) as $key) {
-    //     //         array_push($cols, $key);
-    //     //     }
-    //     // }
-
-
-    //     $colLength = count($cols);
-
-
-    //     if (is_string($data[0])) {
-
-    //         foreach ($data as $item => $item_value) {
-    //             // print_r($item);
-    //             print_r($item_value);
-    //         }
-    //     } else {
-    //         foreach ($data as $item) {
-    //             $value = [];
-
-    //             for ($i = 0; $i < $colLength; $i++) {
-    //                 array_push($value, $item[$cols[$i]]);
-    //             }
-
-    //             array_push($values, $value);
-    //         }
-    //     }
-
-    //     return $this->prepareMultipleAddBind('commex-faculty', $cols, $values);
-    // }
 
     public function getAttendee($commex_ID, $query = null, $faculty_ID = null)
     {
@@ -191,7 +148,9 @@ class Commex extends GlobalMethods
         $sql = "$selectRes
                 $from
                 $condition";
-        return $this->executeGetQuery($sql);
+
+        $data = $this->executeGetQuery($sql);
+        return $this->secured_encrypt($data);
     }
 
 
