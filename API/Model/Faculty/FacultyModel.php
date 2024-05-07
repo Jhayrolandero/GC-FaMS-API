@@ -45,7 +45,8 @@ class Faculty extends GlobalMethods
 
         $result = $this->executeGetQuery($sql);
         if ($result['code'] == 200) {
-            return $result['data'][0];
+            $data = $this->secured_encrypt($result['data'][0]);
+            return $data;
         }
     }
 
@@ -55,23 +56,8 @@ class Faculty extends GlobalMethods
                *
                 FROM `facultymembers`
                 LEFT JOIN `college` ON `facultymembers`.`college_ID` = `college`.`college_ID`;";
-        // $sql = "SELECT  
-        //         `first_name`,
-        //         `middle_name`,
-        //         `ext_name`,
-        //         `last_name`,
-        //         `faculty_ID`,
-        //         facultymembers.`college_ID`,
-        //         `college_name`,
-        //         `college_abbrev`,
-        //         `profile_image`,
-        //         `cover_image`,
-        //         `teaching_position`,
-        //         `email`,
-        //         `employment_status` 
-        //         FROM `facultymembers`
-        //         LEFT JOIN `college` ON `facultymembers`.`college_ID` = `college`.`college_ID`;";
-        return $this->executeGetQuery($sql)['data'];
+        $data = $this->secured_encrypt($this->executeGetQuery($sql)['data']);
+        return $data;
     }
 
     private function emailExist()
@@ -136,35 +122,9 @@ class Faculty extends GlobalMethods
 
     public function editFaculty($data = null, $id)
     {
-
         $params = $this->getParams($data);
         $tempForm = $this->getValues($data);
         array_push($tempForm, $id);
         return $this->prepareEditBind($this->tableName, $params, $tempForm, 'faculty_ID');
-
-        // Ignore this
-        // $filepath = null;
-        // $filepathCover = null;
-        // $params = [];
-        // $tempForm = [];
-
-        // //Calls function that saves image.
-        // if (!empty($_FILES['profile_image'])) {
-
-        //     // return 'Profile Exist';
-        //     $filepath = $this->saveImage("/../../Image_Assets/Faculty_Profile/", $this->tableName, "profile_image", $id);
-        //     array_push($params, 'profile_image');
-        //     array_push($tempForm, $filepath);
-        // }
-
-        // if (!empty($_FILES['cover_image'])) {
-        //     // return 'Cover Exist';
-        //     $filepathCover = $this->saveImage("/../../Image_Assets/Faculty_Cover/", $this->tableName, "cover_image", $id);
-        //     array_push($params, 'cover_image');
-        //     array_push($tempForm, $filepathCover);
-        // }
-
-        // array_push($tempForm, $id);
-        // return $this->prepareEditBind($this->tableName, $params, $tempForm, 'faculty_ID');
     }
 }

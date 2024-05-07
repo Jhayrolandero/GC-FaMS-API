@@ -9,30 +9,36 @@ class ResumeInfo extends GlobalMethods
 {
     //Faculty id GET sched
     // INNER JOIN commex on `commex-faculty`.`commex_ID`=`commex`.`commex_ID`;";
-    public function getCert($id){
+    public function getCert($id)
+    {
         //Fetches certs attained by faculty, and all certs template within the faculty. Pinag-isa ko na since they're mostly both needed.
         $existCertSQL = "SELECT * FROM `certifications-faculty` 
                          INNER JOIN certifications on `certifications-faculty`.`cert_ID`=`certifications`.`cert_ID`
                          WHERE faculty_ID = $id;";
         $certSQL = "SELECT * FROM `certifications`";
-        
-        return [$this->executeGetQuery($existCertSQL)["data"], $this->executeGetQuery($certSQL)["data"]];
+
+        $data =  [$this->executeGetQuery($existCertSQL)["data"], $this->executeGetQuery($certSQL)["data"]];
+        return $this->secured_encrypt($data);
+        // return [$this->executeGetQuery($existCertSQL)["data"], $this->executeGetQuery($certSQL)["data"]];
     }
 
-    public function getCollegeCert($id){
+    public function getCollegeCert($id)
+    {
         $existCertSQL = "SELECT * FROM `certifications-faculty` 
                          INNER JOIN certifications on `certifications-faculty`.`cert_ID`=`certifications`.`cert_ID`
                          INNER JOIN facultymembers on `certifications-faculty`.`faculty_ID`=`facultymembers`.`faculty_ID`
                          WHERE college_ID = $id;";
-        
-        return $this->executeGetQuery($existCertSQL)["data"];
+
+        $data = $this->executeGetQuery($existCertSQL)["data"];
+        return $this->secured_encrypt($data);
     }
 
     public function getExp($id)
     {
         $expSQL = "SELECT * FROM `experience-faculty`
         WHERE faculty_ID = $id;";
-        return $this->executeGetQuery($expSQL)["data"];
+        $data = $this->executeGetQuery($expSQL)["data"];
+        return $this->secured_encrypt($data);
     }
 
     public function getCollegeExp($id)
@@ -40,7 +46,8 @@ class ResumeInfo extends GlobalMethods
         $expSQL = "SELECT * FROM `experience-faculty` 
         INNER JOIN `facultymembers` on `experience-faculty`.`faculty_ID`=`facultymembers`.`faculty_ID`
         WHERE college_ID = $id";
-        return $this->executeGetQuery($expSQL)["data"];
+        $data = $this->executeGetQuery($expSQL)["data"];
+        return $this->secured_encrypt($data);
     }
 
     public function getEduc($id)
@@ -48,7 +55,8 @@ class ResumeInfo extends GlobalMethods
         $educSQL = "SELECT * 
         FROM `educattainment` 
         WHERE faculty_ID = $id;";
-        return $this->executeGetQuery($educSQL)["data"];
+        $data =  $this->executeGetQuery($educSQL)["data"];
+        return $this->secured_encrypt($data);
     }
 
     public function getCollegeEduc($id)
@@ -56,28 +64,34 @@ class ResumeInfo extends GlobalMethods
         $educSQL = "SELECT * FROM `educattainment` 
         INNER JOIN `facultymembers` on `educattainment`.`faculty_ID`=`facultymembers`.`faculty_ID`
         WHERE college_ID = $id";
-        return $this->executeGetQuery($educSQL)["data"];
+        $data =  $this->executeGetQuery($educSQL)["data"];
+        return $this->secured_encrypt($data);
     }
 
-    public function getProj($id){
+    public function getProj($id)
+    {
         $projSQL = "SELECT * 
         FROM `projects` 
         WHERE faculty_ID = $id;";
-        return $this->executeGetQuery($projSQL)["data"];
+        $data =  $this->executeGetQuery($projSQL)["data"];
+        return $this->secured_encrypt($data);
     }
 
-    public function getCollegeProj($id){
+    public function getCollegeProj($id)
+    {
         $projSQL = "SELECT * FROM `projects` 
         INNER JOIN `facultymembers` on `projects`.`faculty_ID`=`facultymembers`.`faculty_ID`
         WHERE college_ID = $id;";
-        return $this->executeGetQuery($projSQL)["data"];
+        $data = $this->executeGetQuery($projSQL)["data"];
+        return $this->secured_encrypt($data);
     }
 
     public function getSpec($id)
     {
         $specSQL = "SELECT * FROM `expertise`
         WHERE faculty_ID = $id;";
-        return $this->executeGetQuery($specSQL)["data"];
+        $data =  $this->executeGetQuery($specSQL)["data"];
+        return $this->secured_encrypt($data);
     }
 
     public function getCollegeSpec($id)
@@ -85,7 +99,8 @@ class ResumeInfo extends GlobalMethods
         $specSQL = "SELECT * FROM `expertise`
         INNER JOIN `facultymembers` on `expertise`.`faculty_ID`=`facultymembers`.`faculty_ID`
         WHERE college_ID = $id;";
-        return $this->executeGetQuery($specSQL)["data"];
+        $data = $this->executeGetQuery($specSQL)["data"];
+        return $this->secured_encrypt($data);
     }
 
 
@@ -158,7 +173,7 @@ class ResumeInfo extends GlobalMethods
 
         //For adding new certificate
         foreach ($_POST as $key => $value) {
-            if($key != 'accomplished_date'){
+            if ($key != 'accomplished_date') {
                 array_push($params, $key);
                 array_push($tempForm, $value);
             }
@@ -173,7 +188,7 @@ class ResumeInfo extends GlobalMethods
         array_push($params, 'faculty_ID');
         array_push($tempForm, $id);
         array_push($params, 'cert_ID');
-        array_push($tempForm, $this->getLastID('certifications')-1);
+        array_push($tempForm, $this->getLastID('certifications') - 1);
 
         if (!empty($_FILES)) {
             $filepath = $this->saveImage("/../../Image_Assets/Certifications/", "certifications-faculty", "cert_image");
@@ -182,14 +197,13 @@ class ResumeInfo extends GlobalMethods
         }
 
         foreach ($_POST as $key => $value) {
-            if($key == 'accomplished_date'){
+            if ($key == 'accomplished_date') {
                 array_push($params, $key);
                 array_push($tempForm, $value);
             }
         }
 
         return $this->prepareAddBind('certifications-faculty', $params, $tempForm);
-
     }
 
     public function addProj($form, $id)
