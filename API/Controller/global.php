@@ -131,7 +131,7 @@ class GlobalMethods extends Connection
         $jwt = $matches[1];
         if (!$jwt) {
             header('HTTP/1.0 403 Forbidden');
-            echo 'Token is missing but header exists';
+            echo 'Token is missing but header exist';
             exit;
         }
 
@@ -160,7 +160,7 @@ class GlobalMethods extends Connection
         } catch (\Throwable $th) {
             // throw $th;
             header('HTTP/1.0 403 Forbidden');
-            echo 'Token is missing but header exists';
+            echo $th;
             exit;
         }
     }
