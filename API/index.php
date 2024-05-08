@@ -220,6 +220,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toAddResume($data, $id, 5));
                 break;
 
+            case 'addNewSpec':
+                echo json_encode($postTunnel->toAddResume($data, $id, 7));
+                break;
+
             case 'addCourse':
                 echo json_encode($postTunnel->toAddCourse($data, $id));
                 break;

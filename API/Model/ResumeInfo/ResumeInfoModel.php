@@ -88,19 +88,29 @@ class ResumeInfo extends GlobalMethods
 
     public function getSpec($id)
     {
-        $specSQL = "SELECT * FROM `expertise`
-        WHERE faculty_ID = $id;";
-        $data =  $this->executeGetQuery($specSQL)["data"];
-        return $this->secured_encrypt($data);
+        $specFacultySQL = "SELECT * FROM `expertise-faculty`
+                    INNER JOIN `expertise` on `expertise`.`expertise_ID`=`expertise-faculty`.`expertise_ID`
+                    WHERE faculty_ID = $id;";
+        $dataFaculty =  $this->executeGetQuery($specFacultySQL)["data"];
+
+        $specSQL = "SELECT * FROM `expertise`;";
+
+        $dataExpertise =  $this->executeGetQuery($specSQL)["data"];
+        return $this->secured_encrypt([$dataFaculty, $dataExpertise]);
     }
 
     public function getCollegeSpec($id)
     {
-        $specSQL = "SELECT * FROM `expertise`
-        INNER JOIN `facultymembers` on `expertise`.`faculty_ID`=`facultymembers`.`faculty_ID`
+        $specFacultySQL = "SELECT * FROM `expertise-faculty`
+        INNER JOIN `expertise` on `expertise`.`expertise_ID`=`expertise-faculty`.`expertise_ID`
+        INNER JOIN `facultymembers` on `expertise-faculty`.`faculty_ID`=`facultymembers`.`faculty_ID`
         WHERE college_ID = $id;";
-        $data = $this->executeGetQuery($specSQL)["data"];
-        return $this->secured_encrypt($data);
+        $dataFaculty = $this->executeGetQuery($specFacultySQL)["data"];
+
+        $specSQL = "SELECT * FROM `expertise`;";
+        $dataExpertise =  $this->executeGetQuery($specSQL)["data"];
+
+        return $this->secured_encrypt([$dataFaculty, $dataExpertise]);
     }
 
 
@@ -221,13 +231,28 @@ class ResumeInfo extends GlobalMethods
 
     public function addSpec($form, $id)
     {
-        $params = array('faculty_ID', 'expertise_name', 'expertise_confidence');
+        $params = array('faculty_ID', 'expertise_ID');
         $tempForm = array(
             $id,
-            $form->expertise_name,
-            $form->expertise_confidence
+            $form->expertise_ID
         );
-        return $this->prepareAddBind('expertise', $params, $tempForm);
+        return $this->prepareAddBind('expertise-faculty', $params, $tempForm);
+    }
+
+    public function addNewSpec($form, $id)
+    {
+        $params = array('expertise_name');
+        $tempForm = array(
+            $form->expertise_name
+        );
+        $this->prepareAddBind('expertise', $params, $tempForm);
+
+        $params = array('faculty_ID', 'expertise_ID');
+        $tempForm = array(
+            $id,
+            $this->getLastID('expertise') - 1
+        );
+        return $this->prepareAddBind('expertise-faculty', $params, $tempForm);
     }
 
     public function editEduc($form, $id)
@@ -318,6 +343,6 @@ class ResumeInfo extends GlobalMethods
 
     public function deleteSpec($id)
     {
-        return $this->prepareDeleteBind('expertise', 'expertise_ID', $id);
+        return $this->prepareDeleteBind('expertise-faculty', 'expertise_faculty_ID', $id);
     }
 }
