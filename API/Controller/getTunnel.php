@@ -1,7 +1,8 @@
 <?php
-header('Access-Control-Allow-Origin: http://localhost:4200');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header("Access-Control-Allow-Headers: *");
+// header('Access-Control-Allow-Origin: http://localhost:4200');
+// header('Access-Control-Allow-Origin: http://localhost:4200');
+// header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+// header("Access-Control-Allow-Headers: *");
 
 //Fetches every single file in Model
 foreach (glob("./Model/*/*.php") as $filename) {
