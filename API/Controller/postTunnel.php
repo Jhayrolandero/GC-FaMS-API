@@ -2,9 +2,9 @@
 
 use function PHPSTORM_META\type;
 
-header('Access-Control-Allow-Origin: http://localhost:4200');
-header('Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS');
-header("Access-Control-Allow-Headers: *");
+// header('Access-Control-Allow-Origin: http://localhost:4200');
+// header('Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS');
+// header("Access-Control-Allow-Headers: *");
 
 // Fetches every single file in Model
 foreach (glob("./Model/*/*.php") as $filename) {
@@ -12,7 +12,8 @@ foreach (glob("./Model/*/*.php") as $filename) {
 }
 // include_once "./Model/Login/login.php";
 
-class PostTunnel
+include_once __DIR__ . '/./global.php';
+class PostTunnel extends GlobalMethods
 {
     private $login;
     private $resume;
@@ -36,7 +37,10 @@ class PostTunnel
 
     public function toValidateLogin($form)
     {
-        return $this->login->validateLogin($form);
+        // return $form->email;
+        return $this->login->validateLogin($this->secureDecrypt($form));
+        // return $this->secureDecrypt($form);
+        // return $this->login->validateLogin($form);
     }
 
     public function addFaculty($data)
@@ -167,9 +171,25 @@ class PostTunnel
         }
     }
 
-    function test()
+    function test($data)
     {
-        return $this->commex->addAttendee();
+
+        $passphrase = "ucj7XoyBfAMt/ZMF20SQ7sEzad+bKf4bha7bFBdl2HY=";
+        try {
+            $salt = hex2bin($data->salt);
+            $iv  = hex2bin($data->iv);
+        } catch (Exception $e) {
+            return "nigga";
+        }
+
+        $ciphertext = base64_decode($data->ciphertext);
+        $iterations = 999; //same as js encrypting 
+
+        $key = hash_pbkdf2("sha512", $passphrase, $salt, $iterations, 64);
+
+        $decrypted = openssl_decrypt($ciphertext, 'aes-256-cbc', hex2bin($key), OPENSSL_RAW_DATA, $iv);
+
+        return json_decode($decrypted);
     }
     public function toAddAttendee()
     {

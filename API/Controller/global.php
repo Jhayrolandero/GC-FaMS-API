@@ -1,7 +1,7 @@
 <?php
-header('Access-Control-Allow-Origin: http://localhost:4200');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header("Access-Control-Allow-Headers: *");
+// header('Access-Control-Allow-Origin: http://localhost:4200');
+// header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+// header("Access-Control-Allow-Headers: *");
 
 
 use Firebase\JWT\JWT;
@@ -18,11 +18,12 @@ class GlobalMethods extends Connection
 {
 
     private $env;
-
+    private $first_key;
 
     function __construct()
     {
         $this->env = parse_ini_file('.env');
+        $this->first_key = $this->env["FIRSTKEY"];
     }
     /**
      * Global function to execute queries
@@ -120,6 +121,12 @@ class GlobalMethods extends Connection
 
     public function verifyToken()
     {
+
+        // Prevent Outsiders from accessing the API
+        if (empty($_SERVER['HTTP_AUTHORIZATION'])) {
+            echo "Unauthorized Access nigga!";
+            exit;
+        }
         //Check existence of token
         if (!preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
             header('HTTP/1.0 403 Forbidden');
@@ -331,7 +338,7 @@ class GlobalMethods extends Connection
     function secured_encrypt($data)
     {
 
-        $first_key = $this->env["FIRSTKEY"];
+        // $first_key = $this->env["FIRSTKEY"];
 
         // $stringData =  implode()
         $stringData =  json_encode($data);
@@ -344,11 +351,37 @@ class GlobalMethods extends Connection
 
         $iterations = 999;
         // Use the pass key and the salt to derive more strong key
-        $key = hash_pbkdf2("sha512", $first_key, $salt, $iterations, 64);
+        $key = hash_pbkdf2("sha512", $this->first_key, $salt, $iterations, 64);
 
         $encrypted_data = openssl_encrypt($stringData, 'aes-256-cbc', hex2bin($key), OPENSSL_RAW_DATA, $iv);
 
         $output = ["ciphertext" => base64_encode($encrypted_data), "iv" => bin2hex($iv), "salt" => bin2hex($salt)];
         return $output;
+    }
+
+    function secureDecrypt($data)
+    {
+
+        try {
+            // $first_key = $this->env["FIRSTKEY"];
+
+            //  For some reason i can't use the key
+            $first_key = "ucj7XoyBfAMt/ZMF20SQ7sEzad+bKf4bha7bFBdl2HY=";
+
+            $salt = hex2bin($data->salt);
+            $iv  = hex2bin($data->iv);
+
+
+            $ciphertext = base64_decode($data->ciphertext);
+            $iterations = 999; //same as js encrypting 
+
+            $key = hash_pbkdf2("sha512", $first_key, $salt, $iterations, 64);
+
+            $decrypted = openssl_decrypt($ciphertext, 'aes-256-cbc', hex2bin($key), OPENSSL_RAW_DATA, $iv);
+
+            return json_decode($decrypted);
+        } catch (Exception $e) {
+            return $e;
+        }
     }
 }

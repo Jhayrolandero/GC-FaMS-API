@@ -1,5 +1,7 @@
 <?php
-header('Access-Control-Allow-Origin: http://localhost:4200');
+header('Access-Control-Allow-Origin: *');
+// header('Access-Control-Allow-Origin: https://gc-fa-ms-git-deploymenttest1-jhayrolanderos-projects.vercel.app');
+// header('Access-Control-Allow-Origin: http://localhost:4200');
 header('Access-Control-Allow-Credentials: true');
 
 
@@ -30,8 +32,14 @@ if (isset($_REQUEST['request'])) {
     http_response_code(404);
 }
 
+
 //Login filter
 if ($request[0] === 'login') {
+    // Enforce the login form should be populated else this will be evaluated
+    if (empty(json_decode(file_get_contents("php://input")))) {
+        echo "Unauthorized Access nigga!";
+        exit;
+    }
     echo json_encode($postTunnel->toValidateLogin(json_decode(file_get_contents("php://input"))));
     exit;
 }
@@ -191,7 +199,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     case 'POST':
-        $payloadID = $globalOb->verifyToken()['payload'];
+        // $payloadID = $globalOb->verifyToken()['payload'];
         $id = $globalOb->verifyToken()['payload']['id'];
         $college = $globalOb->verifyToken()['payload']['college'];
         $data = json_decode(file_get_contents("php://input"));
@@ -241,7 +249,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'test':
-                echo json_encode($postTunnel->test());
+                echo json_encode($postTunnel->test($data));
                 break;
 
                 // Use this for updating profile pic
@@ -355,9 +363,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $params = $_GET["t"];
                 echo json_encode($postTunnel->toEditProfile($params, $request[1]));
                 break;
-            case 'test':
-                echo json_encode($postTunnel->test());
-                break;
+                // case 'test':
+                //     echo json_encode($postTunnel->test());
+                //     break;
             default:
                 http_response_code(404);
                 break;
