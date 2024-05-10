@@ -88,6 +88,9 @@ class PostTunnel extends GlobalMethods
             case 6:
                 return $this->resume->addNewCert($form, $id);
 
+            case 7:
+                return $this->resume->addNewSpec($form, $id);
+
             default:
                 # code...
                 break;

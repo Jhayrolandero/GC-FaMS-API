@@ -138,7 +138,7 @@ class GlobalMethods extends Connection
         $jwt = $matches[1];
         if (!$jwt) {
             header('HTTP/1.0 403 Forbidden');
-            echo 'Token is missing but header exists';
+            echo 'Token is missing but header exist';
             exit;
         }
 
@@ -152,29 +152,22 @@ class GlobalMethods extends Connection
         $secretKey = $this->env["GCFAMS_API_KEY"];
 
         //Decode received token
-        $payload = JWT::decode($jwt, new Key($secretKey, 'HS512'), $headers);
 
-        // return $payload;
-        // Decode payload part
-        $parsedPayload = json_decode(json_encode($payload), true);
+        try {
+            $payload = JWT::decode($jwt, new Key($secretKey, 'HS512'), $headers);
 
-        //Re-encode decoded payload with the stored signature key to check for tampers
-        $toCheckSignature = JWT::encode($parsedPayload, $secretKey, 'HS512');
-        $toCheckSignature = explode('.', $toCheckSignature);
-
-        //If re-encoded token is equal to received token, validate token.
-        if ($toCheckSignature[2] == $jwtArr[2]) {
-            return [
+            return array(
                 "code" => 200,
                 "payload" =>
                 array(
                     "id" => $payload->id,
                     "college" => $payload->college
                 )
-            ];
-        } else {
+            );
+        } catch (\Throwable $th) {
+            // throw $th;
             header('HTTP/1.0 403 Forbidden');
-            echo 'Currently encoded payload does not matched initially signed payload';
+            echo $th;
             exit;
         }
     }
