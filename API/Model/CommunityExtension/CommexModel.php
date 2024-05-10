@@ -107,16 +107,20 @@ class Commex extends GlobalMethods
     }
 
 
-    public function addAttendee()
+    public function addAttendee($faculty_ID, $college_ID, $commex_ID)
     {
-        $attendee = json_decode($_POST["attendees"][0]);
+        // $attendee = json_decode($_POST["attendees"][0]);
 
-        $faculty_ID = $attendee->faculty_ID;
-        $commex_ID = $attendee->commex_ID;
+        // $faculty_ID = $attendee->faculty_ID;
+        // $commex_ID = $attendee->commex_ID;
         $cols = ['faculty_ID', 'commex_ID'];
         $values = [$faculty_ID, $commex_ID];
 
-        return $this->prepareAddBind('commex-faculty', $cols, $values);
+        $collegeCols = ['college_ID', 'commex_ID'];
+        $collegeVals = [$college_ID, $commex_ID];
+
+        $this->prepareAddBind('commex-faculty', $cols, $values);
+        return $this->prepareAddBind('commex-college', $collegeCols, $collegeVals);
     }
 
     public function getAttendee($commex_ID, $query = null, $faculty_ID = null)

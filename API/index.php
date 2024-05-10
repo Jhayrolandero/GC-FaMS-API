@@ -265,7 +265,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toEditCover($params, $request[1]));
                 break;
             case 'attendee':
-                echo json_encode($postTunnel->toAddAttendee());
+                echo json_encode($postTunnel->toAddAttendee($id, $college));
                 break;
             default:
                 http_response_code(403);
