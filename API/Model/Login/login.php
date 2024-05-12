@@ -52,7 +52,7 @@ class Login extends GlobalMethods
                 return array("token" => "", "code" => 403);
             }
         } else {
-            return array("token" => "", "code" => 404);
+            return $this->executeGetQuery($sql);
         }
     }
 }
