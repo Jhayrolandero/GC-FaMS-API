@@ -102,4 +102,38 @@ class Faculty extends GlobalMethods
         array_push($tempForm, $id);
         return $this->prepareEditBind($this->tableName, $params, $tempForm, 'faculty_ID');
     }
+    public function editProfile($id)
+    {
+        $params = [];
+        $tempForm = [];
+
+        //Calls function that saves image.
+        if (!empty($_FILES['profile_image'])) {
+            $filepath = $this->saveImage("/../../Image_Assets/Faculty_Profile/", $this->tableName, "profile_image", $id);
+            array_push($params, 'profile_image');
+            array_push($tempForm, $filepath);
+        } else {
+            return "Empty File";
+        }
+        array_push($tempForm, $id);
+        return $this->prepareEditBind($this->tableName, $params, $tempForm, 'faculty_ID');
+    }
+
+    public function editCover($id)
+    {
+
+        $params = [];
+        $tempForm = [];
+
+        if (!empty($_FILES['cover_image'])) {
+            $filepathCover = $this->saveImage("/../../Image_Assets/Faculty_Cover/", $this->tableName, "cover_image", $id);
+            array_push($params, 'cover_image');
+            array_push($tempForm, $filepathCover);
+        } else {
+            return "Empty File";
+        }
+        array_push($tempForm, $id);
+
+        return $this->prepareEditBind($this->tableName, $params, $tempForm, 'faculty_ID');
+    }
 }

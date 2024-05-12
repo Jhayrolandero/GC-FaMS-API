@@ -249,20 +249,20 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'test':
-                echo json_encode($postTunnel->test($data));
+                echo json_encode($postTunnel->test($id));
                 break;
 
                 // Use this for updating profile pic
 
             case 'profile':
-                $params = $_GET["t"];
-                echo json_encode($postTunnel->toEditProfile($params, $request[1]));
+                // $params = $_GET["t"];
+                echo json_encode($postTunnel->toEditProfile($id));
                 break;
 
                 // Use this for updating cover pic
             case 'cover':
-                $params = $_GET["t"];
-                echo json_encode($postTunnel->toEditCover($params, $request[1]));
+                // $params = $_GET["t"];
+                echo json_encode($postTunnel->toEditCover($id));
                 break;
             case 'attendee':
                 echo json_encode($postTunnel->toAddAttendee($id, $college));
