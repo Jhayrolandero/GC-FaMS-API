@@ -248,9 +248,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toAddCommex());
                 break;
 
-            case 'test':
-                echo json_encode($postTunnel->test($id));
-                break;
+                // case 'test':
+                //     echo json_encode($postTunnel->test($id));
+                //     break;
 
                 // Use this for updating profile pic
 
@@ -275,6 +275,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
     case 'PATCH':
         $data = json_decode(file_get_contents("php://input"));
+        $id = $globalOb->verifyToken()['payload']['id'];
+        $college = $globalOb->verifyToken()['payload']['college'];
 
         // For req of Formdata
         // parse_str(file_get_contents("php://input"), $_PATCH);
@@ -304,7 +306,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'faculty':
-                echo json_encode($postTunnel->toEditFaculty($data, $request[1]));
+                echo json_encode($postTunnel->test($data, $id));
                 break;
 
             default:

@@ -158,10 +158,6 @@ class PostTunnel extends GlobalMethods
     public function toEditProfile($id)
     {
         return $this->faculty->editProfile($id);
-        // switch ($params) {
-        //     case 'faculty':
-        //         return $this->faculty->editFaculty(null, $id);
-        // }
     }
 
     public function toEditCover($id)
@@ -173,7 +169,7 @@ class PostTunnel extends GlobalMethods
         // }
     }
 
-    function test($id)
+    function test($data, $id)
     {
 
         // $passphrase = "ucj7XoyBfAMt/ZMF20SQ7sEzad+bKf4bha7bFBdl2HY=";
@@ -192,7 +188,11 @@ class PostTunnel extends GlobalMethods
         // $decrypted = openssl_decrypt($ciphertext, 'aes-256-cbc', hex2bin($key), OPENSSL_RAW_DATA, $iv);
 
         // return $_FILES;
-        return $this->faculty->editProfile($id);
+
+        // return $data;
+        return $this->faculty->editFaculty2($data, $id);
+
+        // return $this->faculty->editProfile($id);
     }
     public function toAddAttendee($faculty_ID, $college_ID)
     {

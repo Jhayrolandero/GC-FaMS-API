@@ -95,6 +95,10 @@ class Faculty extends GlobalMethods
         return $this->getLastID($this->tableName);
     }
 
+    /**
+     * 
+     * DOn;t if something uses this func
+     */
     public function editFaculty($data = null, $id)
     {
         $params = $this->getParams($data);
@@ -102,6 +106,8 @@ class Faculty extends GlobalMethods
         array_push($tempForm, $id);
         return $this->prepareEditBind($this->tableName, $params, $tempForm, 'faculty_ID');
     }
+
+
     public function editProfile($id)
     {
         $params = [];
@@ -135,5 +141,21 @@ class Faculty extends GlobalMethods
         array_push($tempForm, $id);
 
         return $this->prepareEditBind($this->tableName, $params, $tempForm, 'faculty_ID');
+    }
+
+    public function editFaculty2($data, $id)
+    {
+        $params = [];
+        $values = [];
+
+
+        foreach ($data as $key => $value) {
+            array_push($params, $key);
+            array_push($values, $value);
+        }
+        array_push($values, $id);
+
+
+        return $this->prepareEditBind($this->tableName, $params, $values, 'faculty_ID');
     }
 }
