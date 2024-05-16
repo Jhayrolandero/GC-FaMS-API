@@ -158,4 +158,15 @@ class Faculty extends GlobalMethods
 
         return $this->prepareEditBind($this->tableName, $params, $values, 'faculty_ID');
     }
+
+    public function editPassword($data, $id)
+    {
+        $values = [];
+
+        $password_hash = password_hash($data, PASSWORD_DEFAULT);
+        array_push($values, $password_hash);
+        array_push($values, $id);
+
+        return $this->prepareEditBind($this->tableName, ["password"], $values, 'faculty_ID');
+    }
 }

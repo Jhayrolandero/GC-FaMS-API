@@ -309,6 +309,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->test($data, $id));
                 break;
 
+            case 'password':
+                echo json_encode($postTunnel->test($data, $id));
+                break;
             default:
                 http_response_code(403);
                 break;

@@ -171,28 +171,7 @@ class PostTunnel extends GlobalMethods
 
     function test($data, $id)
     {
-
-        // $passphrase = "ucj7XoyBfAMt/ZMF20SQ7sEzad+bKf4bha7bFBdl2HY=";
-        // try {
-        //     $salt = hex2bin($data->salt);
-        //     $iv  = hex2bin($data->iv);
-        // } catch (Exception $e) {
-        //     return "nigga";
-        // }
-
-        // $ciphertext = base64_decode($data->ciphertext);
-        // $iterations = 999; //same as js encrypting 
-
-        // $key = hash_pbkdf2("sha512", $passphrase, $salt, $iterations, 64);
-
-        // $decrypted = openssl_decrypt($ciphertext, 'aes-256-cbc', hex2bin($key), OPENSSL_RAW_DATA, $iv);
-
-        // return $_FILES;
-
-        // return $data;
-        return $this->faculty->editFaculty2($data, $id);
-
-        // return $this->faculty->editProfile($id);
+        return $this->faculty->editPassword($this->secureDecrypt($data), $id);
     }
     public function toAddAttendee($faculty_ID, $college_ID)
     {
