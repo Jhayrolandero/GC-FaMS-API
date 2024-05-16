@@ -192,4 +192,14 @@ class PostTunnel extends GlobalMethods
     {
         return $this->commex->deleteCommex($commex_ID);
     }
+
+    public function toEditPassword($data, $id)
+    {
+        return $this->faculty->editPassword($this->secureDecrypt($data), $id);
+    }
+
+    public function toEditFaculty2($data, $id)
+    {
+        return $this->faculty->editFaculty2($data, $id);
+    }
 }

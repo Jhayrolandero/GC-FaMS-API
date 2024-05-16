@@ -305,12 +305,12 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toEditResume($data, $request[1], 5));
                 break;
 
-            case 'faculty':
-                echo json_encode($postTunnel->test($data, $id));
+            case 'profile':
+                echo json_encode($postTunnel->toEditFaculty2($data, $id));
                 break;
 
             case 'password':
-                echo json_encode($postTunnel->test($data, $id));
+                echo json_encode($postTunnel->toEditPassword($data, $id));
                 break;
             default:
                 http_response_code(403);
