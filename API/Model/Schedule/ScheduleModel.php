@@ -47,4 +47,13 @@ class Schedule extends GlobalMethods
         // return $tempForm;
         return $this->prepareAddBind('course-faculty', $params, $tempForm);
     }
+
+    public function deleteCourse($courseId, $id){
+        return $this->prepareDeleteBind2('course-faculty', ["course_code", "faculty_ID"], [$courseId, $id]);
+    }
+
+    // public function deleteFaculty($id)
+    // {
+    //     return $this->prepareDeleteBind($this->tableName, 'faculty_ID', $id);
+    // }
 }
