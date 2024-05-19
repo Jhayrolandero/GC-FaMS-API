@@ -58,6 +58,10 @@ class PostTunnel extends GlobalMethods
         return $this->course->addCourse($data, $id);
     }
 
+    public function toDeleteCourse($courseId, $id){
+        return $this->course->deleteCourse($courseId, $id);
+    }
+
     public function toAddCommex()
     {
 

@@ -323,7 +323,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     case 'DELETE':
-        $globalOb->verifyToken()['payload'];
+        $id = $globalOb->verifyToken()['payload']['id'];
+        $college = $globalOb->verifyToken()['payload']['college'];
+
         switch ($request[0]) {
             case 'deleteEduc':
                 echo json_encode($postTunnel->toDeleteResume($request[1], 1));
@@ -345,13 +347,17 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toDeleteResume($request[1], 5));
                 break;
 
+            case 'deleteCourse':
+                echo json_encode($postTunnel->toDeleteCourse($request[1], $id));
+                break;
+
             case 'faculty':
                 echo json_encode($postTunnel->toDeleteFaculty($request[1]));
                 break;
 
             case 'attendee':
-                $faculty_ID = $request[1];
-                $commex_ID = $request[3];
+                $faculty_ID = $id;
+                $commex_ID = $request[1];
                 echo json_encode($postTunnel->toDeleteAttendee($commex_ID, $faculty_ID));
                 break;
 
