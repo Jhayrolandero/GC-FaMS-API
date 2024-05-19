@@ -159,41 +159,23 @@ class PostTunnel extends GlobalMethods
         return $this->faculty->editFaculty($data, $id);
     }
 
-    public function toEditProfile($params, $id)
+    public function toEditProfile($id)
     {
-        switch ($params) {
-            case 'faculty':
-                return $this->faculty->editFaculty(null, $id);
-        }
+        return $this->faculty->editProfile($id);
     }
 
-    public function toEditCover($params, $id)
+    public function toEditCover($id)
     {
-        switch ($params) {
-            case 'faculty':
-                return $this->faculty->editFaculty(null, $id);
-        }
+        return $this->faculty->editCover($id);
+        // switch ($params) {
+        //     case 'faculty':
+        //         return $this->faculty->editFaculty(null, $id);
+        // }
     }
 
-    function test($data)
+    function test($data, $id)
     {
-
-        $passphrase = "ucj7XoyBfAMt/ZMF20SQ7sEzad+bKf4bha7bFBdl2HY=";
-        try {
-            $salt = hex2bin($data->salt);
-            $iv  = hex2bin($data->iv);
-        } catch (Exception $e) {
-            return "nigga";
-        }
-
-        $ciphertext = base64_decode($data->ciphertext);
-        $iterations = 999; //same as js encrypting 
-
-        $key = hash_pbkdf2("sha512", $passphrase, $salt, $iterations, 64);
-
-        $decrypted = openssl_decrypt($ciphertext, 'aes-256-cbc', hex2bin($key), OPENSSL_RAW_DATA, $iv);
-
-        return json_decode($decrypted);
+        return $this->faculty->editPassword($this->secureDecrypt($data), $id);
     }
     public function toAddAttendee($faculty_ID, $college_ID)
     {
@@ -214,5 +196,14 @@ class PostTunnel extends GlobalMethods
     {
         return $this->commex->deleteCommex($commex_ID);
     }
-}
 
+    public function toEditPassword($data, $id)
+    {
+        return $this->faculty->editPassword($this->secureDecrypt($data), $id);
+    }
+
+    public function toEditFaculty2($data, $id)
+    {
+        return $this->faculty->editFaculty2($data, $id);
+    }
+}

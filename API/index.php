@@ -248,21 +248,21 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toAddCommex());
                 break;
 
-            case 'test':
-                echo json_encode($postTunnel->test($data));
-                break;
+                // case 'test':
+                //     echo json_encode($postTunnel->test($id));
+                //     break;
 
                 // Use this for updating profile pic
 
             case 'profile':
-                $params = $_GET["t"];
-                echo json_encode($postTunnel->toEditProfile($params, $request[1]));
+                // $params = $_GET["t"];
+                echo json_encode($postTunnel->toEditProfile($id));
                 break;
 
                 // Use this for updating cover pic
             case 'cover':
-                $params = $_GET["t"];
-                echo json_encode($postTunnel->toEditCover($params, $request[1]));
+                // $params = $_GET["t"];
+                echo json_encode($postTunnel->toEditCover($id));
                 break;
             case 'attendee':
                 echo json_encode($postTunnel->toAddAttendee($id, $college));
@@ -275,6 +275,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
     case 'PATCH':
         $data = json_decode(file_get_contents("php://input"));
+        $id = $globalOb->verifyToken()['payload']['id'];
+        $college = $globalOb->verifyToken()['payload']['college'];
 
         // For req of Formdata
         // parse_str(file_get_contents("php://input"), $_PATCH);
@@ -303,10 +305,17 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toEditResume($data, $request[1], 5));
                 break;
 
-            case 'faculty':
-                echo json_encode($postTunnel->toEditFaculty($data, $request[1]));
+            case 'profile':
+                echo json_encode($postTunnel->toEditFaculty2($data, $id));
                 break;
 
+            case 'password':
+                if (isset($request[1])) {
+                    echo json_encode($postTunnel->toEditPassword($data, $request[1]));
+                    die;
+                }
+                echo json_encode($postTunnel->toEditPassword($data, $id));
+                break;
             default:
                 http_response_code(403);
                 break;
@@ -361,22 +370,22 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
         }
         break;
-    case 'PUT':
-        $globalOb->verifyToken()['payload'];
-        $data = json_decode(file_get_contents("php://input"));
-        switch ($request[0]) {
-            case 'profile':
-                $params = $_GET["t"];
-                echo json_encode($postTunnel->toEditProfile($params, $request[1]));
-                break;
-                // case 'test':
-                //     echo json_encode($postTunnel->test());
-                //     break;
-            default:
-                http_response_code(404);
-                break;
-        }
-        break;
+        // case 'PUT':
+        //     $globalOb->verifyToken()['payload'];
+        //     $data = json_decode(file_get_contents("php://input"));
+        //     switch ($request[0]) {
+        //         case 'profile':
+        //             $params = $_GET["t"];
+        //             echo json_encode($postTunnel->toEditProfile($params, $request[1]));
+        //             break;
+        //             // case 'test':
+        //             //     echo json_encode($postTunnel->test());
+        //             //     break;
+        //         default:
+        //             http_response_code(404);
+        //             break;
+        //     }
+        //     break;
     default:
         http_response_code(404);
         break;

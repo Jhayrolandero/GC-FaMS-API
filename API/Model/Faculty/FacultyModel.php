@@ -95,11 +95,78 @@ class Faculty extends GlobalMethods
         return $this->getLastID($this->tableName);
     }
 
+    /**
+     * 
+     * DOn;t if something uses this func
+     */
     public function editFaculty($data = null, $id)
     {
         $params = $this->getParams($data);
         $tempForm = $this->getValues($data);
         array_push($tempForm, $id);
         return $this->prepareEditBind($this->tableName, $params, $tempForm, 'faculty_ID');
+    }
+
+
+    public function editProfile($id)
+    {
+        $params = [];
+        $tempForm = [];
+
+        //Calls function that saves image.
+        if (!empty($_FILES['profile_image'])) {
+            $filepath = $this->saveImage("/../../Image_Assets/Faculty_Profile/", $this->tableName, "profile_image", $id);
+            array_push($params, 'profile_image');
+            array_push($tempForm, $filepath);
+        } else {
+            return "Empty File";
+        }
+        array_push($tempForm, $id);
+        return $this->prepareEditBind($this->tableName, $params, $tempForm, 'faculty_ID');
+    }
+
+    public function editCover($id)
+    {
+
+        $params = [];
+        $tempForm = [];
+
+        if (!empty($_FILES['cover_image'])) {
+            $filepathCover = $this->saveImage("/../../Image_Assets/Faculty_Cover/", $this->tableName, "cover_image", $id);
+            array_push($params, 'cover_image');
+            array_push($tempForm, $filepathCover);
+        } else {
+            return "Empty File";
+        }
+        array_push($tempForm, $id);
+
+        return $this->prepareEditBind($this->tableName, $params, $tempForm, 'faculty_ID');
+    }
+
+    public function editFaculty2($data, $id)
+    {
+        $params = [];
+        $values = [];
+
+
+        foreach ($data as $key => $value) {
+            array_push($params, $key);
+            array_push($values, $value);
+        }
+        array_push($values, $id);
+
+
+        return $this->prepareEditBind($this->tableName, $params, $values, 'faculty_ID');
+    }
+
+    public function editPassword($data, $id)
+    {
+        $values = [];
+
+        $password_hash = password_hash($data, PASSWORD_DEFAULT);
+        array_push($values, $password_hash);
+        array_push($values, $id);
+
+        return $this->prepareEditBind($this->tableName, ["password"], $values, 'faculty_ID');
     }
 }

@@ -79,7 +79,7 @@ class GlobalMethods extends Connection
         return array("code" => $code, "errmsg" => $errmsg);
     }
 
-    public function saveImage($dir, $tableName, $name) //A reusable function for saving images based on provided directory location
+    public function saveImage($dir, $tableName, $name, $editID = null) //A reusable function for saving images based on provided directory location
     {
         //Declare temporary holders for parameter and value for sql
         $tempFile = '';
@@ -91,12 +91,17 @@ class GlobalMethods extends Connection
         $fileName = $_FILES[$name]['name'];
 
         //Fetch last autoincrement id on commex
-        $lastIncrementID = $this->getLastID($tableName);
+        if (empty($editID)) {
 
-        // $picID = isset($id) ? $id : $lastIncrementID;
+            $ID = $this->getLastID($tableName);
+        } else {
+            $ID = $editID;
+        }
+
+        // $picID = isset($id) ? $id : $ID;
 
         //Declares folder location
-        $fileFolder = __DIR__ . $dir . "$lastIncrementID/";
+        $fileFolder = __DIR__ . $dir . "$ID/";
 
         //Creates directory if it doesn't exist yet
         if (!file_exists($fileFolder)) {
@@ -104,7 +109,7 @@ class GlobalMethods extends Connection
         }
 
         //Declares location for image file itself.
-        $filepath = __DIR__ . $dir . "$lastIncrementID/$fileName";
+        $filepath = __DIR__ . $dir . "$ID/$fileName";
 
         //If file exists in path, delete it.
         if (file_exists($filepath)) {
