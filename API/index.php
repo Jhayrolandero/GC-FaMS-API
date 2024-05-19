@@ -310,6 +310,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'password':
+                if (isset($request[1])) {
+                    echo json_encode($postTunnel->toEditPassword($data, $request[1]));
+                    die;
+                }
                 echo json_encode($postTunnel->toEditPassword($data, $id));
                 break;
             default:
@@ -360,22 +364,22 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
         }
         break;
-    case 'PUT':
-        $globalOb->verifyToken()['payload'];
-        $data = json_decode(file_get_contents("php://input"));
-        switch ($request[0]) {
-            case 'profile':
-                $params = $_GET["t"];
-                echo json_encode($postTunnel->toEditProfile($params, $request[1]));
-                break;
-                // case 'test':
-                //     echo json_encode($postTunnel->test());
-                //     break;
-            default:
-                http_response_code(404);
-                break;
-        }
-        break;
+        // case 'PUT':
+        //     $globalOb->verifyToken()['payload'];
+        //     $data = json_decode(file_get_contents("php://input"));
+        //     switch ($request[0]) {
+        //         case 'profile':
+        //             $params = $_GET["t"];
+        //             echo json_encode($postTunnel->toEditProfile($params, $request[1]));
+        //             break;
+        //             // case 'test':
+        //             //     echo json_encode($postTunnel->test());
+        //             //     break;
+        //         default:
+        //             http_response_code(404);
+        //             break;
+        //     }
+        //     break;
     default:
         http_response_code(404);
         break;
