@@ -232,6 +232,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toAddResume($data, $id, 7));
                 break;
 
+            case 'addCv':
+                echo json_encode($postTunnel->toAddCv($data, $id));
+                break;    
+
             case 'addCourse':
                 echo json_encode($postTunnel->toAddCourse($data, $id));
                 break;
@@ -267,6 +271,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
             case 'attendee':
                 echo json_encode($postTunnel->toAddAttendee($id, $college));
                 break;
+
+
+
             default:
                 http_response_code(403);
                 break;

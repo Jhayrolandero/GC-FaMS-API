@@ -29,6 +29,7 @@ class PostTunnel extends GlobalMethods
         $this->commex = new Commex();
         $this->eval = new Evaluation();
         $this->course = new Schedule();
+        $this->cv = new CurriculumVitae();
     }
 
     // public function addFaculty($data){
@@ -64,12 +65,14 @@ class PostTunnel extends GlobalMethods
 
     public function toAddCommex()
     {
-
         return $this->commex->addCommex();
         // return $_POST;
     }
 
-
+    public function toAddCv($data, $id)
+    {
+        return $this->cv->generateCv($data, $id);
+    }
 
     public function toAddResume($form, $id, $type)
     {
