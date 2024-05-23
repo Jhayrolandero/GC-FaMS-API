@@ -109,13 +109,20 @@ class CurriculumVitae extends GlobalMethods
     }
 
     //Binds that only get binded once
-    public function singleBind($data)
+    public function singleBind($data, $imgsrc)
     {
+
+        $startPos = strpos($imgsrc, "Image_Assets");
+
+        // If "Image_Assets" is found
+        $substring = substr($imgsrc, $startPos);
+        $img =  "http://localhost/GC-FaMS-API/" . $substring;
+
         $this->html = str_replace('{{ faculty_name }}', htmlspecialchars($data->profile->first_name . " " . $data->profile->last_name), $this->html);
         $this->html = str_replace('{{ college_abbrev }}', htmlspecialchars($data->profile->college_abbrev), $this->html);
         $this->html = str_replace('{{ email }}', htmlspecialchars($data->profile->email), $this->html);
         $this->html = str_replace('{{ number }}', htmlspecialchars($data->profile->phone_number), $this->html);
-        // $this->html = str_replace('{{ profile_image }}', htmlspecialchars($data->profile->profile_image), $this->html);
+        $this->html = str_replace('{{ profile }}', $img, $this->html);
 
         $this->html = str_replace('{{ exp }}', $this->expModule, $this->html);
         $this->html = str_replace('{{ cert }}', $this->certModule, $this->html);
@@ -123,13 +130,14 @@ class CurriculumVitae extends GlobalMethods
         $this->html = str_replace('{{ course }}', $this->courseModule, $this->html);
         $this->html = str_replace('{{ project }}', $this->projectModule, $this->html);
         $this->html = str_replace('{{ expertise }}', $this->specModule, $this->html);
+
+        var_dump($this->html);
     }
 
     //Main function
     public function generateCv($data, $id)
     {
-        $this->html = file_get_contents(__DIR__ . "/index.html");
-
+        $this->html = file_get_contents(__DIR__ . "/cv.html");
         //Call binding functions
         $this->experienceParse($data);
         $this->certificateParse($data);
@@ -137,13 +145,15 @@ class CurriculumVitae extends GlobalMethods
         $this->courseParse($data);
         $this->projectParse($data);
         $this->specParse($data);
-        $this->singleBind($data);
+        $this->singleBind($data, $data->profile->profile_image);
 
         // return $this->html;
 
         //Configure options
         $options = new Options;
-        $options->setChroot('/fonts');
+        // $options->setChroot(__DIR__);
+        // $options->set('isRemoteEnabled', true);
+        $options->setIsRemoteEnabled(true);
         $dompdf = new Dompdf($options);
 
         $dompdf->setPaper("a4", "portrait");
@@ -151,7 +161,7 @@ class CurriculumVitae extends GlobalMethods
         // $dompdf->loadHtmlFile("index.html");
         // $dompdf->file("index.html");
 
-
+        // var_dump($data->profile->profile_image);
         $dompdf->loadHtml($this->html);
         $dompdf->render();
         // $dompdf->addInfo("Title", "CV");
@@ -164,6 +174,7 @@ class CurriculumVitae extends GlobalMethods
 
 
         file_put_contents('../CV_Assets/' . $id . '.pdf', $output);
-        return $data;
+
+        return "";
     }
 }
