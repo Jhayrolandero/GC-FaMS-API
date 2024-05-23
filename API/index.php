@@ -3,7 +3,7 @@ header('Access-Control-Allow-Origin: *');
 // header('Access-Control-Allow-Origin: https://gc-fa-ms-git-deploymenttest1-jhayrolanderos-projects.vercel.app');
 // header('Access-Control-Allow-Origin: http://localhost:4200');
 header('Access-Control-Allow-Credentials: true');
-
+header("Cache-Control: no-cache, no-store, must-revalidate");
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
@@ -234,7 +234,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
             case 'addCv':
                 echo json_encode($postTunnel->toAddCv($data, $id));
-                break;    
+                break;
 
             case 'addCourse':
                 echo json_encode($postTunnel->toAddCourse($data, $id));

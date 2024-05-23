@@ -5,7 +5,8 @@ require_once('../vendor/autoload.php');
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
-class CurriculumVitae extends GlobalMethods{
+class CurriculumVitae extends GlobalMethods
+{
     private $html;
     private $certModule;
     private $educModule;
@@ -14,87 +15,93 @@ class CurriculumVitae extends GlobalMethods{
     private $projectModule;
     private $specModule;
 
-        //A function that dynamically binds certificate data to html
-        public function specParse($data){
-            $length = count($data->expertise);
-            $this->specModule = "";
-    
-            for ($i=0; $i < $length; $i++) { 
-                $this->specModule .= 
+    //A function that dynamically binds certificate data to html
+    public function specParse($data)
+    {
+        $length = count($data->expertise);
+        $this->specModule = "";
+
+        for ($i = 0; $i < $length; $i++) {
+            $this->specModule .=
                 "<div style='margin: 20px;'> 
                 <p>" . htmlspecialchars($data->expertise[$i]->expertise_name) . "</p>
               </div>";
-            }
         }
+    }
 
-        //A function that dynamically binds certificate data to html
-        public function projectParse($data){
-            $length = count($data->projects);
-            $this->projectModule = "";
-    
-            for ($i=0; $i < $length; $i++) { 
-                $this->projectModule .= 
+    //A function that dynamically binds certificate data to html
+    public function projectParse($data)
+    {
+        $length = count($data->projects);
+        $this->projectModule = "";
+
+        for ($i = 0; $i < $length; $i++) {
+            $this->projectModule .=
                 "<div>
                     <h4 style='font-family: InterBold; font-size: 16px;'>" . htmlspecialchars($data->projects[$i]->project_name) . "</h4>
                     <p style='font-family: InterItalic; font-size: 16px;'>" . htmlspecialchars($data->projects[$i]->project_date) . "</p>
                     <p style='font-family: Inter; font-size: 16px; margin-left: 15px;'>" . htmlspecialchars($data->projects[$i]->project_detail) . "</p>
                 </div>";
-            }
         }
+    }
 
-        //A function that dynamically binds certificate data to html
-        public function courseParse($data){
-            $length = count($data->courses);
-            $this->courseModule = "";
-    
-            for ($i=0; $i < $length; $i++) { 
-                $this->courseModule .= 
+    //A function that dynamically binds certificate data to html
+    public function courseParse($data)
+    {
+        $length = count($data->courses);
+        $this->courseModule = "";
+
+        for ($i = 0; $i < $length; $i++) {
+            $this->courseModule .=
                 "<div  style='margin-left: 40px; margin-botton: 15px;'>
                     <p style='font-family: InterBold; font-size: 20px;'>" . htmlspecialchars($data->courses[$i]->course_name) . "</p>
                 </div>";
-            }
         }
+    }
 
     //A function that dynamically binds certificate data to html
-    public function experienceParse($data){
+    public function experienceParse($data)
+    {
         $length = count($data->experience);
         $this->expModule = "";
 
-        for ($i=0; $i < $length; $i++) { 
-            $this->expModule .= 
-            "<div style='margin-bottom: 20px;'>
+        for ($i = 0; $i < $length; $i++) {
+            $this->expModule .=
+                "<div style='margin-bottom: 20px;'>
                 <h4 style='font-family: InterBold; font-size: 16px;'>" . htmlspecialchars($data->experience[$i]->experience_title) . "</h4>
-                <p style='font-family: Inter; font-size: 16px;'>". htmlspecialchars($data->experience[$i]->experience_place) ."</p>
+                <p style='font-family: Inter; font-size: 16px;'>" . htmlspecialchars($data->experience[$i]->experience_place) . "</p>
                 <p style='font-family: InterItalic; font-size: 16px;'>" . htmlspecialchars($data->experience[$i]->experience_from) . " " . htmlspecialchars($data->experience[$i]->experience_to) . "</p>
             </div>";
         }
     }
 
     //A function that dynamically binds certificate data to html
-    public function educationParse($data){
+    public function educationParse($data)
+    {
         $length = count($data->education);
         $this->educModule = "";
 
-        for ($i=0; $i < $length; $i++) { 
-            $this->educModule .= 
-            "<div style='margin-bottom: 20px;'>
-            <p style='font-family: InterBold; font-size: 16px;'> ". htmlspecialchars($data->education[$i]->educ_title) . "</p>
+        for ($i = 0; $i < $length; $i++) {
+            $this->educModule .=
+                "<div style='margin-bottom: 20px;'>
+            <p style='font-family: InterBold; font-size: 16px;'> " . htmlspecialchars($data->education[$i]->educ_title) . "</p>
             <p style='font-family: Inter; font-size: 16px;'>" . htmlspecialchars($data->education[$i]->educ_school) . "</p>
             <p style='font-family: InterItalic; font-size: 16px; font-style: italics;'>" . htmlspecialchars($data->education[$i]->year_start) . " " . htmlspecialchars($data->education[$i]->year_end) . "</p>
           </div>";
         }
     }
 
-    
+
     //A function that dynamically binds certificate data to html
-    public function certificateParse($data){
+    public function certificateParse($data)
+    {
         $length = count($data->certificates);
         $this->certModule = "";
 
-        for ($i=0; $i < $length; $i++) { 
-            $this->certModule .= 
-            "<div style='margin: 20px;'>
-                <h4 style='font-family: InterBold; font-size: 16px; line-height: 15px;'>" . htmlspecialchars($data->certificates[$i]->cert_name) ."</h4>
+        for ($i = 0; $i < $length; $i++) {
+            $this->certModule .=
+                "<div style='margin: 20px;'>
+                <h4 style='font-family: InterBold; font-size: 16px; line-height: 15px;'>" . htmlspecialchars($data->certificates[$i]->cert_name) . "</h4>
                 <hr/>
                 <p style='font-family: InterBold; font-size: 13px;'>" . htmlspecialchars($data->certificates[$i]->cert_corporation) . "</p>
             </div>";
@@ -102,12 +109,20 @@ class CurriculumVitae extends GlobalMethods{
     }
 
     //Binds that only get binded once
-    public function singleBind($data){
+    public function singleBind($data, $imgsrc)
+    {
+
+        $startPos = strpos($imgsrc, "Image_Assets");
+
+        // If "Image_Assets" is found
+        $substring = substr($imgsrc, $startPos);
+        $img =  "http://localhost/GC-FaMS-API/" . $substring;
+
         $this->html = str_replace('{{ faculty_name }}', htmlspecialchars($data->profile->first_name . " " . $data->profile->last_name), $this->html);
         $this->html = str_replace('{{ college_abbrev }}', htmlspecialchars($data->profile->college_abbrev), $this->html);
         $this->html = str_replace('{{ email }}', htmlspecialchars($data->profile->email), $this->html);
         $this->html = str_replace('{{ number }}', htmlspecialchars($data->profile->phone_number), $this->html);
-        // $this->html = str_replace('{{ profile_image }}', htmlspecialchars($data->profile->profile_image), $this->html);
+        $this->html = str_replace('{{ profile }}', $img, $this->html);
 
         $this->html = str_replace('{{ exp }}', $this->expModule, $this->html);
         $this->html = str_replace('{{ cert }}', $this->certModule, $this->html);
@@ -115,12 +130,14 @@ class CurriculumVitae extends GlobalMethods{
         $this->html = str_replace('{{ course }}', $this->courseModule, $this->html);
         $this->html = str_replace('{{ project }}', $this->projectModule, $this->html);
         $this->html = str_replace('{{ expertise }}', $this->specModule, $this->html);
+
+        var_dump($this->html);
     }
 
     //Main function
-    public function generateCv($data, $id){
-        $this->html = file_get_contents(__DIR__ . "/index.html");
-
+    public function generateCv($data, $id)
+    {
+        $this->html = file_get_contents(__DIR__ . "/cv.html");
         //Call binding functions
         $this->experienceParse($data);
         $this->certificateParse($data);
@@ -128,21 +145,23 @@ class CurriculumVitae extends GlobalMethods{
         $this->courseParse($data);
         $this->projectParse($data);
         $this->specParse($data);
-        $this->singleBind($data);
+        $this->singleBind($data, $data->profile->profile_image);
 
         // return $this->html;
 
         //Configure options
         $options = new Options;
-        $options->setChroot('/fonts');
+        // $options->setChroot(__DIR__);
+        // $options->set('isRemoteEnabled', true);
+        $options->setIsRemoteEnabled(true);
         $dompdf = new Dompdf($options);
-        
+
         $dompdf->setPaper("a4", "portrait");
-        
+
         // $dompdf->loadHtmlFile("index.html");
         // $dompdf->file("index.html");
-        
 
+        // var_dump($data->profile->profile_image);
         $dompdf->loadHtml($this->html);
         $dompdf->render();
         // $dompdf->addInfo("Title", "CV");
@@ -155,9 +174,7 @@ class CurriculumVitae extends GlobalMethods{
 
 
         file_put_contents('../CV_Assets/' . $id . '.pdf', $output);
-        return $data;
+
+        return "";
     }
 }
-
-
-

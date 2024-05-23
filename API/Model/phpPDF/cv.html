@@ -4,21 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="./output.css" rel="stylesheet" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"> -->
     <title>Document</title>
     <style>
       @font-face {
-          font-family: 'InterBold';
-          src: url('./Inter-Bold.ttf') format('truetype');
-          font-style: normal;
-      }
-      
-      body {
-          font-family: 'Inter', sans-serif;
+        font-family: "InterBold";
+        src: url("./Inter-Bold.ttf") format("truetype");
+        font-style: normal;
       }
 
+      body {
+        font-family: "Inter", sans-serif;
+      }
 
       * {
         margin: 0;
@@ -26,8 +25,8 @@
         box-sizing: border-box;
       }
 
-      .facultyName{
-        font-family: 'InterBold';
+      .facultyName {
+        font-family: "InterBold";
         font-size: 2.5rem;
       }
 
@@ -155,27 +154,25 @@
   <body>
     <div class="container">
       <div class="heading">
-        <h1 class="facultyName">
-          {{ faculty_name }}
-        </h1>
-        <p style="font-family: Inter">
-          {{ college_abbrev }} FACULTY MEMBER
-        </p>
+        <h1 class="facultyName">{{ faculty_name }}</h1>
+        <p style="font-family: Inter">{{ college_abbrev }} FACULTY MEMBER</p>
       </div>
       <div class="side">
         <div class="img-container">
-          <img src="./image-assets/profiles/1/dice.jpg" alt="" />
+          <!-- {{ profile }} -->
+          <img id="imgProfile" src="{{ profile }}" alt="" />
         </div>
+        <!-- src="API\Model\phpPDF\1077114.png" -->
         <div class="flex flex-col gap-6 w-full side-contents">
           <!-- Contact -->
-          <div style="margin: 20px;">
+          <div style="margin: 20px">
             <div>
               <i class="fa-regular fa-envelope-open"></i>
-              <p style="font-family: Inter; font-size: 15px;">{{ email }}</p>
+              <p style="font-family: Inter; font-size: 15px">{{ email }}</p>
             </div>
             <div>
               <i class="fa-solid fa-phone text-white"></i>
-              <p style="font-family: Inter; font-size: 15px;">{{ number }}</p>
+              <p style="font-family: Inter; font-size: 15px">{{ number }}</p>
             </div>
           </div>
 
@@ -185,15 +182,17 @@
               <span class="bg-white w-[12px] block" id="block-1">.</span>
               <span class="bg-white w-[6px] block" id="block-2">.</span>
               <h1
-                style="font-family: InterBold; font-size: 20px; letter-spacing: 0.15em;"
+                style="
+                  font-family: InterBold;
+                  font-size: 20px;
+                  letter-spacing: 0.15em;
+                "
                 id="cert-title"
               >
                 CERTIFICATIONS
               </h1>
             </div>
-            <div class="px-6 flex flex-col gap-4 cert-record">
-              {{ cert }}
-            </div>
+            <div class="px-6 flex flex-col gap-4 cert-record">{{ cert }}</div>
           </div>
 
           <!-- Expertise -->
@@ -202,7 +201,11 @@
               <span class="bg-white w-[12px] block" id="block-1">.</span>
               <span class="bg-white w-[6px] block" id="block-2">.</span>
               <h1
-               style="font-family: InterBold; font-size: 20px; letter-spacing: 0.15em;"
+                style="
+                  font-family: InterBold;
+                  font-size: 20px;
+                  letter-spacing: 0.15em;
+                "
                 id="exp-title"
               >
                 EXPERTISE
@@ -218,7 +221,13 @@
       </div>
       <div class="content">
         <div class="educ-container">
-          <h1 style="font-family: InterBold; letter-spacing: 0.15em; font-size: 24px;">
+          <h1
+            style="
+              font-family: InterBold;
+              letter-spacing: 0.15em;
+              font-size: 24px;
+            "
+          >
             EDUCATIONAL ATTAINMENT
           </h1>
           <div class="ps-[0.5in] flex flex-col gap-4 pe-10 record">
@@ -226,7 +235,13 @@
           </div>
         </div>
         <div class="industry-container">
-          <h1 style="font-family: InterBold; letter-spacing: 0.15em; font-size: 24px;">
+          <h1
+            style="
+              font-family: InterBold;
+              letter-spacing: 0.15em;
+              font-size: 24px;
+            "
+          >
             INDUSTRY EXPERIENCE
           </h1>
           <div class="ps-[0.5in] flex flex-col gap-4 pe-10 record">
@@ -234,13 +249,27 @@
           </div>
         </div>
         <div class="course-container">
-          <h1 style="font-family: InterBold; letter-spacing: 0.15em; font-size: 24px;">
+          <h1
+            style="
+              font-family: InterBold;
+              letter-spacing: 0.15em;
+              font-size: 24px;
+            "
+          >
             COURSES HANDLED
           </h1>
-            {{ course }}
+          {{ course }}
         </div>
         <div class="project-container">
-          <h1 style="font-family: InterBold; letter-spacing: 0.15em; font-size: 24px;">PROJECTS</h1>
+          <h1
+            style="
+              font-family: InterBold;
+              letter-spacing: 0.15em;
+              font-size: 24px;
+            "
+          >
+            PROJECTS
+          </h1>
           <div class="ps-[0.5in] flex flex-col gap-4 pe-10 record">
             {{ project }}
           </div>
