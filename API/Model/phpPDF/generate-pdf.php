@@ -130,8 +130,6 @@ class CurriculumVitae extends GlobalMethods
         $this->html = str_replace('{{ course }}', $this->courseModule, $this->html);
         $this->html = str_replace('{{ project }}', $this->projectModule, $this->html);
         $this->html = str_replace('{{ expertise }}', $this->specModule, $this->html);
-
-        var_dump($this->html);
     }
 
     //Main function
@@ -147,11 +145,9 @@ class CurriculumVitae extends GlobalMethods
         $this->specParse($data);
         $this->singleBind($data, $data->profile->profile_image);
 
-        // return $this->html;
-
         //Configure options
         $options = new Options;
-        // $options->setChroot(__DIR__);
+        $options->setChroot('/fonts');
         // $options->set('isRemoteEnabled', true);
         $options->setIsRemoteEnabled(true);
         $dompdf = new Dompdf($options);
@@ -175,6 +171,6 @@ class CurriculumVitae extends GlobalMethods
 
         file_put_contents('../CV_Assets/' . $id . '.pdf', $output);
 
-        return "";
+        return $data;
     }
 }

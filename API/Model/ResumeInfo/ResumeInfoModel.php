@@ -9,6 +9,33 @@ class ResumeInfo extends GlobalMethods
 {
     //Faculty id GET sched
     // INNER JOIN commex on `commex-faculty`.`commex_ID`=`commex`.`commex_ID`;";
+
+
+    public function selectCv($data, $id){
+        switch ($data[0]) {
+            case 1:
+                return $this->prepareEditBind('educattainment', array('isSelected'), array(!$data[1]->isSelected, $data[1]->educattainment_ID), 'educattainment_ID');
+                break;
+
+            case 3:
+                return $this->prepareEditBind('experience-faculty',  array('isSelected'), array(!$data[1]->isSelected, $data[1]->experience_ID), 'experience_ID');
+                break;
+
+            case 4:
+                return $this->prepareEditBind('projects',  array('isSelected'), array(!$data[1]->isSelected, $data[1]->project_ID), 'project_ID');
+                break;
+
+            case 5:
+                return $this->prepareEditBind('expertise-faculty',  array('isSelected'), array(!$data[1]->isSelected, $data[1]->expertise_faculty_ID), 'expertise_faculty_ID');
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+    }
+
+        
     public function getCert($id)
     {
         //Fetches certs attained by faculty, and all certs template within the faculty. Pinag-isa ko na since they're mostly both needed.
@@ -119,7 +146,7 @@ class ResumeInfo extends GlobalMethods
     {
         // $sql = "INSERT INTO `educattainment`(faculty_ID, educ_title, educ_school, year_start, year_end educ_details)
         // VALUES (?,?,?,?,?,?)";
-        $params = array('faculty_ID', 'educ_level', 'educ_title', 'educ_school', 'year_start', 'year_end', 'educ_details');
+        $params = array('faculty_ID', 'educ_level', 'educ_title', 'educ_school', 'year_start', 'year_end', 'educ_details', 'isSelected');
         $tempForm = array(
             $id,
             $form->educ_level,
@@ -127,21 +154,23 @@ class ResumeInfo extends GlobalMethods
             $form->educ_school,
             $form->year_start,
             $form->year_end,
-            $form->educ_details
+            $form->educ_details,
+            0
         );
         return $this->prepareAddBind('educattainment', $params, $tempForm);
     }
 
     public function addExp($form, $id)
     {
-        $params = array('faculty_ID', 'experience_place', 'experience_title', 'experience_details', 'experience_from', 'experience_to');
+        $params = array('faculty_ID', 'experience_place', 'experience_title', 'experience_details', 'experience_from', 'experience_to', 'isSelected');
         $tempForm = array(
             $id,
             $form->experience_place,
             $form->experience_title,
             $form->experience_details,
             $form->experience_from,
-            $form->experience_to
+            $form->experience_to,
+            0
         );
 
         return $this->prepareAddBind('experience-faculty', $params, $tempForm);
@@ -169,6 +198,10 @@ class ResumeInfo extends GlobalMethods
             array_push($params, $key);
             array_push($tempForm, $value);
         }
+
+        array_push($params, 'isSelected');
+        array_push($tempForm, 0);
+
 
         // return $tempForm;
         return $this->prepareAddBind('certifications-faculty', $params, $tempForm);
@@ -218,24 +251,29 @@ class ResumeInfo extends GlobalMethods
 
     public function addProj($form, $id)
     {
-        $params = array('faculty_ID', 'project_name', 'project_date', 'project_detail', 'project_link');
+        $params = array('faculty_ID', 'project_name', 'project_date', 'project_detail', 'project_link', 'isSelected');
         $tempForm = array(
             $id,
             $form->project_name,
             $form->project_date,
             $form->project_detail,
-            $form->project_link
+            $form->project_link,
+            0
         );
         return $this->prepareAddBind('projects', $params, $tempForm);
     }
 
     public function addSpec($form, $id)
     {
-        $params = array('faculty_ID', 'expertise_ID');
+        $params = array('faculty_ID', 'expertise_ID', 'isSelected');
         $tempForm = array(
             $id,
-            $form->expertise_ID
+            $form->expertise_ID,
+            0
         );
+
+
+
         return $this->prepareAddBind('expertise-faculty', $params, $tempForm);
     }
 

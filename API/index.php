@@ -316,6 +316,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toEditFaculty2($data, $id));
                 break;
 
+            case 'selectCv':
+                echo json_encode($postTunnel->toSelectCv($data, $id));
+                break;
+
             case 'password':
                 if (isset($request[1])) {
                     echo json_encode($postTunnel->toEditPassword($data, $request[1]));
