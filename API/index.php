@@ -50,6 +50,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
         $id = $globalOb->verifyToken()['payload']['id'];
         $college = $globalOb->verifyToken()['payload']['college'];
+        $privilege = $globalOb->verifyToken()['payload']['privilege'];
 
         // $id = 40;
         // $college = 1;
@@ -77,11 +78,17 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'fetchCollege':
-                echo json_encode($getTunnel->getCollege($id));
+
+                if ($privilege === "Admin") {
+                    echo json_encode($getTunnel->getCollege(null));
+                    break;
+                }
+                echo json_encode($getTunnel->getCollege($college));
                 break;
 
             case 'profile':
                 // echo json_encode($college);
+
                 echo json_encode($getTunnel->getFaculty($id));
                 break;
 
@@ -139,7 +146,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($getTunnel->getEduc($college, 1));
                 break;
 
-
             case 'project':
                 echo json_encode($getTunnel->getProj($id, 0));
                 break;
@@ -167,7 +173,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'faculty':
-                echo json_encode($getTunnel->getFaculties());
+
+                if ($privilege === "Admin") {
+                    echo json_encode($getTunnel->getFaculties(null));
+                    break;
+                }
+
+                echo json_encode($getTunnel->getFaculties($college));
                 break;
 
             case 'attendee':
@@ -314,6 +326,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
             case 'profile':
                 echo json_encode($postTunnel->toEditFaculty2($data, $id));
+                break;
+
+            case 'faculty':
+                echo json_encode($postTunnel->toEditFaculty($data, $request[1]));
                 break;
 
             case 'password':

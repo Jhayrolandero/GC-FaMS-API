@@ -25,12 +25,17 @@ class Faculty extends GlobalMethods
         }
     }
 
-    public function getAllFaculty()
+    public function getAllFaculty($college_ID)
     {
         $sql = "SELECT  
                *
                 FROM `facultymembers`
-                LEFT JOIN `college` ON `facultymembers`.`college_ID` = `college`.`college_ID`;";
+                LEFT JOIN `college` ON `facultymembers`.`college_ID` = `college`.`college_ID`";
+
+        if (isset($college_ID)) {
+            $sql .= "WHERE `facultymembers`.`college_ID` = $college_ID AND `facultymembers`.`teaching_position` != 'Admin'";
+        }
+
         $data = $this->secured_encrypt($this->executeGetQuery($sql)['data']);
         return $data;
     }

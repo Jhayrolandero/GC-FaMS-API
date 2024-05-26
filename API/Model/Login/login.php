@@ -13,7 +13,7 @@ include_once "./Controller/global.php";
 
 class Login extends GlobalMethods
 {
-    function generateToken($faculty_ID, $isAdmin, $college_ID)
+    function generateToken($faculty_ID, $isAdmin, $college_ID, $teaching_position)
     {
         $issuedAt = time();
         $expirationTime = $issuedAt + (10 * 60);
@@ -25,7 +25,8 @@ class Login extends GlobalMethods
             "exp" => $expirationTime,
             "id" => $faculty_ID,
             "college" => $college_ID,
-            "isAdmin" => $isAdmin
+            "isAdmin" => $isAdmin,
+            "privilege" => $teaching_position
         );
         return array(
             "token" => JWT::encode($token, $secretKey, 'HS512'),
@@ -46,7 +47,8 @@ class Login extends GlobalMethods
                 return $this->generateToken(
                     $result['data'][0]['faculty_ID'],
                     $result['data'][0]['isAdmin'],
-                    $result['data'][0]['college_ID']
+                    $result['data'][0]['college_ID'],
+                    $result['data'][0]['teaching_position'],
                 );
             } else {
                 return array("token" => "", "code" => 403);

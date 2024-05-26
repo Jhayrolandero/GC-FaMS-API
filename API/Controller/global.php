@@ -160,13 +160,13 @@ class GlobalMethods extends Connection
 
         try {
             $payload = JWT::decode($jwt, new Key($secretKey, 'HS512'), $headers);
-
             return array(
                 "code" => 200,
                 "payload" =>
                 array(
                     "id" => $payload->id,
-                    "college" => $payload->college
+                    "college" => $payload->college,
+                    "privilege" => $payload->privilege
                 )
             );
         } catch (\Throwable $th) {
