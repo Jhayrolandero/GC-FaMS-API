@@ -328,6 +328,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toEditFaculty2($data, $id));
                 break;
 
+            case 'selectCv':
+                echo json_encode($postTunnel->toSelectCv($data, $id));
+                break;
+
             case 'faculty':
                 echo json_encode($postTunnel->toEditFaculty($data, $request[1]));
                 break;

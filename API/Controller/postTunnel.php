@@ -74,6 +74,10 @@ class PostTunnel extends GlobalMethods
         return $this->cv->generateCv($data, $id);
     }
 
+    public function toSelectCv($data, $id){
+        return $this->resume->selectCv($data, $id);
+    }
+
     public function toAddResume($form, $id, $type)
     {
         switch ($type) {
