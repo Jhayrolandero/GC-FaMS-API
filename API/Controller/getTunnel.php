@@ -128,7 +128,7 @@ class GetTunnel extends Connection
 
     public function getCollege($id)
     {
-        return $this->college->getCollege();
+        return $this->college->getCollege($id);
     }
 
     // public function getResumeInfo($id)
@@ -176,9 +176,9 @@ class GetTunnel extends Connection
             $this->evaluation->getCollegeEvaluation($id);
     }
 
-    public function getFaculties()
+    public function getFaculties($college_ID)
     {
-        return $this->faculty->getAllFaculty();
+        return $this->faculty->getAllFaculty($college_ID);
     }
 
     public function getAttendee($id, $query = null, $faculty_ID = null)

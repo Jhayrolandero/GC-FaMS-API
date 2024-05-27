@@ -116,6 +116,7 @@ class CurriculumVitae extends GlobalMethods
 
         // If "Image_Assets" is found
         $substring = substr($imgsrc, $startPos);
+        // $img =  "https://gcfams.com/GC-FaMS-API/" . $substring;
         $img =  "http://localhost/GC-FaMS-API/" . $substring;
 
         $this->html = str_replace('{{ faculty_name }}', htmlspecialchars($data->profile->first_name . " " . $data->profile->last_name), $this->html);
