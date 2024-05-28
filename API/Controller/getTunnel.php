@@ -121,6 +121,8 @@ class GetTunnel extends Connection
                 return $this->commex->getCommex($id, $query);
             case 'faculty':
                 return $this->commex->getCommex($id, $query);
+            case 'faculty-id':
+                return $this->commex->getCommexID($id, $query);
             case 'all':
                 return $this->commex->getCommexAll();
         }
