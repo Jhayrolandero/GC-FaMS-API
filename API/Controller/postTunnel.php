@@ -46,6 +46,7 @@ class PostTunnel extends GlobalMethods
 
     public function addFaculty($data)
     {
+
         return $this->faculty->addFaculty();
     }
 
@@ -59,7 +60,8 @@ class PostTunnel extends GlobalMethods
         return $this->course->addCourse($data, $id);
     }
 
-    public function toDeleteCourse($courseId, $id){
+    public function toDeleteCourse($courseId, $id)
+    {
         return $this->course->deleteCourse($courseId, $id);
     }
 
@@ -74,7 +76,8 @@ class PostTunnel extends GlobalMethods
         return $this->cv->generateCv($data, $id);
     }
 
-    public function toSelectCv($data, $id){
+    public function toSelectCv($data, $id)
+    {
         return $this->resume->selectCv($data, $id);
     }
 
@@ -180,6 +183,10 @@ class PostTunnel extends GlobalMethods
         // }
     }
 
+    public function toEditCommex($data, $id)
+    {
+        return $this->commex->editCommex($data, $id);
+    }
     function test($data, $id)
     {
         return $this->faculty->editPassword($this->secureDecrypt($data), $id);

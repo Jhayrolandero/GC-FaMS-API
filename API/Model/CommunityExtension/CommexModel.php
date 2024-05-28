@@ -179,4 +179,13 @@ class Commex extends GlobalMethods
     {
         return $this->prepareDeleteBind('commex', 'commex_ID', $commex_ID);
     }
+
+    public function editCommex($commex, $commex_ID)
+    {
+
+        $params = $this->getParams($commex);
+        $values = $this->getValues($commex);
+        array_push($values, $commex_ID);
+        return $this->prepareEditBind('commex', $params, $values, 'commex_ID');
+    }
 }

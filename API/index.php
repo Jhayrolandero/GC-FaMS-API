@@ -343,6 +343,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 }
                 echo json_encode($postTunnel->toEditPassword($data, $id));
                 break;
+
+            case 'commex':
+                echo json_encode($postTunnel->toEditCommex($data, $request[1]));
+                break;
             default:
                 http_response_code(403);
                 break;
