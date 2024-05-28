@@ -68,9 +68,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     case 'faculty':
                         echo json_encode($getTunnel->getSchedule($id, $query));
                         break;
-                    case 'all':
-
-                        break;
                     default:
                         http_response_code(404);
                         break;
@@ -98,7 +95,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
             case 'getcommex':
                 $query = $_GET['t'];
-
                 if (empty($query)) {
                     http_response_code(404);
                     return;
@@ -111,8 +107,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     case 'faculty':
                         echo json_encode($getTunnel->getCommex($id, $query));
                         break;
+
+                    case 'faculty-id':
+                        echo json_encode($getTunnel->getCommex($_GET['id'], $query));
+                        break;
+
                     case 'all':
-                        echo json_encode($getTunnel->getCommex(null, $query));
+                        echo json_encode($getTunnel->getCommex(null, null, $query));
                         break;
                     default:
                         http_response_code(404);

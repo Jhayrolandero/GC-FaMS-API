@@ -158,11 +158,9 @@ class CurriculumVitae extends GlobalMethods
         // $dompdf->loadHtmlFile("index.html");
         // $dompdf->file("index.html");
 
-        // var_dump($data->profile->profile_image);
+
         $dompdf->loadHtml($this->html);
         $dompdf->render();
-        // $dompdf->addInfo("Title", "CV");
-        // $dompdf->stream("Cv.pdf", ["Attachment" => 0]);
         $output = $dompdf->output();
 
         if (file_exists('../CV_Assets/' . $id . '.pdf')) {

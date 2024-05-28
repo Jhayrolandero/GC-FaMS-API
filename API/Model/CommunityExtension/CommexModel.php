@@ -24,7 +24,7 @@ class Commex extends GlobalMethods
                 break;
         }
 
-        $sql = "SELECT commex.commex_ID, commex_title, commex_details, commex_header_img, commex_date
+        $sql = "SELECT *
                 FROM `$table`
                 INNER JOIN commex on `$table`.`commex_ID`=`commex`.`commex_ID`
                 WHERE $condID = $id;";
@@ -32,6 +32,23 @@ class Commex extends GlobalMethods
 
         $data =  $this->executeGetQuery($sql)['data'];
 
+        return $this->secured_encrypt($data);
+    }
+
+    public function getCommexID($id, $query)
+    {
+        $sql = "SELECT 
+            `commex-faculty`.`faculty_ID`, 
+            `commex-faculty`.`commex_ID`, 
+            `commex`.`commex_title`, 
+            `commex`.`commex_details`, 
+            `commex`.`commex_header_img`, 
+            `commex`.`commex_date`
+                FROM `commex-faculty`
+                INNER JOIN commex on `commex-faculty`.`commex_ID`=`commex`.`commex_ID`
+                WHERE faculty_ID = $id;";
+
+        $data = $this->executeGetQuery($sql)['data'];
         return $this->secured_encrypt($data);
     }
 
