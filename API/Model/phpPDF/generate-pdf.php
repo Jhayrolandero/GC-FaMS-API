@@ -131,6 +131,29 @@ class CurriculumVitae extends GlobalMethods
         $this->html = str_replace('{{ course }}', $this->courseModule, $this->html);
         $this->html = str_replace('{{ project }}', $this->projectModule, $this->html);
         $this->html = str_replace('{{ expertise }}', $this->specModule, $this->html);
+
+        switch ($data->profile->college_abbrev) {
+            case 'CCS':
+                $this->html = str_replace('{{ bg-color }}', htmlspecialchars('#ffab48'), $this->html);
+                break;
+
+            case 'CHTM':
+                $this->html = str_replace('{{ bg-color }}', htmlspecialchars('#FF4DAD'), $this->html);
+                break;
+        
+            case 'CAHS':
+                $this->html = str_replace('{{ bg-color }}', htmlspecialchars('#FF4242'), $this->html);
+                break;
+
+            case 'CBA':
+                $this->html = str_replace('{{ bg-color }}', htmlspecialchars('#FFFD3E'), $this->html);
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+
     }
 
     //Main function
