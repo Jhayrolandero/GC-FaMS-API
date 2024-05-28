@@ -17,6 +17,10 @@ class ResumeInfo extends GlobalMethods
                 return $this->prepareEditBind('educattainment', array('isSelected'), array(!$data[1]->isSelected, $data[1]->educattainment_ID), 'educattainment_ID');
                 break;
 
+            case 2:
+                return $this->prepareEditBind('certifications-faculty', array('isSelected'), array(!$data[1]->isSelected, $data[1]->cert_attainment_ID), 'cert_attainment_ID');
+                break;
+
             case 3:
                 return $this->prepareEditBind('experience-faculty',  array('isSelected'), array(!$data[1]->isSelected, $data[1]->experience_ID), 'experience_ID');
                 break;
@@ -371,7 +375,7 @@ class ResumeInfo extends GlobalMethods
 
     public function deleteCert($id)
     {
-        return $this->prepareDeleteBind('certifications-faculty', 'cert_ID', $id);
+        return $this->prepareDeleteBind('certifications-faculty', 'cert_attainment_ID', $id);
     }
 
     public function deleteProj($id)
