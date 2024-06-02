@@ -11,7 +11,8 @@ class ResumeInfo extends GlobalMethods
     // INNER JOIN commex on `commex-faculty`.`commex_ID`=`commex`.`commex_ID`;";
 
 
-    public function selectCv($data, $id){
+    public function selectCv($data, $id)
+    {
         switch ($data[0]) {
             case 1:
                 return $this->prepareEditBind('educattainment', array('isSelected'), array(!$data[1]->isSelected, $data[1]->educattainment_ID), 'educattainment_ID');
@@ -28,14 +29,14 @@ class ResumeInfo extends GlobalMethods
             case 5:
                 return $this->prepareEditBind('expertise-faculty',  array('isSelected'), array(!$data[1]->isSelected, $data[1]->expertise_faculty_ID), 'expertise_faculty_ID');
                 break;
-            
+
             default:
                 # code...
                 break;
         }
     }
 
-        
+
     public function getCert($id)
     {
         //Fetches certs attained by faculty, and all certs template within the faculty. Pinag-isa ko na since they're mostly both needed.
@@ -310,13 +311,14 @@ class ResumeInfo extends GlobalMethods
 
     public function editExp($form, $id)
     {
-        $params = array('experience_title', 'experience_place', 'experience_from', 'experience_to', 'experience_details');
+        $params = array('experience_title', 'experience_place', 'experience_from', 'experience_to', 'experience_details', 'teaching_related');
         $tempForm = array(
             $form->experience_title,
             $form->experience_place,
             $form->experience_from,
             $form->experience_to,
             $form->experience_details,
+            $form->teaching_related,
             $id
         );
         return $this->prepareEditBind('experience-faculty', $params, $tempForm, 'experience_ID');
