@@ -255,7 +255,6 @@ class GlobalMethods extends Connection
 
         $stmt = $this->connect()->prepare($sql);
         $stmt->bindParam(1, $id);
-
         return $this->executePostQuery($stmt);
     }
 
