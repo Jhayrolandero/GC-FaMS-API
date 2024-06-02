@@ -101,6 +101,7 @@ class GlobalMethods extends Connection
         // $picID = isset($id) ? $id : $ID;
 
         //Declares folder location
+        
         $fileFolder = __DIR__ . $dir . "$ID/";
 
         //Creates directory if it doesn't exist yet
