@@ -164,6 +164,18 @@ class GetTunnel extends Connection
             $this->resume->getCollegeProj($id);
     }
 
+    
+    public function getProjAuthor($id)
+    {
+        return $this->resume->getProjAuthors($id);
+    }
+
+    
+    public function getProjImages($id)
+    {
+        return $this->resume->getProjImages($id);
+    }
+
     public function getSpec($id, $type)
     {
         return $type == 0 ?
