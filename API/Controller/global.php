@@ -79,7 +79,8 @@ class GlobalMethods extends Connection
         return array("code" => $code, "errmsg" => $errmsg);
     }
 
-    public function customSaveImage($image, $outputFolder, $fileFormat = 'png', $nameIndex, $projectID){
+    public function customSaveImage($image, $outputFolder, $fileFormat = 'png', $nameIndex, $projectID)
+    {
         // Ensure the output folder exists
         $outputFolder = __DIR__ . $outputFolder . "$projectID/";
 
@@ -126,7 +127,7 @@ class GlobalMethods extends Connection
         // $picID = isset($id) ? $id : $ID;
 
         //Declares folder location
-        
+
         $fileFolder = __DIR__ . $dir . "$ID/";
 
         //Creates directory if it doesn't exist yet
@@ -413,5 +414,88 @@ class GlobalMethods extends Connection
         } catch (Exception $e) {
             return $e;
         }
+    }
+
+    // Or change this to multiple upload for future ref
+    function addSupportingDocs($faculty_ID, $docs_ID, $type)
+    {
+
+        $filePaths = [];
+        $educPath = __DIR__ . "/../../Image_Assets/SupportDocuments/$type/" . $faculty_ID . "/" . $docs_ID . "/";
+
+        // $uploadDir = 'uploads/';
+        foreach ($_FILES['documents']['name'] as $key => $name) {
+
+            // Add user dir
+            $fileFolder1 = __DIR__ . "/../../Image_Assets/SupportDocuments/$type/" . $faculty_ID;
+
+            //Creates directory if it doesn't exist yet
+            if (!file_exists($fileFolder1)) {
+                mkdir($fileFolder1, 0777);
+            }
+
+            // add the docs dir
+            $fileFolder2 = __DIR__ . "/../../Image_Assets/SupportDocuments/$type/" . $faculty_ID . "/" . $docs_ID;
+
+            //Creates directory if it doesn't exist yet
+            if (!file_exists($fileFolder2)) {
+                mkdir($fileFolder2, 0777);
+            }
+
+            $tmpName = $_FILES['documents']['tmp_name'][$key];
+            //Declares location for image file itself.
+            $filePath = $educPath . basename($name);
+
+            //If file exists in path, add extension.
+            if (file_exists($filePath)) {
+                $filePath = $this->getUniqueFileName($filePath);
+                // unlink($filePath);
+            }
+
+            //Add file to give nfilepath
+            if (!move_uploaded_file($tmpName, $filePath)) {
+                return array("code" => 404, "errmsg" => "Upload unsuccessful");
+            }
+
+            // Determine the file type
+            $fileType = mime_content_type($filePath);
+
+            // Get the file name
+            $fileName = basename($filePath);
+
+
+            // str_replace("/home/u417870998/domains/gcfams.com/public_html", "" , $filepath);
+
+            $path = str_replace("C:\\xampp\\htdocs", "", $filePath);
+            $path = str_replace("\\", "/", $path); // Normalize the path to use forward slashes
+
+            $data = [
+                "doc_path" => $path,
+                "doc_name" => $fileName,
+                "doc_type" => $fileType
+            ];
+
+            array_push($filePaths, $data);
+        }
+
+        return $filePaths;
+    }
+
+    public function getUniqueFileName($filePath)
+    {
+        $pathInfo = pathinfo($filePath);
+        $directory = $pathInfo['dirname'];
+        $fileName = $pathInfo['filename'];
+        $extension = isset($pathInfo['extension']) ? '.' . $pathInfo['extension'] : '';
+
+        $uniqueFilePath = $filePath;
+        $counter = 1;
+
+        while (file_exists($uniqueFilePath)) {
+            $uniqueFilePath = $directory . DIRECTORY_SEPARATOR . $fileName . '_' . $counter . $extension;
+            $counter++;
+        }
+
+        return $uniqueFilePath;
     }
 }

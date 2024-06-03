@@ -164,13 +164,13 @@ class GetTunnel extends Connection
             $this->resume->getCollegeProj($id);
     }
 
-    
+
     public function getProjAuthor($id)
     {
         return $this->resume->getProjAuthors($id);
     }
 
-    
+
     public function getProjImages($id)
     {
         return $this->resume->getProjImages($id);
@@ -198,5 +198,10 @@ class GetTunnel extends Connection
     public function getAttendee($id, $query = null, $faculty_ID = null)
     {
         return $this->commex->getAttendee($id, $query, $faculty_ID);
+    }
+
+    public function getEducDocs($faculty_ID)
+    {
+        return $this->resume->getEducSupportDocs($faculty_ID);
     }
 }

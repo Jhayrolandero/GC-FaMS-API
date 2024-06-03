@@ -55,6 +55,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
         // $id = 40;
         // $college = 1;
         switch ($request[0]) {
+
+            case 'educdocs':
+                echo json_encode($getTunnel->getEducDocs($id));
+                break;
+
             case 'schedules':
                 $query = $_GET['t'];
                 if (empty($query)) {
@@ -154,7 +159,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             case 'project-authors':
                 echo json_encode($getTunnel->getProjAuthor($request[1]));
                 break;
-                
+
             case 'project-images':
                 echo json_encode($getTunnel->getProjImages($request[1]));
                 break;
@@ -294,7 +299,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
 
             case 'educdocs':
-                echo json_encode($postTunnel->toAddEducDocs());
+                echo json_encode($postTunnel->toAddEducDocs($id));
                 break;
 
             case 'certdocs':

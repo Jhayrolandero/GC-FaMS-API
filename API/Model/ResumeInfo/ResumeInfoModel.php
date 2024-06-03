@@ -291,9 +291,9 @@ class ResumeInfo extends GlobalMethods
         $this->prepareAddBind('projects', $params, $tempForm);
 
         #Append all authors on the project
-        $params = array('faculty_ID', 'project_ID', 'author_type', 'isSelected' );
+        $params = array('faculty_ID', 'project_ID', 'author_type', 'isSelected');
         #For co authors
-        for ($i=0; $i < count($form->project_co_author); $i++) { 
+        for ($i = 0; $i < count($form->project_co_author); $i++) {
             $tempForm = array(
                 $form->project_co_author[$i],
                 $this->getLastID('projects') - 1,
@@ -315,8 +315,8 @@ class ResumeInfo extends GlobalMethods
 
         #Append and save all images on the project
         $params = array('project_ID', 'project_image');
-        for ($i=0; $i < count($form->project_images); $i++) { 
-            
+        for ($i = 0; $i < count($form->project_images); $i++) {
+
             $tempForm = array(
                 $this->getLastID('projects') - 1,
                 $this->customSaveImage($form->project_images[$i], "/../../Image_Assets/Projects/", "png", $i, $this->getLastID('projects') - 1)
@@ -445,5 +445,55 @@ class ResumeInfo extends GlobalMethods
     public function deleteSpec($id)
     {
         return $this->prepareDeleteBind('expertise-faculty', 'expertise_faculty_ID', $id);
+    }
+
+    public function addSupDocs($type, $faculty_ID, $doc_ID)
+    {
+
+        $filePaths = [];
+        switch ($type) {
+            case 'educ':
+                $filePaths = $this->addSupportingDocs($faculty_ID, $doc_ID, 'educ');
+
+                foreach ($filePaths as $path) {
+
+                    $this->prepareAddBind(
+                        'educ-support',
+                        ["doc_path", "doc_name", "doc_type", "educattainment_ID"],
+                        [$path["doc_path"], $path["doc_name"], $path["doc_type"], $doc_ID]
+                    );
+                }
+                break;
+            case 'industry':
+                $filePaths = $this->addSupportingDocs($faculty_ID, $doc_ID, 'industry');
+                break;
+            case 'expertise':
+                $filePaths = $this->addSupportingDocs($faculty_ID, $doc_ID, 'expertise');
+                break;
+            case 'certs':
+                $filePaths = $this->addSupportingDocs($faculty_ID, $doc_ID, 'certs');
+                break;
+        }
+    }
+
+
+    public function getEducSupportDocs($faculty_ID)
+    {
+
+        // $existCertSQL = "SELECT * FROM `certifications-faculty` 
+        // INNER JOIN certifications on `certifications-faculty`.`cert_ID`=`certifications`.`cert_ID`
+        // INNER JOIN facultymembers on `certifications-faculty`.`faculty_ID`=`facultymembers`.`faculty_ID`
+        // WHERE college_ID = $id;";
+
+        // $data = $this->executeGetQuery($existCertSQL)["data"];
+        // return $this->secured_encrypt($data);
+
+        $script = "SELECT `educ-support`.*, educattainment.faculty_ID
+        FROM `educ-support`
+        INNER JOIN educattainment ON `educ-support`.`educattainment_ID`= educattainment.educattainment_ID
+        WHERE educattainment.faculty_ID = $faculty_ID;";
+
+        $data = $this->executeGetQuery($script)["data"];
+        return $this->secured_encrypt($data);
     }
 }
