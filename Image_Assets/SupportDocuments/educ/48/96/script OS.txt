@@ -1,0 +1,80 @@
+name of a microkernel-based operating system kernel. MACH was developed at Carnegie Mellon University in the late 1980s and early 1990s. It is known for its design philosophy of using a microkernel architecture, which is a modular approach to
+ building operating systems where the kernel is kept as small as possible, and much of the operating system's functionality is implemented as separate user-level processes or servers.
+
+
+message based meaning mach uses a message passing-mechanism as the primary communication between tasks also known as processes
+This means that tasks communicate with each other and with the kernel by sending and receiving messages.
+
+system call
+	- even system call are messages, when a task wants to request a service from the kernel example allocating memory or creating a new task
+it construct a message to the kernel. The kernel processes that messages then sends a reply back to the requesting task
+
+Kernel Mailbox: This mailbox is used for communication with the kernel. 
+When a task wants to make a system call or interact with the kernel for any reason, 
+it sends a message to the kernel's mailbox. (Used to communicate[send message to the kernel])
+
+Notify Mailbox: The Notify mailbox is used for receiving notifications from other tasks or from the kernel. 
+Tasks can set up notification ports, and when certain events occur, 
+such as the completion of an asynchronous operation, messages are sent to the Notify mailbox to inform the task.
+(use to receive notif to the task or the kernel)
+
+port_allocation()
+ To create a mailbox for communication, tasks use the port_allocate() system call. 
+This call allocates a port, which is essentially a reference to a mailbox. (use pointer as an example)
+Ports are used as the destination or source in message sends and receives.
+
+System Calls for Message Transfer:
+
+msg_send(): This system call is used by a task to send a message to another task or to the kernel. It provides a way for a task to initiate communication.
+
+msg_receive(): This system call is used by a task to wait for and receive incoming messages. It allows a task to block until a message arrives.
+
+msg_rpc(): The msg_rpc() system call is used for remote procedure calls (RPCs) between tasks. It allows a task to invoke a function in another task as if it were a local function call.
+
+
+
+Windows
+
+LPC (explain that LPC is like a special phone system that helps task to communicate to each other quickly and securely)
+. It's considered "advanced" because it provides a more efficient and direct way of communication compared to some other IPC methods.
+think of it like the primitive way of sendding written mail now we use socmed to communicate
+
+
+Only works between processes on the same system: LPC is designed for communication between processes 
+that are running on the same Windows system. It's not suitable for communication between processes on different machines.
+
+Uses ports (like mailboxes) to establish and maintain communication channels: LPC uses ports as communication endpoints,
+ somewhat similar to how mailboxes work. Each process can create and manage its own communication ports for sending and receiving messages.
+
+Communication process:
+
+The client opens a handle to the subsystem’s connection port object: To initiate communication, the client process opens a handle to a connection port object associated with the subsystem it wants to communicate with.
+
+The client sends a connection request: The client sends a connection request to the server process through the opened handle. This request is a way of indicating that it wants to establish communication.
+
+The server creates a private communication port and returns the handle to the client: Upon receiving the connection request, 
+the server creates a private communication port and returns a handle for that port to the client. This handle is used for further communication between the client and server.
+
+The client and server use the corresponding port handle to send messages or callbacks and to listen for replies: With the port handle obtained from the server, 
+the client and server can now send messages to each other. They can also use this handle to listen for replies or callbacks from the other party.
+
+The shared section object you mentioned in the diagram likely represents a shared memory region or a shared resource that the client and server processes can both access.
+ In the context of inter-process communication (IPC), shared memory is a common technique used to exchange data between processes efficiently.
+
+
+explanation 
+
+Getting Ready to Talk: Imagine you have two people, let's call them Alice and Bob, who want to talk to each other through a special
+ communication system on their computers. First, Alice needs to get a "connection handle," which is like a virtual phone number for her to use to talk to Bob's computer.
+
+Sending a Request: Once Alice has this virtual phone number (the connection handle), she sends a message to Bob's computer saying, 
+"Hey, I want to chat with you!" This message is called a "connection request."
+
+Bob's Response: When Bob's computer gets Alice's request, it sets up a private channel just for them to talk on. Think of it like Bob creating a 
+private room for their conversation. Then, Bob's computer gives Alice a special key (the handle) to this private room.
+
+Start Talking: Now, Alice and Bob can use their private room and special keys to send messages back and forth. They can also wait for each other's replies,
+ kind of like having a private chat where only they can communicate.
+
+So, in simple terms, LPC is like giving two people a way to exchange messages securely on their computers by first getting a virtual phone number,
+ making a request, and then having a private room for their conversation.

@@ -284,8 +284,22 @@ class PostTunnel extends GlobalMethods
 
     public function toAddEducDocs($faculty_ID)
     {
-
         $doc_ID = $_POST['id'];
         return $this->resume->addSupDocs('educ', $faculty_ID, $doc_ID);
+    }
+    public function toAddExpDocs($faculty_ID)
+    {
+        $doc_ID = $_POST['id'];
+        return $this->resume->addSupDocs('expertise', $faculty_ID, $doc_ID);
+    }
+    public function toAddIndustryDocs($faculty_ID)
+    {
+        $doc_ID = $_POST['id'];
+        return $this->resume->addSupDocs('industry', $faculty_ID, $doc_ID);
+    }
+    public function toAddCertDocs($faculty_ID)
+    {
+        $doc_ID = $_POST['id'];
+        return $this->resume->addSupDocs('certs', $faculty_ID, $doc_ID);
     }
 }

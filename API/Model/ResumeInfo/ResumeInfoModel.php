@@ -466,12 +466,44 @@ class ResumeInfo extends GlobalMethods
                 break;
             case 'industry':
                 $filePaths = $this->addSupportingDocs($faculty_ID, $doc_ID, 'industry');
+
+                foreach ($filePaths as $path) {
+
+                    $this->prepareAddBind(
+                        'industry-support',
+                        ["doc_path", "doc_name", "doc_type", "experience_ID"],
+                        [$path["doc_path"], $path["doc_name"], $path["doc_type"], $doc_ID]
+                    );
+                }
                 break;
             case 'expertise':
                 $filePaths = $this->addSupportingDocs($faculty_ID, $doc_ID, 'expertise');
+
+                try {
+
+                    foreach ($filePaths as $path) {
+
+                        $this->prepareAddBind(
+                            'exp-support',
+                            ["doc_path", "doc_name", "doc_type", "expertise_ID"],
+                            [$path["doc_path"], $path["doc_name"], $path["doc_type"], $doc_ID]
+                        );
+                    }
+                } catch (Error $e) {
+                    return $e;
+                }
                 break;
             case 'certs':
                 $filePaths = $this->addSupportingDocs($faculty_ID, $doc_ID, 'certs');
+
+                foreach ($filePaths as $path) {
+
+                    $this->prepareAddBind(
+                        'cert-support',
+                        ["doc_path", "doc_name", "doc_type", "cert_attainment_ID"],
+                        [$path["doc_path"], $path["doc_name"], $path["doc_type"], $doc_ID]
+                    );
+                }
                 break;
         }
     }
@@ -480,18 +512,46 @@ class ResumeInfo extends GlobalMethods
     public function getEducSupportDocs($faculty_ID)
     {
 
-        // $existCertSQL = "SELECT * FROM `certifications-faculty` 
-        // INNER JOIN certifications on `certifications-faculty`.`cert_ID`=`certifications`.`cert_ID`
-        // INNER JOIN facultymembers on `certifications-faculty`.`faculty_ID`=`facultymembers`.`faculty_ID`
-        // WHERE college_ID = $id;";
-
-        // $data = $this->executeGetQuery($existCertSQL)["data"];
-        // return $this->secured_encrypt($data);
-
         $script = "SELECT `educ-support`.*, educattainment.faculty_ID
         FROM `educ-support`
         INNER JOIN educattainment ON `educ-support`.`educattainment_ID`= educattainment.educattainment_ID
         WHERE educattainment.faculty_ID = $faculty_ID;";
+
+        $data = $this->executeGetQuery($script)["data"];
+        return $this->secured_encrypt($data);
+    }
+    public function getExpSupportDocs($faculty_ID)
+    {
+
+        $script = "SELECT `exp-support`.*, `expertise-faculty`.`faculty_ID`
+        FROM `exp-support`
+        INNER JOIN `expertise-faculty` ON `exp-support`.expertise_ID = `expertise-faculty`.expertise_ID
+        WHERE `expertise-faculty`.faculty_ID = $faculty_ID;
+        ";
+
+        $data = $this->executeGetQuery($script)["data"];
+        return $this->secured_encrypt($data);
+        // return $this->secured_encrypt($data);
+    }
+    public function getIndustrySupportDocs($faculty_ID)
+    {
+
+        $script = "SELECT `industry-support`.*, `experience-faculty`.`faculty_ID`
+        FROM `industry-support`
+        INNER JOIN `experience-faculty` ON `industry-support`.`experience_ID` = `experience-faculty`.`experience_ID`
+        WHERE `experience-faculty`.`faculty_ID` = $faculty_ID;";
+
+        $data = $this->executeGetQuery($script)["data"];
+        return $this->secured_encrypt($data);
+    }
+    public function getCertSupportDocs($faculty_ID)
+    {
+
+        $script = "SELECT `cert-support`.*, `certifications-faculty`.`cert_attainment_ID`
+        FROM `cert-support`
+        INNER JOIN `certifications-faculty` ON `cert-support`.`cert_attainment_ID` = `certifications-faculty`.`cert_attainment_ID`
+        WHERE `certifications-faculty`.`faculty_ID` = $faculty_ID;
+        ";
 
         $data = $this->executeGetQuery($script)["data"];
         return $this->secured_encrypt($data);

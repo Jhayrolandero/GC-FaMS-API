@@ -204,4 +204,19 @@ class GetTunnel extends Connection
     {
         return $this->resume->getEducSupportDocs($faculty_ID);
     }
+
+    public function getDocs($faculty_ID, $type)
+    {
+
+        switch ($type) {
+            case 'educdocs':
+                return $this->resume->getEducSupportDocs($faculty_ID);
+            case 'certdocs':
+                return $this->resume->getCertSupportDocs($faculty_ID);
+            case 'industrydocs':
+                return $this->resume->getIndustrySupportDocs($faculty_ID);
+            case 'expertisedocs':
+                return $this->resume->getExpSupportDocs($faculty_ID);
+        }
+    }
 }
