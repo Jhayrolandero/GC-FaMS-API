@@ -151,6 +151,14 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($getTunnel->getProj($id, 0));
                 break;
 
+            case 'project-authors':
+                echo json_encode($getTunnel->getProjAuthor($request[1]));
+                break;
+                
+            case 'project-images':
+                echo json_encode($getTunnel->getProjImages($request[1]));
+                break;
+
             case 'project-college':
                 echo json_encode($getTunnel->getProj($college, 1));
                 break;

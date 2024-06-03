@@ -79,6 +79,31 @@ class GlobalMethods extends Connection
         return array("code" => $code, "errmsg" => $errmsg);
     }
 
+    public function customSaveImage($image, $outputFolder, $fileFormat = 'png', $nameIndex, $projectID){
+        // Ensure the output folder exists
+        $outputFolder = __DIR__ . $outputFolder . "$projectID/";
+
+        if (!file_exists($outputFolder)) {
+            mkdir($outputFolder, 0777, true);
+        }
+
+        // Extract the actual base64 string (remove the data:image/png;base64, part)
+        $base64Data = explode(',', $image)[1];
+
+        // Decode the base64 string
+        $imageData = base64_decode($base64Data);
+
+        // Define the output file path
+        $filePath = $outputFolder . ($nameIndex + 1) . '.' . $fileFormat;
+
+        // Save the image data to a file
+        file_put_contents($filePath, $imageData);
+
+        // return $filepath = str_replace("/home/u417870998/domains/gcfams.com/public_html", "" , $filepath);
+        return str_replace("C:\\xampp\\htdocs", "", $filePath);
+    }
+
+
     public function saveImage($dir, $tableName, $name, $editID = null) //A reusable function for saving images based on provided directory location
     {
         //Declare temporary holders for parameter and value for sql
@@ -121,7 +146,7 @@ class GlobalMethods extends Connection
         if (!move_uploaded_file($tempFile, $filepath)) {
             return array("code" => 404, "errmsg" => "Upload unsuccessful");
         }
-
+        // return $filepath = str_replace("/home/u417870998/domains/gcfams.com/public_html", "" , $filepath);
         return $filepath = str_replace("C:\\xampp\\htdocs", "", $filepath);
     }
 
