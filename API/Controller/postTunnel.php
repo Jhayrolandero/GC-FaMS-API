@@ -220,4 +220,23 @@ class PostTunnel extends GlobalMethods
     {
         return $this->faculty->editFaculty2($data, $id);
     }
+
+    public function toAddEducDocs()
+    {
+
+
+        $uploadDir = 'uploads/';
+        foreach ($_FILES['documents']['name'] as $key => $name) {
+            $tmpName = $_FILES['documents']['tmp_name'][$key];
+            $filePath = $uploadDir . basename($name);
+            if (move_uploaded_file($tmpName, $filePath)) {
+                echo "File uploaded successfully: $name\n";
+            } else {
+                echo "Failed to upload file: $name\n";
+            }
+        }
+
+
+        return $_FILES;
+    }
 }

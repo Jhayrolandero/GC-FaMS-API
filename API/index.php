@@ -285,6 +285,21 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toAddAttendee($id, $college));
                 break;
 
+            case 'educdocs':
+                echo json_encode($postTunnel->toAddEducDocs());
+                break;
+
+            case 'certdocs':
+
+                break;
+            case 'expertdocs':
+
+                break;
+
+            case 'inddocs':
+
+                break;
+
 
 
             default:
