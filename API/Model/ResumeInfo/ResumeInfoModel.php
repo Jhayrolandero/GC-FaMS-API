@@ -479,19 +479,15 @@ class ResumeInfo extends GlobalMethods
             case 'expertise':
                 $filePaths = $this->addSupportingDocs($faculty_ID, $doc_ID, 'expertise');
 
-                try {
 
-                    foreach ($filePaths as $path) {
-
-                        $this->prepareAddBind(
-                            'exp-support',
-                            ["doc_path", "doc_name", "doc_type", "expertise_ID"],
-                            [$path["doc_path"], $path["doc_name"], $path["doc_type"], $doc_ID]
-                        );
-                    }
-                } catch (Error $e) {
-                    return $e;
+                foreach ($filePaths as $path) {
+                    $this->prepareAddBind(
+                        'expertise-support',
+                        ["doc_path", "doc_name", "doc_type", "expertise_faculty_ID"],
+                        [$path["doc_path"], $path["doc_name"], $path["doc_type"], $doc_ID]
+                    );
                 }
+
                 break;
             case 'certs':
                 $filePaths = $this->addSupportingDocs($faculty_ID, $doc_ID, 'certs');
@@ -523,9 +519,9 @@ class ResumeInfo extends GlobalMethods
     public function getExpSupportDocs($faculty_ID)
     {
 
-        $script = "SELECT `exp-support`.*, `expertise-faculty`.`faculty_ID`
-        FROM `exp-support`
-        INNER JOIN `expertise-faculty` ON `exp-support`.expertise_ID = `expertise-faculty`.expertise_ID
+        $script = "SELECT `expertise-support`.*, `expertise-faculty`.`faculty_ID`
+        FROM `expertise-support`
+        INNER JOIN `expertise-faculty` ON `expertise-support`.expertise_faculty_ID = `expertise-faculty`.expertise_ID
         WHERE `expertise-faculty`.faculty_ID = $faculty_ID;
         ";
 
@@ -547,9 +543,9 @@ class ResumeInfo extends GlobalMethods
     public function getCertSupportDocs($faculty_ID)
     {
 
-        $script = "SELECT `cert-support`.*, `certifications-faculty`.`cert_attainment_ID`
+        $script = "SELECT `cert-support`.*, `certifications-faculty`.`faculty_ID`
         FROM `cert-support`
-        INNER JOIN `certifications-faculty` ON `cert-support`.`cert_attainment_ID` = `certifications-faculty`.`cert_attainment_ID`
+        INNER JOIN `certifications-faculty` ON `cert-support`.`cert_attainment_ID` = `certifications-faculty`.`cert_ID`
         WHERE `certifications-faculty`.`faculty_ID` = $faculty_ID;
         ";
 
