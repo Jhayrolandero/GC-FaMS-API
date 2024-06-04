@@ -447,6 +447,21 @@ class ResumeInfo extends GlobalMethods
         return $this->prepareDeleteBind('expertise-faculty', 'expertise_faculty_ID', $id);
     }
 
+    public function deleteSupDocs($type, $doc_ID)
+    {
+
+        switch ($type) {
+            case 'educ':
+                return $this->prepareDeleteBind('educ-support', 'support_ID', $doc_ID);
+            case 'expertise':
+                return $this->prepareDeleteBind('expertise-support', 'support_ID', $doc_ID);
+            case 'industry':
+                return $this->prepareDeleteBind('industry-support', 'support_ID', $doc_ID);
+            case 'certs':
+                return $this->prepareDeleteBind('cert-support', 'support_ID', $doc_ID);
+        }
+    }
+
     public function addSupDocs($type, $faculty_ID, $doc_ID)
     {
 

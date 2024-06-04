@@ -302,4 +302,20 @@ class PostTunnel extends GlobalMethods
         $doc_ID = $_POST['id'];
         return $this->resume->addSupDocs('certs', $faculty_ID, $doc_ID);
     }
+    public function toDeleteEducDocs($doc_ID)
+    {
+        return $this->resume->deleteSupDocs('educ', $doc_ID);
+    }
+    public function toDeleteExpDocs($doc_ID)
+    {
+        return $this->resume->deleteSupDocs('expertise', $doc_ID);
+    }
+    public function toDeleteIndustryDocs($doc_ID)
+    {
+        return $this->resume->deleteSupDocs('industry', $doc_ID);
+    }
+    public function toDeleteCertDocs($doc_ID)
+    {
+        return $this->resume->deleteSupDocs('certs', $doc_ID);
+    }
 }

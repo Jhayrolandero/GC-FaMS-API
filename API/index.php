@@ -438,27 +438,26 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $commex_ID = $request[1];
                 echo json_encode($postTunnel->toDeleteCommex($commex_ID));
                 break;
+
+            case 'educdocs':
+                echo json_encode($postTunnel->todeleteEducDocs($request[1]));
+                break;
+            case 'certdocs':
+                echo json_encode($postTunnel->todeleteCertDocs($request[1]));
+                break;
+            case 'expdocs':
+                echo json_encode($postTunnel->todeleteExpDocs($request[1]));
+                break;
+            case 'industrydocs':
+                echo json_encode($postTunnel->todeleteIndustryDocs($request[1]));
+
+                break;
             default:
                 http_response_code(403);
                 break;
         }
         break;
-        // case 'PUT':
-        //     $globalOb->verifyToken()['payload'];
-        //     $data = json_decode(file_get_contents("php://input"));
-        //     switch ($request[0]) {
-        //         case 'profile':
-        //             $params = $_GET["t"];
-        //             echo json_encode($postTunnel->toEditProfile($params, $request[1]));
-        //             break;
-        //             // case 'test':
-        //             //     echo json_encode($postTunnel->test());
-        //             //     break;
-        //         default:
-        //             http_response_code(404);
-        //             break;
-        //     }
-        //     break;
+
     default:
         http_response_code(404);
         break;
