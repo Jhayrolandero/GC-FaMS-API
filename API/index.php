@@ -1,11 +1,13 @@
 <?php
 header('Access-Control-Allow-Origin: *');
-// header('Access-Control-Allow-Origin: https://gc-fa-ms-git-deploymenttest1-jhayrolanderos-projects.vercel.app');
-// header('Access-Control-Allow-Origin: http://localhost:4200');
 header('Access-Control-Allow-Credentials: true');
 header("Cache-Control: no-cache, no-store, must-revalidate");
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+
+
+    header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+    header("Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Request-With");
 
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
         header("Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS");
@@ -55,6 +57,23 @@ switch ($_SERVER['REQUEST_METHOD']) {
         // $id = 40;
         // $college = 1;
         switch ($request[0]) {
+
+            case 'educdocs':
+                echo json_encode($getTunnel->getDocs($id, 'educdocs'));
+                break;
+
+            case 'certdocs':
+                echo json_encode($getTunnel->getDocs($id, 'certdocs'));
+                break;
+
+            case 'industrydocs':
+                echo json_encode($getTunnel->getDocs($id, 'industrydocs'));
+                break;
+
+            case 'expdocs':
+                echo json_encode($getTunnel->getDocs($id, 'expertisedocs'));
+                break;
+
             case 'schedules':
                 $query = $_GET['t'];
                 if (empty($query)) {
@@ -154,7 +173,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
             case 'project-authors':
                 echo json_encode($getTunnel->getProjAuthor($request[1]));
                 break;
-                
+
             case 'project-images':
                 echo json_encode($getTunnel->getProjImages($request[1]));
                 break;
@@ -291,6 +310,20 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
             case 'attendee':
                 echo json_encode($postTunnel->toAddAttendee($id, $college));
+                break;
+
+            case 'educdocs':
+                echo json_encode($postTunnel->toAddEducDocs($id));
+                break;
+            case 'certdocs':
+                echo json_encode($postTunnel->toAddCertDocs($id));
+                break;
+            case 'expdocs':
+                echo json_encode($postTunnel->toAddExpDocs($id));
+                break;
+            case 'industrydocs':
+                echo json_encode($postTunnel->toAddIndustryDocs($id));
+
                 break;
 
 

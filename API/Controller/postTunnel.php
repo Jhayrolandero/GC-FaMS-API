@@ -220,4 +220,86 @@ class PostTunnel extends GlobalMethods
     {
         return $this->faculty->editFaculty2($data, $id);
     }
+
+    // public function toAddEducDocs($faculty_ID)
+    // {
+
+    //     $filePaths = [];
+    //     $id = $_POST['id'];
+
+    //     $educPath = __DIR__ . "/../../Image_Assets/SupportDocuments/educ/" . $faculty_ID . "/" . $id . "/";
+
+    //     foreach ($_FILES['documents']['name'] as $key => $name) {
+    //         // Add user dir
+    //         $fileFolder1 = __DIR__ . "/../../Image_Assets/SupportDocuments/educ/" . $faculty_ID;
+
+    //         // Creates directory if it doesn't exist yet
+    //         if (!file_exists($fileFolder1)) {
+    //             mkdir($fileFolder1, 0777, true);
+    //         }
+
+    //         // Add the docs dir
+    //         $fileFolder2 = __DIR__ . "/../../Image_Assets/SupportDocuments/educ/" . $faculty_ID . "/" . $id;
+
+    //         // Creates directory if it doesn't exist yet
+    //         if (!file_exists($fileFolder2)) {
+    //             mkdir($fileFolder2, 0777, true);
+    //         }
+
+    //         $tmpName = $_FILES['documents']['tmp_name'][$key];
+    //         // Declares location for image file itself
+    //         $filePath = $educPath . basename($name);
+
+    //         // If file exists in path, add extension
+    //         if (file_exists($filePath)) {
+    //             $filePath = $this->getUniqueFileName($filePath);
+    //         }
+
+    //         // Add file to given filepath
+    //         if (!move_uploaded_file($tmpName, $filePath)) {
+    //             return array("code" => 404, "errmsg" => "Upload unsuccessful");
+    //         }
+
+    //         // Determine the file type
+    //         $fileType = mime_content_type($filePath);
+
+    //         // Get the file name
+    //         $fileName = basename($filePath);
+
+    //         // Remove base directory from path
+    //         $path = str_replace("C:\\xampp\\htdocs", "", $filePath);
+    //         $path = str_replace("\\", "/", $path); // Normalize the path to use forward slashes
+
+    //         $data = [
+    //             "path" => $path,
+    //             "name" => $fileName,
+    //             "type" => $fileType
+    //         ];
+
+    //         array_push($filePaths, $data);
+    //     }
+
+    //     return $filePaths;
+    // }
+
+    public function toAddEducDocs($faculty_ID)
+    {
+        $doc_ID = $_POST['id'];
+        return $this->resume->addSupDocs('educ', $faculty_ID, $doc_ID);
+    }
+    public function toAddExpDocs($faculty_ID)
+    {
+        $doc_ID = $_POST['id'];
+        return $this->resume->addSupDocs('expertise', $faculty_ID, $doc_ID);
+    }
+    public function toAddIndustryDocs($faculty_ID)
+    {
+        $doc_ID = $_POST['id'];
+        return $this->resume->addSupDocs('industry', $faculty_ID, $doc_ID);
+    }
+    public function toAddCertDocs($faculty_ID)
+    {
+        $doc_ID = $_POST['id'];
+        return $this->resume->addSupDocs('certs', $faculty_ID, $doc_ID);
+    }
 }
