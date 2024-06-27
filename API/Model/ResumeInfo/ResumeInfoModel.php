@@ -278,51 +278,61 @@ class ResumeInfo extends GlobalMethods
 
     public function addProj($form, $id)
     {
-        #Add new project
-        $params = array('project_name', 'project_date', 'project_detail', 'project_type', 'project_link', 'isFinished');
-        $tempForm = array(
-            $form->project_name,
-            $form->project_date,
-            $form->project_detail,
-            $form->project_type,
-            $form->project_link,
-            $form->isFinished,
-        );
-        $this->prepareAddBind('projects', $params, $tempForm);
-
-        #Append all authors on the project
-        $params = array('faculty_ID', 'project_ID', 'author_type', 'isSelected');
-        #For co authors
-        for ($i = 0; $i < count($form->project_co_author); $i++) {
+        try {
+            #Add new project
+            $params = array('project_name', 'project_start_date', 'project_end_date', 'project_detail', 'project_link', 'is_finished');
             $tempForm = array(
-                $form->project_co_author[$i],
+                $form->project_name,
+                $form->project_start_date,
+                $form->project_end_date,
+                $form->project_detail,
+                $form->project_link,
+                $form->is_finished,
+            );
+            $this->prepareAddBind('projects', $params, $tempForm);
+
+
+            #Append all authors on the project
+            $params = array('faculty_ID', 'project_ID', 'author_type', 'is_selected');
+            #For co authors
+            for ($i = 0; $i < count($form->project_co_author); $i++) {
+                $tempForm = array(
+                    $form->project_co_author[$i],
+                    $this->getLastID('projects') - 1,
+                    0,
+                    0
+                );
+                $this->prepareAddBind('projects-faculty', $params, $tempForm);
+            }
+            #For main author
+            $tempForm = array(
+                $form->project_author,
                 $this->getLastID('projects') - 1,
-                0,
+                1,
                 0
             );
             $this->prepareAddBind('projects-faculty', $params, $tempForm);
+
+
+
+            #Append and save all images on the project
+            $params = array('project_ID', 'project_image');
+            for ($i = 0; $i < count($form->project_images); $i++) {
+
+                $tempForm = array(
+                    $this->getLastID('projects') - 1,
+                    $this->customSaveImage($form->project_images[$i], "/../../Image_Assets/Projects/", "png", $i, $this->getLastID('projects') - 1)
+                );
+                $this->prepareAddBind('projects-images', $params, $tempForm);
+            }
+
+            return "Project Added!";
+        } catch (\Throwable $th) {
+            return $th;
         }
-        #For main author
-        $tempForm = array(
-            $form->project_co_author[count($form->project_co_author) - 1],
-            $this->getLastID('projects') - 1,
-            1,
-            0
-        );
-        $this->prepareAddBind('projects-faculty', $params, $tempForm);
+        
 
 
-
-        #Append and save all images on the project
-        $params = array('project_ID', 'project_image');
-        for ($i = 0; $i < count($form->project_images); $i++) {
-
-            $tempForm = array(
-                $this->getLastID('projects') - 1,
-                $this->customSaveImage($form->project_images[$i], "/../../Image_Assets/Projects/", "png", $i, $this->getLastID('projects') - 1)
-            );
-            $this->prepareAddBind('projects-images', $params, $tempForm);
-        }
     }
 
     public function addSpec($form, $id)

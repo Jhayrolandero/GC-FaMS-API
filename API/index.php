@@ -39,7 +39,7 @@ if (isset($_REQUEST['request'])) {
 if ($request[0] === 'login') {
     // Enforce the login form should be populated else this will be evaluated
     if (empty(json_decode(file_get_contents("php://input")))) {
-        echo "Unauthorized Access nigga!";
+        echo "Unauthorized Access!";
         exit;
     }
     echo json_encode($postTunnel->toValidateLogin(json_decode(file_get_contents("php://input"))));
@@ -239,7 +239,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
         break;
 
     case 'POST':
-        // $payloadID = $globalOb->verifyToken()['payload'];
         $id = $globalOb->verifyToken()['payload']['id'];
         $college = $globalOb->verifyToken()['payload']['college'];
         $data = json_decode(file_get_contents("php://input"));
@@ -316,7 +315,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toAddEducDocs($id));
                 break;
             case 'certdocs':
-                echo json_encode($postTunnel->toAddCertDocs($id));
+                echo json_encode("HEYS");
+                // echo json_encode($postTunnel->toAddCertDocs($id));
                 break;
             case 'expdocs':
                 echo json_encode($postTunnel->toAddExpDocs($id));
