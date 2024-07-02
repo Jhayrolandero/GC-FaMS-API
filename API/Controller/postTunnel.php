@@ -30,6 +30,7 @@ class PostTunnel extends GlobalMethods
         $this->eval = new Evaluation();
         $this->course = new Schedule();
         $this->cv = new CurriculumVitae();
+        $this->research = new Research();
     }
 
     // public function addFaculty($data){
@@ -109,6 +110,10 @@ class PostTunnel extends GlobalMethods
                 # code...
                 break;
         }
+    }
+
+    public function toAddResearch($data, $id){
+        return $this->research->addResearch($data, $id);
     }
 
     public function toEditResume($form, $id, $type)

@@ -18,6 +18,7 @@ class GetTunnel extends Connection
     private $college;
     private $resume;
     private $evaluation;
+    private $research;
 
     public function __construct()
     {
@@ -27,6 +28,7 @@ class GetTunnel extends Connection
         $this->college = new College();
         $this->resume = new ResumeInfo();
         $this->evaluation = new Evaluation();
+        $this->research = new Research();
     }
 
     /**
@@ -131,6 +133,11 @@ class GetTunnel extends Connection
     public function getCollege($id)
     {
         return $this->college->getCollege($id);
+    }
+
+    public function getResearch($id)
+    {
+        return $this->research->getResearch($id);
     }
 
     // public function getResumeInfo($id)
