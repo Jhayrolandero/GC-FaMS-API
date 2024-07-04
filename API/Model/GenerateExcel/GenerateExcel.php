@@ -149,7 +149,7 @@ class Generate extends GlobalMethods{
                 $this->mainSheet->setCellValue("A6", '2nd Semester A.Y. 2024 - 2025');
 
                 //Iteration for records row
-                for ($i=0; $i < count($data[0]) - 1; $i++) { 
+                for ($i=0; $i < count($data[0]); $i++) { 
                     $title = ['No.', 'Name', 'College', 'Position', 'Knowledge Of Content', 'Flexible Learning Modality', 'Instructional Skills', 'Management of Learning', 'Teaching for Independent Learning', 'Evaluation Average'];
                     for ($x=0; $x < count($title); $x++) { 
                         $this->mainSheet->setCellValue($alph[$x] . ($i + 9), $data[0][$i]->{$title[$x]});
@@ -167,7 +167,7 @@ class Generate extends GlobalMethods{
                     $this->mainSheet->setCellValue("A6", '2nd Semester A.Y. 2024 - 2025');
     
 
-                    for ($i=0; $i < count($data[0]) - 1; $i++) { 
+                    for ($i=0; $i < count($data[0]); $i++) { 
                         $title = ['No.', 'Name', 'College', 'Position'];
 
                         //Makes the last 15 years
@@ -189,12 +189,12 @@ class Generate extends GlobalMethods{
                 $this->mainSheet = $this->spreadsheet->getSheetByName('Main');
 
                 //Adds the header titles at top.
-                $this->mainSheet->setCellValue("A4", $collegeAbb . 'Faculty Details Report');
+                $this->mainSheet->setCellValue("A4", $collegeAbb . ' Faculty Details Report');
                 $this->mainSheet->setCellValue("A5", 'Gordon College - ' . $collegeAbb);
                 $this->mainSheet->setCellValue("A6", '2nd Semester A.Y. 2024 - 2025');
 
 
-                for ($i=0; $i < count($data[0]) - 1; $i++) { 
+                for ($i=0; $i < count($data[0]); $i++) { 
                     $title = ['Name', 'Email', 'Phone Number', 'Employment Status (FT/PT)', 'Related Certificates', 'Related Professional Experience', 'Teaching Year/s Experience', 'Units Load', 'Courses Taught', 'Student Evaluation Result', 'Expertise', 'Associate', 'Baccalaureate', 'Masterals', 'Doctorate'];
 
                     for ($x=0; $x < count($title); $x++) { 
@@ -202,6 +202,48 @@ class Generate extends GlobalMethods{
                     }
                 }
                 break;
+
+            case 'Attainment Timeline':
+                //Loads spreadsheet template, and gets the Main sheet
+                $this->spreadsheet = IOFactory::load(__DIR__ . "/Templates/Attainment Timeline.xlsx");
+                $this->mainSheet = $this->spreadsheet->getSheetByName('Main');
+
+                //Adds the header titles at top.
+                $this->mainSheet->setCellValue("A4", $collegeAbb . ' Attainment Timeline');
+                $this->mainSheet->setCellValue("A5", 'Gordon College - ' . $collegeAbb);
+                $this->mainSheet->setCellValue("A6", '2nd Semester A.Y. 2024 - 2025');
+
+
+                for ($i=0; $i < count($data[0]); $i++) { 
+                    $title = ['Year', 'Certificates Received', 'Certificates Received Change from Previous Year (%)', 'Community Extensions Attended', 'Community Extensions Attended Change from Previous Year (%)', 'Seminars Completed', 'Seminars Completed Change from Previous Year (%)', 'Total Achievements', 'Change from Previous Year (%)'];
+
+                    for ($x=0; $x < count($title); $x++) { 
+                        $this->mainSheet->setCellValue($alph[$x] . ($i + 9), $data[0][$i]->{$title[$x]});
+                    }
+                }
+                break;
+
+            case 'Milestone Achieved':
+                //Loads spreadsheet template, and gets the Main sheet
+                $this->spreadsheet = IOFactory::load(__DIR__ . "/Templates/Milestone Achieved.xlsx");
+                $this->mainSheet = $this->spreadsheet->getSheetByName('Main');
+
+                //Adds the header titles at top.
+                $this->mainSheet->setCellValue("A4", $collegeAbb . ' Milestone Achieved (' . (date("Y") - 14) . ' - ' . date("Y") . ')');
+                $this->mainSheet->setCellValue("A5", 'Gordon College - ' . $collegeAbb);
+                $this->mainSheet->setCellValue("A6", '2nd Semester A.Y. 2024 - 2025');
+
+
+                for ($i=0; $i < count($data[0]); $i++) { 
+                    $title = ['Year', 'Community Extensions Attended', 'Community Extensions Attended Change from Previous Year (%)', 'Educational Attainment', 'Educational Attainment Change from Previous Year (%)', 'Certificates Received', 'Certificates Received Change from Previous Year (%)', 'Total Milestone', 'Milestone Change from Previous Year (%)'];
+
+                    for ($x=0; $x < count($title); $x++) { 
+                        $this->mainSheet->setCellValue($alph[$x] . ($i + 9), $data[0][$i]->{$title[$x]});
+                    }
+                }
+                break;
+    
+                
             
             default:
                 # code...
