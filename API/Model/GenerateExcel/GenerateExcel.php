@@ -9,14 +9,16 @@ require_once __DIR__ . '/../../Controller/global.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
-
-class Generate extends GlobalMethods{
+class Generate extends GlobalMethods
+{
     private $data;
     private $spreadsheet;
     private $mainSheet;
     private $quotation;
     private $accessories_data;
+    private $title;
 
     //Function that inputs single occuring cell inputs. (I separated them so no one suffers when mapping this)
     // public function singleInput($p_date, $p_quotref, $p_name, $p_discount, $p_vat, $p_sched_1, $p_sched_2, $p_sched_3, $p_sched_4, $p_deliverysched, $q_date, $q_hbi, $q_name, $q_email, $q_number, $q_discount, $q_vat) {
@@ -24,25 +26,25 @@ class Generate extends GlobalMethods{
     //     $this->payment_schedule->setCellValue($p_date, date("Y/m/d"));
     //     $this->payment_schedule->setCellValue($p_quotref, $this->data->quotationNumber);
     //     $this->payment_schedule->setCellValue($p_name, $this->data->customerName);
-        
+
     //     //Discount and vat values on payment schedule
     //     $this->payment_schedule->setCellValue($p_discount, $this->data->discount);
     //     $this->payment_schedule->setCellValue($p_vat, $this->data->vat);
-        
+
     //     //4 Stages of payment schedules (Dates only since)
     //     $this->payment_schedule->setCellValue($p_sched_1, $this->payment_schedule->getCell($p_sched_1)->getValue() . ' (' . $this->data->paymentDates[0] . ')');
     //     $this->payment_schedule->setCellValue($p_sched_2, $this->payment_schedule->getCell($p_sched_2)->getValue() . ' (' . $this->data->paymentDates[1] . ')');
     //     $this->payment_schedule->setCellValue($p_sched_3, $this->payment_schedule->getCell($p_sched_3)->getValue() . ' (' . $this->data->paymentDates[2] . ')');
     //     $this->payment_schedule->setCellValue($p_sched_4, $this->payment_schedule->getCell($p_sched_4)->getValue() . ' (' . $this->data->paymentDates[3] . ')');
     //     $this->payment_schedule->setCellValue($p_deliverysched, $this->payment_schedule->getCell($p_deliverysched)->getValue() . $this->data->deliverySched);
-        
+
     //     //Personal details on quotation sheet
     //     $this->quotation->setCellValue($q_date, date("Y/m/d"));
     //     $this->quotation->setCellValue($q_hbi, $this->data->quotationNumber);
     //     $this->quotation->setCellValue($q_name, $this->data->customerName);
     //     $this->quotation->setCellValue($q_email, $this->data->customerEmail);
     //     $this->quotation->setCellValue($q_number, $this->data->contactNumber);
-        
+
     //     //Discount and vat values on quotation sheet
     //     $this->quotation->setCellValue($q_discount, $this->data->discount);
     //     $this->quotation->setCellValue($q_vat, $this->data->vat);
@@ -118,94 +120,46 @@ class Generate extends GlobalMethods{
     //     }
 
     // }
- 
+
     //Main function call for geerating excels
-    public function generateExcel($data, $college) {
+    public function generateExcel($data, $college)
+    {
         //Preliminary datya
         $alph = range('A', 'Z');
         $this->data = $data;
         $collegeAbb = '';
+        $title = [];
 
         switch ($college) {
             case '1':
                 $collegeAbb = "CCS";
                 break;
-            
+
             default:
-                # code...
+                $collegeAbb = "GC";
                 break;
         }
 
-        //This excel generator uses templated excels because :)
-        //data[0] is the data itself data[1] is the type of data
-        switch ($data[1]) {
-            case 'Faculty Student Evaluation':
-                //Loads spreadsheet template, and gets the Main sheet
-                $this->spreadsheet = IOFactory::load(__DIR__ . "/Templates/Faculty Student Evaluation.xlsx");
-                $this->mainSheet = $this->spreadsheet->getSheetByName('Main');
 
-                //Adds the header titles at top.
-                $this->mainSheet->setCellValue("A5", 'Gordon College - ' . $collegeAbb);
-                $this->mainSheet->setCellValue("A6", '2nd Semester A.Y. 2024 - 2025');
 
-                //Iteration for records row
-                for ($i=0; $i < count($data[0]) - 1; $i++) { 
-                    $title = ['No.', 'Name', 'College', 'Position', 'Knowledge Of Content', 'Flexible Learning Modality', 'Instructional Skills', 'Management of Learning', 'Teaching for Independent Learning', 'Evaluation Average'];
-                    for ($x=0; $x < count($title); $x++) { 
-                        $this->mainSheet->setCellValue($alph[$x] . ($i + 9), $data[0][$i]->{$title[$x]});
-                    }
+        $this->renderTemplate($data[1], $collegeAbb);
+        $this->title = array_keys(get_object_vars($data[0][0]));
+
+        // Fellas in Paris
+        if ($data[1] === "Individual Evaluation Average Timeline") {
+
+            for ($i = 0; $i < count($data[0]) - 1; $i++) {
+                $title = ['No.', 'Name', 'College', 'Position'];
+                //Makes the last 15 years
+                for ($j = 0; $j < 15; $j++) {
+                    array_push($title, (date("Y") - (14 - $j)) . ' ');
+                    $this->mainSheet->setCellValue($alph[($j + 4)] . '8', (date("Y") - (14 - $j)) . ' ');
                 }
-                break;
+            }
 
-            case 'Individual Evaluation Average Timeline':
-                    //Loads spreadsheet template, and gets the Main sheet
-                    $this->spreadsheet = IOFactory::load(__DIR__ . "/Templates/Individual Evaluation Average Timeline.xlsx");
-                    $this->mainSheet = $this->spreadsheet->getSheetByName('Main');
-    
-                    //Adds the header titles at top.
-                    $this->mainSheet->setCellValue("A5", 'Gordon College - ' . $collegeAbb);
-                    $this->mainSheet->setCellValue("A6", '2nd Semester A.Y. 2024 - 2025');
-    
-
-                    for ($i=0; $i < count($data[0]) - 1; $i++) { 
-                        $title = ['No.', 'Name', 'College', 'Position'];
-
-                        //Makes the last 15 years
-                        for ($j=0; $j < 15; $j++) { 
-                            array_push($title, (date("Y") - (14 - $j)) . ' ');
-                            $this->mainSheet->setCellValue($alph[($j + 4)] . '8', (date("Y") - (14 - $j)) . ' ');
-                        }
-
-                        for ($x=0; $x < count($title); $x++) { 
-                            $this->mainSheet->setCellValue($alph[$x] . ($i + 9), $data[0][$i]->{$title[$x]});
-                        }
-                    }
-                break;
-
-
-            case 'Faculty Details Report':
-                //Loads spreadsheet template, and gets the Main sheet
-                $this->spreadsheet = IOFactory::load(__DIR__ . "/Templates/Faculty Details Report.xlsx");
-                $this->mainSheet = $this->spreadsheet->getSheetByName('Main');
-
-                //Adds the header titles at top.
-                $this->mainSheet->setCellValue("A4", $collegeAbb . 'Faculty Details Report');
-                $this->mainSheet->setCellValue("A5", 'Gordon College - ' . $collegeAbb);
-                $this->mainSheet->setCellValue("A6", '2nd Semester A.Y. 2024 - 2025');
-
-
-                for ($i=0; $i < count($data[0]) - 1; $i++) { 
-                    $title = ['Name', 'Email', 'Phone Number', 'Employment Status (FT/PT)', 'Related Certificates', 'Related Professional Experience', 'Teaching Year/s Experience', 'Units Load', 'Courses Taught', 'Student Evaluation Result', 'Expertise', 'Associate', 'Baccalaureate', 'Masterals', 'Doctorate'];
-
-                    for ($x=0; $x < count($title); $x++) { 
-                        $this->mainSheet->setCellValue($alph[$x] . ($i + 9), $data[0][$i]->{$title[$x]});
-                    }
-                }
-                break;
-            
-            default:
-                # code...
-                break;
+            $this->setValue($title, $this->data);
+        } else {
+            $this->setValue($this->title, $this->data);
         }
 
 
@@ -216,8 +170,66 @@ class Generate extends GlobalMethods{
         ob_end_clean();
         $ret = $writer->save('php://output');
         die();
-        return $ret;
-        
+        // return $ret;
+    }
+
+
+    public function setValue($title, $data)
+    {
+        $alph = range('A', 'Z');
+
+        $thresholdLength = 30;
+        $fontSize = 18;
+        $numRows = count($data[0]);
+        for ($i = 0; $i < count($data[0]); $i++) {
+            for ($x = 0; $x < count($title); $x++) {
+                $cell = $alph[$x] . ($i + 9);
+                $property = $title[$x];
+
+                // Check if the property exists and set value, otherwise set an empty string or default value
+                $value = isset($data[0][$i]->{$property}) ? $data[0][$i]->{$property} : '';
+                $this->mainSheet->setCellValue($cell, $value);
+
+                // Center align the data cells
+                $this->mainSheet->getStyle($cell)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+                // $spreadsheet->getActiveSheet()->setBreak('A10', \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::BREAK_ROW);
+                // Ensure text wrapping
+                if (strlen($value) > $thresholdLength) {
+                    $this->mainSheet->getStyle($cell)->getAlignment()->setWrapText(true);
+                }
+
+                // Set the font size to 18
+                $this->mainSheet->getStyle($cell)->getFont()->setSize($fontSize);
+            }
+        }
+
+        // Auto-size the columns
+        foreach (range('A', $alph[count($title) - 1]) as $columnID) {
+            $this->mainSheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+
+        // Adjust the print area to fit all the data
+        $lastColumn = $alph[count($title) - 1];
+        $lastRow = $numRows + 8; // Assuming data starts from row 9
+        $printArea = 'A1:' . $lastColumn . $lastRow;
+        $this->mainSheet->getPageSetup()->setPrintArea($printArea);
+
+        // Set the page layout to fit all columns and rows on one page if needed
+        $this->mainSheet->getPageSetup()->setFitToWidth(1);
+        $this->mainSheet->getPageSetup()->setFitToHeight(0);
+    }
+
+    public function renderTemplate($title, $collegeAbb)
+    {
+        // Loads spreadsheet template, and gets the Main sheet
+        $this->spreadsheet = IOFactory::load(__DIR__ . "/Templates/$title.xlsx");
+        $this->mainSheet = $this->spreadsheet->getSheetByName('Main');
+
+        // Adds the header titles at top.
+        $this->mainSheet->setCellValue("A4", $collegeAbb . " $title");
+        $this->mainSheet->setCellValue("A5", 'Gordon College - ' . $collegeAbb);
+        $this->mainSheet->setCellValue("A6", '2nd Semester A.Y. 2024 - 2025');
     }
 }
-?>
