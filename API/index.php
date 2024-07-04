@@ -58,6 +58,32 @@ switch ($_SERVER['REQUEST_METHOD']) {
         // $college = 1;
         switch ($request[0]) {
 
+            case 'picture':
+
+                $docPath = $_GET["path"];
+                $file = __DIR__ . "/../$docPath";
+
+                echo $file;
+                // $file =  "./Cv.pdf";
+                if (file_exists($file)) {
+                    // Set headers to indicate a file download
+                    header('Content-Description: File Transfer');
+                    header('Content-Type: application/pdf');
+                    header('Content-Disposition: attachment; filename="' . basename($file) . '"');
+                    header('Expires: 0');
+                    header('Cache-Control: must-revalidate');
+                    header('Pragma: public');
+                    header('Content-Length: ' . filesize($file));
+
+                    // Read the file and output its contents
+                    readfile($file);
+                    exit;
+                } else {
+                    http_response_code(404);
+                    echo "File not found.";
+                }
+
+                break;
             case 'educdocs':
                 echo json_encode($getTunnel->getDocs($id, 'educdocs'));
                 break;

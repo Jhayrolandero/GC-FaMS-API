@@ -25,6 +25,54 @@ class GlobalMethods extends Connection
         $this->env = parse_ini_file('.env');
         $this->first_key = $this->env["FIRSTKEY"];
     }
+
+    public function getSemester($month, $year)
+    {
+        // Define month names and their corresponding semester periods
+        $months = array(
+            "0" => array("semester" => "2nd", "yearOffset" => 0),
+            "1" => array("semester" => "2nd", "yearOffset" => 0),
+            "2" => array("semester" => "2nd", "yearOffset" => 0),
+            "3" => array("semester" => "2nd", "yearOffset" => 0),
+            "4" => array("semester" => "2nd", "yearOffset" => 0),
+            "5" => array("semester" => "2nd", "yearOffset" => 0),
+            "6" => array("semester" => "Midyear", "yearOffset" => 0),
+            "7" => array("semester" => "1st", "yearOffset" => 0),
+            "8" => array("semester" => "1st", "yearOffset" => 0),
+            "9" => array("semester" => "1st", "yearOffset" => 0),
+            "10" => array("semester" => "1st", "yearOffset" => 0),
+            "11" => array("semester" => "1st", "yearOffset" => 0),
+        );
+
+        // Check if the provided month is valid
+        if (!array_key_exists($month, $months)) {
+            throw new Exception("Invalid month");
+        }
+
+        $semesterData = $months[$month];
+        $semester = $semesterData["semester"];
+        $yearOffset = $semesterData["yearOffset"];
+
+        // Determine academic year
+        if ($semester === "1st") {
+            $academicYearStart = $year;
+            $academicYearEnd = $year + 1;
+        } elseif ($semester === "2nd") {
+            $academicYearStart = $year - 1;
+            $academicYearEnd = $year;
+        } elseif ($semester === "Midyear") {
+            $academicYearStart = $year;
+            $academicYearEnd = $year;
+        } else {
+            throw new Exception("Month provided does not belong to any semester.");
+        }
+
+        return array(
+            "semester" => $semester,
+            "academicYear" => "$academicYearStart-$academicYearEnd"
+        );
+    }
+
     /**
      * Global function to execute queries
      *
@@ -34,6 +82,8 @@ class GlobalMethods extends Connection
      * @return array
      *   the result of query.
      */
+
+
     public function executeGetQuery($sqlString)
     {
         $data = [];

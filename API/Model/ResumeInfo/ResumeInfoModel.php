@@ -568,7 +568,6 @@ class ResumeInfo extends GlobalMethods
     }
     public function getCertSupportDocs($faculty_ID)
     {
-
         $script = "SELECT `cert-support`.*, `certifications-faculty`.`faculty_ID`
         FROM `cert-support`
         INNER JOIN `certifications-faculty` ON `cert-support`.`cert_attainment_ID` = `certifications-faculty`.`cert_ID`
