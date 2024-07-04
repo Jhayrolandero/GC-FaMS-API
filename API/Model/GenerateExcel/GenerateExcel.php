@@ -20,6 +20,7 @@ class Generate extends GlobalMethods
     private $accessories_data;
     private $title;
 
+
     //Function that inputs single occuring cell inputs. (I separated them so no one suffers when mapping this)
     // public function singleInput($p_date, $p_quotref, $p_name, $p_discount, $p_vat, $p_sched_1, $p_sched_2, $p_sched_3, $p_sched_4, $p_deliverysched, $q_date, $q_hbi, $q_name, $q_email, $q_number, $q_discount, $q_vat) {
     //     //Personal details (upper segment of payment schedule)
@@ -135,11 +136,25 @@ class Generate extends GlobalMethods
                 $collegeAbb = "CCS";
                 break;
 
+            case '2':
+                $collegeAbb = "CCS";
+                break;
+            case '3':
+                $collegeAbb = "CBA";
+                break;
+            case '4':
+                $collegeAbb = "CAHS";
+                break;
+            case '5':
+                $collegeAbb = "CEAS";
+                break;
+            case '6':
+                $collegeAbb = "CHTM";
+                break;
             default:
                 $collegeAbb = "GC";
                 break;
         }
-
 
 
         $this->renderTemplate($data[1], $collegeAbb);
@@ -223,6 +238,14 @@ class Generate extends GlobalMethods
 
     public function renderTemplate($title, $collegeAbb)
     {
+
+        // Get the current month and year
+        $currentMonth = date('n') - 1; // date('n') returns 1-12, subtract 1 to match JavaScript's 0-11
+        $currentYear = date('Y');
+
+        // Get the current semester and academic year
+        $currentSemester = $this->getSemester((string)$currentMonth, $currentYear);
+        $currSem = $currentSemester['semester'] . " Semester, A.Y. " . $currentSemester['academicYear'];
         // Loads spreadsheet template, and gets the Main sheet
         $this->spreadsheet = IOFactory::load(__DIR__ . "/Templates/$title.xlsx");
         $this->mainSheet = $this->spreadsheet->getSheetByName('Main');
@@ -230,6 +253,7 @@ class Generate extends GlobalMethods
         // Adds the header titles at top.
         $this->mainSheet->setCellValue("A4", $collegeAbb . " $title");
         $this->mainSheet->setCellValue("A5", 'Gordon College - ' . $collegeAbb);
-        $this->mainSheet->setCellValue("A6", '2nd Semester A.Y. 2024 - 2025');
+        $this->mainSheet->setCellValue("A6", $currSem);
+        // $this->mainSheet->setCellValue("A6", '2nd Semester A.Y. 2024 - 2025');
     }
 }
