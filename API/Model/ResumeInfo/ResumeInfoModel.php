@@ -280,14 +280,15 @@ class ResumeInfo extends GlobalMethods
     {
         try {
             #Add new project
-            $params = array('project_name', 'project_start_date', 'project_end_date', 'project_detail', 'project_link', 'is_finished');
+            $params = array('project_name', 'project_start_date', 'project_end_date', 'project_detail', 'project_link', 'project_main_image', 'is_finished');
             $tempForm = array(
                 $form->project_name,
                 $form->project_start_date,
                 $form->project_end_date,
                 $form->project_detail,
                 $form->project_link,
-                $form->is_finished,
+                $this->customSaveImage($form->project_main_image, "/../../Image_Assets/Projects/", "png", -1, $this->getLastID('projects') - 1),
+                $form->is_finished
             );
             $this->prepareAddBind('projects', $params, $tempForm);
 

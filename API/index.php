@@ -134,6 +134,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($getTunnel->getFaculty($id));
                 break;
 
+            case 'research':
+                echo json_encode($getTunnel->getResearch($id));
+                break;
+
             case 'test':
                 echo json_encode($getTunnel->test());
                 break;
@@ -269,6 +273,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $college = $globalOb->verifyToken()['payload']['college'];
         $data = json_decode(file_get_contents("php://input"));
         switch ($request[0]) {
+            case 'generateExcel':
+                // echo json_encode($data[0]->{'No.'});
+                echo json_encode($postTunnel->toGenerateExcel($data, $college));
+                break;
+
             case 'addEduc':
                 echo json_encode($postTunnel->toAddResume($data, $id, 1));
                 break;
@@ -317,6 +326,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 echo json_encode($postTunnel->toAddCommex());
                 break;
 
+            case 'addResearch':
+                echo json_encode($postTunnel->toAddResearch($data, $id));
+                break;
+    
+
                 // case 'test':
                 //     echo json_encode($postTunnel->test($id));
                 //     break;
@@ -349,8 +363,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
             case 'industrydocs':
                 echo json_encode($postTunnel->toAddIndustryDocs($id));
-
                 break;
+
 
 
 
