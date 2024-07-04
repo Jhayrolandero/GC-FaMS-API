@@ -247,6 +247,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
         $college = $globalOb->verifyToken()['payload']['college'];
         $data = json_decode(file_get_contents("php://input"));
         switch ($request[0]) {
+            case 'generateExcel':
+                // echo json_encode($data[0]->{'No.'});
+                echo json_encode($postTunnel->toGenerateExcel($data, $college));
+                break;
+
             case 'addEduc':
                 echo json_encode($postTunnel->toAddResume($data, $id, 1));
                 break;

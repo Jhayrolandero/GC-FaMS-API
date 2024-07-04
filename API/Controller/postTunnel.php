@@ -20,6 +20,7 @@ class PostTunnel extends GlobalMethods
 
     private $faculty;
     private $commex;
+    private $excel;
 
     public function __construct()
     {
@@ -31,6 +32,7 @@ class PostTunnel extends GlobalMethods
         $this->course = new Schedule();
         $this->cv = new CurriculumVitae();
         $this->research = new Research();
+        $this->excel = new Generate();
     }
 
     // public function addFaculty($data){
@@ -70,6 +72,11 @@ class PostTunnel extends GlobalMethods
     {
         return $this->commex->addCommex();
         // return $_POST;
+    }
+
+    public function toGenerateExcel($data, $college)
+    {
+        return $this->excel->generateExcel($data, $college);
     }
 
     public function toAddCv($data, $id)
