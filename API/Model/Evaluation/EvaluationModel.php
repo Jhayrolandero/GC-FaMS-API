@@ -28,11 +28,12 @@ class Evaluation extends GlobalMethods
 
     public function addEval($form, $id)
     {
-        $params = array('faculty_ID', 'semester', 'evaluation_year', 'param1_score', 'param2_score', 'param3_score', 'param4_score', 'param5_score', 'param6_score');
+        $params = array('faculty_ID', 'semester', 'evaluation_year', 'evaluation_year_end', 'param1_score', 'param2_score', 'param3_score', 'param4_score', 'param5_score', 'param6_score');
         $tempForm = array(
             $id,
             $form->semester,
             $form->evaluation_year,
+            $form->evaluation_year_end,
             $form->param1_score,
             $form->param2_score,
             $form->param3_score,
@@ -42,6 +43,22 @@ class Evaluation extends GlobalMethods
         );
         return $this->prepareAddBind('evaluation', $params, $tempForm);
     }
+    // public function addEval($form, $id)
+    // {
+    //     $params = array('faculty_ID', 'semester', 'evaluation_year', 'param1_score', 'param2_score', 'param3_score', 'param4_score', 'param5_score', 'param6_score');
+    //     $tempForm = array(
+    //         $id,
+    //         $form->semester,
+    //         $form->evaluation_year,
+    //         $form->param1_score,
+    //         $form->param2_score,
+    //         $form->param3_score,
+    //         $form->param4_score,
+    //         $form->param5_score,
+    //         $form->param6_score
+    //     );
+    //     return $this->prepareAddBind('evaluation', $params, $tempForm);
+    // }
 
 
     public function getProfileEvaluation($id)
