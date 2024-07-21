@@ -150,6 +150,8 @@ class ResumeInfo extends GlobalMethods
         $specSQL = "SELECT * FROM `expertise`;";
 
         $dataExpertise =  $this->executeGetQuery($specSQL)["data"];
+
+        // return $this->executeGetQuery($specSQL)["data"];
         return $this->secured_encrypt([$dataFaculty, $dataExpertise]);
     }
 
@@ -331,18 +333,16 @@ class ResumeInfo extends GlobalMethods
         } catch (\Throwable $th) {
             return $th;
         }
-        
-
-
     }
 
     public function addSpec($form, $id)
     {
-        $params = array('faculty_ID', 'expertise_ID', 'isSelected');
+        $params = array('faculty_ID', 'expertise_ID', 'isSelected', 'dateAchieved');
         $tempForm = array(
             $id,
             $form->expertise_ID,
-            0
+            0,
+            $form->dateAchieved
         );
 
 
@@ -358,10 +358,11 @@ class ResumeInfo extends GlobalMethods
         );
         $this->prepareAddBind('expertise', $params, $tempForm);
 
-        $params = array('faculty_ID', 'expertise_ID');
+        $params = array('faculty_ID', 'expertise_ID', 'dateAchieved');
         $tempForm = array(
             $id,
-            $this->getLastID('expertise') - 1
+            $this->getLastID('expertise') - 1,
+            $form->dateAchieved
         );
         return $this->prepareAddBind('expertise-faculty', $params, $tempForm);
     }
