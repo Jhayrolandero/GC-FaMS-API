@@ -116,8 +116,8 @@ class CurriculumVitae extends GlobalMethods
 
         // If "Image_Assets" is found
         $substring = substr($imgsrc, $startPos);
-        $img =  "https://gcfams.com/GC-FaMS-API/" . $substring;
-        // $img =  "http://localhost/GC-FaMS-API/" . $substring;
+        // $img =  "https://gcfams.com/GC-FaMS-API/" . $substring;
+        $img =  "http://localhost/GC-FaMS-API/" . $substring;
 
         $this->html = str_replace('{{ faculty_name }}', htmlspecialchars($data->profile->first_name . " " . $data->profile->last_name), $this->html);
         $this->html = str_replace('{{ college_abbrev }}', htmlspecialchars($data->profile->college_abbrev), $this->html);
@@ -159,8 +159,13 @@ class CurriculumVitae extends GlobalMethods
     //Main function
     public function generateCv($data, $id)
     {
-        $this->html = file_get_contents(__DIR__ . "/cv.html");
-        //Call binding functions
+
+
+        try {
+
+            // re
+            $this->html = file_get_contents(__DIR__ . "/cv.html");
+            //Call binding functions
         $this->experienceParse($data);
         $this->certificateParse($data);
         $this->educationParse($data);
@@ -180,19 +185,25 @@ class CurriculumVitae extends GlobalMethods
 
         // $dompdf->loadHtmlFile("index.html");
         // $dompdf->file("index.html");
-
-
+        // /opt/lampp/htdocs/GC-FaMS-API/CV_Assets
         $dompdf->loadHtml($this->html);
         $dompdf->render();
         $output = $dompdf->output();
 
-        if (file_exists('../CV_Assets/' . $id . '.pdf')) {
-            unlink('../CV_Assets/' . $id . '.pdf');
+        // return $output;
+
+        // if (file_exists(__DIR__ .'/../../../CV_Assets/' . $id . '.pdf')) {
+        //     // return "From Funx";
+        //     rreturn  unlink(__DIR__ .'/../../../CV_Assets/' . $id . '.pdf');
+        // }
+        
+        // return "From out";
+        return file_put_contents(__DIR__ .'/../../../CV_Assets/' . $id . '.pdf', $output);
+        // return $data;
+        } catch (Throwable $e) {
+
+        return $e;
         }
-
-
-        file_put_contents('../CV_Assets/' . $id . '.pdf', $output);
-
-        return $data;
+        
     }
 }

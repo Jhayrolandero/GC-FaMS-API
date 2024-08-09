@@ -15,25 +15,16 @@ class ResumeInfo extends GlobalMethods
     {
         switch ($data[0]) {
             case 1:
-                return $this->prepareEditBind('educattainment', array('isSelected'), array(!$data[1]->isSelected, $data[1]->educattainment_ID), 'educattainment_ID');
-                break;
-
+                return $this->prepareEditBind('educattainment', array('isSelected'), array($data[1]->isSelected ? 0 : 1, $data[1]->educattainment_ID), 'educattainment_ID');
             case 2:
-                return $this->prepareEditBind('certifications-faculty', array('isSelected'), array(!$data[1]->isSelected, $data[1]->cert_attainment_ID), 'cert_attainment_ID');
-                break;
-
+                return $this->prepareEditBind('certifications-faculty', array('isSelected'), array($data[1]->isSelected ? 0 : 1, $data[1]->cert_attainment_ID), 'cert_attainment_ID');
             case 3:
-                return $this->prepareEditBind('experience-faculty',  array('isSelected'), array(!$data[1]->isSelected, $data[1]->experience_ID), 'experience_ID');
-                break;
-
+                return $this->prepareEditBind('experience-faculty',  array('isSelected'), array($data[1]->isSelected ? 0 : 1, $data[1]->experience_ID), 'experience_ID');
             case 4:
-                return $this->prepareEditBind('projects',  array('isSelected'), array(!$data[1]->isSelected, $data[1]->project_ID), 'project_ID');
-                break;
-
+                return $this->prepareEditBind('projects',  array('isSelected'), array($data[1]->isSelected ? 0 : 1, $data[1]->project_ID), 'project_ID');
             case 5:
-                return $this->prepareEditBind('expertise-faculty',  array('isSelected'), array(!$data[1]->isSelected, $data[1]->expertise_faculty_ID), 'expertise_faculty_ID');
-                break;
-
+                // return $data[1]->isSelected;
+                return $this->prepareEditBind('expertise-faculty',  array('isSelected'), array($data[1]->isSelected ? 0 : 1, $data[1]->expertise_faculty_ID), 'expertise_faculty_ID');
             default:
                 # code...
                 break;
