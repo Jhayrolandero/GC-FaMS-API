@@ -28,8 +28,11 @@ class Evaluation extends GlobalMethods
 
     public function addEval($form, $id)
     {
-        $params = array('faculty_ID', 'semester', 'evaluation_year', 'evaluation_year_end', 'param1_score', 'param2_score', 'param3_score', 'param4_score', 'param5_score', 'param6_score');
-        $tempForm = array(
+
+        try {
+            
+            $params = array('faculty_ID', 'semester', 'evaluation_year', 'evaluation_year_end', 'param1_score', 'param2_score', 'param3_score', 'param4_score', 'param5_score', 'param6_score');
+            $tempForm = array(
             $id,
             $form->semester,
             $form->evaluation_year,
@@ -42,6 +45,9 @@ class Evaluation extends GlobalMethods
             $form->param6_score
         );
         return $this->prepareAddBind('evaluation', $params, $tempForm);
+        } catch (PDOException $e) {
+            return $e;
+        }
     }
     // public function addEval($form, $id)
     // {

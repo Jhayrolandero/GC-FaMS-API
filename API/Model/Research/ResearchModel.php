@@ -32,13 +32,15 @@ class Research extends GlobalMethods
     {
         try {
             #Add new research
-            $params = array('faculty_ID', 'research_name', 'publish_date', 'research_link');
+            $params = array('faculty_ID', 'research_name', 'publish_date', 'research_link', 'ongoing');
             $tempForm = array(
                 $id,
                 $form->research_name,
-                $form->publish_date,
+                $form->publish_date ? $form->publish_date: null,
                 $form->research_link,
+                $form->ongoing ? 1 : 0,
             );
+            // var_dump ($this->prepareAddBind('research', $params, $tempForm)); 
             $this->prepareAddBind('research', $params, $tempForm);
 
 

@@ -151,7 +151,18 @@ class GlobalMethods extends Connection
         file_put_contents($filePath, $imageData);
 
         // return $filepath = str_replace("/home/u417870998/domains/gcfams.com/public_html", "" , $filepath);
-        return str_replace("C:\\xampp\\htdocs", "", $filePath);
+        // return str_replace("C:\\xampp\\htdocs", "", $filePath);
+
+        $startPos = strpos($filePath, '/GC-FaMS-API');
+
+        // $endPos = strpos($filePath, '/', $startPos);
+        // $length = $endPos - $startPos;
+        $substring = substr($filePath, $startPos);
+        
+        // return $filepath = str_replace("/home/u417870998/domains/gcfams.com/public_html", "" , $filepath);
+        // return $filepath = str_replace("C:\\xampp\\htdocs", "", $filepath);
+        return $substring;
+
     }
 
 
@@ -164,6 +175,8 @@ class GlobalMethods extends Connection
         //Iterates through the file uploaded (image)
         //Assigngs the parameter and value (filename)
         $tempFile = $_FILES[$name]['tmp_name'];
+
+        // return $tempFile;
         $fileName = $_FILES[$name]['name'];
 
         //Fetch last autoincrement id on commex
@@ -193,12 +206,27 @@ class GlobalMethods extends Connection
             unlink($filepath);
         }
 
+        // /opt/lampp/htdocs/GC-FaMS-API/API/Controller/../../Image_Assets/CommunityExtensions/110/Untitled.jpeg
+        // /opt/lampp/htdocs/GC-FaMS-API/API/Controller/../../Image_Assets/Certifications/81/Untitled.jpeg
+        // /opt/lampp/htdocs/GC-FaMS-API/API/Controller/../../Image_Assets/CommunityExtensions/109/Screenshot from 2024-08-04 12-48-54.png
         //Add file to give nfilepath
+        // return $filepath;
         if (!move_uploaded_file($tempFile, $filepath)) {
+            // return $filepath;
             return array("code" => 404, "errmsg" => "Upload unsuccessful");
         }
+
+
+        // return "hello";
+        $startPos = strpos($filepath, '/GC-FaMS-API');
+
+        // $endPos = strpos($filepath, '/', $startPos);
+        // $length = $endPos - $startPos;
+        $substring = substr($filepath, $startPos);
+        
         // return $filepath = str_replace("/home/u417870998/domains/gcfams.com/public_html", "" , $filepath);
-        return $filepath = str_replace("C:\\xampp\\htdocs", "", $filepath);
+        // return $filepath = str_replace("C:\\xampp\\htdocs", "", $filepath);
+        return $substring;
     }
 
     public function verifyToken()

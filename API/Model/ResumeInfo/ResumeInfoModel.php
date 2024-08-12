@@ -281,8 +281,9 @@ class ResumeInfo extends GlobalMethods
                 $form->project_detail,
                 $form->project_link,
                 $this->customSaveImage($form->project_main_image, "/../../Image_Assets/Projects/", "png", -1, $this->getLastID('projects') - 1),
-                $form->is_finished
+                $form->is_finished ? 1 : 0
             );
+            // var_dump(            $this->prepareAddBind('projects', $params, $tempForm)        );
             $this->prepareAddBind('projects', $params, $tempForm);
 
 
@@ -328,8 +329,11 @@ class ResumeInfo extends GlobalMethods
 
     public function addSpec($form, $id)
     {
-        $params = array('faculty_ID', 'expertise_ID', 'isSelected', 'dateAchieved');
-        $tempForm = array(
+
+        try {
+
+            $params = array('faculty_ID', 'expertise_ID', 'isSelected', 'dateAchieved');
+            $tempForm = array(
             $id,
             $form->expertise_ID,
             0,
@@ -339,12 +343,18 @@ class ResumeInfo extends GlobalMethods
 
 
         return $this->prepareAddBind('expertise-faculty', $params, $tempForm);
+        } catch(PDOException $e) {
+            return $e;
+        }
     }
 
     public function addNewSpec($form, $id)
     {
-        $params = array('expertise_name');
-        $tempForm = array(
+
+        try {
+
+            $params = array('expertise_name');
+            $tempForm = array(
             $form->expertise_name
         );
         $this->prepareAddBind('expertise', $params, $tempForm);
@@ -356,6 +366,9 @@ class ResumeInfo extends GlobalMethods
             $form->dateAchieved
         );
         return $this->prepareAddBind('expertise-faculty', $params, $tempForm);
+        } catch(PDOException $e) {
+            return $e;
+        }
     }
 
     public function editEduc($form, $id)
